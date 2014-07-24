@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Moraleja</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="actionbar_notificacion">Notificaciones</string>
+    <string name="actionbar_settings">Config</string>
+    <string name="actionbar_share">Comp</string>
+    <string name="actionbar_favorito">Favorito</string>
+    <string name="actionbar_inicio">Inicio</string>
+    <string name="coordenadas">LatLong:</string>
+    <string name="eventos">Eventos</string>
+    <string name="historia">Historia</string>
+    <string name="sitio">Comp</string>
+    <string name="comer">Eventos</string>
+    <string name="dormir">Historia</string>
+    <string name="conoceMoraleja">Conoce Moraleja</string>
+    <string name="deTapas">Tomamos Algo?</string>
+    <string name="dondeComer">Comer y Dormir</string>
+    <string name="dondeComprar">De Compras</string>
+    <string name="serviciosReparaciones">Servicios y Reparaciones</string>
+    <string name="favoritos">Favoritos</string>
+    <string name="copiright">Diseño de Apps &#169;  2014- ProjectsApps</string>
+    <string name="eventosNormal">Eventos normal</string>
+    <string name="eventosActualizar">Actualizar</string>
+    <string name="title_activity_eventos">EventosActivity</string>
+    <string name="title_activity_detalle_evento">DetalleEventoActivity</string>
+    <string name="title_activity_evento_lista_normal">Donde ir?</string>
+    <string name="vacio">No hay eventos</string>
+    <string name="title_activity_detalle_contenido">Te Ofrecemos</string>
+    <string name="actualizacion_ok">Actualizacion finalizada con éxito</string>
+    <string name="actualizacion_ko">Se ha producido un erro en el proceso de actualización</string>
+    <string name="title_activity_preferencias">PreferenciasActivity</string>
+    <string name="pref_actualizar_automaticamente">Actualizar automaticamente</string>
+    <string name="pref_actualizar_automaticamente_sum">Realiza la actualización de contenidos nuevos automáticamente</string>
+    <string name="pref_actualizar_solo_categorias">Actualizar categorias</string>
+    <string name="pref_actualizar_solo_categorias_sum">Solamente actualiza la información de las categorias seleccionadas</string>
+    <string name="pref_cat_config_categorias_actualizar">Configuracion actualizacion por categorias</string>
+    <string name="title_activity_main">ViewFlipper Demo</string>
+    <string name="str_img1">Image1</string>
+    <string name="str_img2">Image2</string>
+    <string name="str_img3">Image3</string>
+    <string name="str_img4">Image4</string>
+    <string name="str_img5">Image5</string>
+    <string name="str_btn_start">Start SlideShow</string>
+    <string name="str_btn_stop">Stop SlideShow</string>
+    <string name="compartir1">Estoy en </string>
+    <string name="compartir2">, haz clic en este enlace para localizarme.</string>
+    <string name="titulo_compartir">Compartir Lugar</string>
+    <string name="title_activity_inicio">InicioActivity</string>
+    <string name="title_activity_notificaciones">NotificacionesActivity</string>
+
+</resources>

@@ -1,0 +1,54 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="10dp"
+    android:background="#002DB3"
+    android:orientation="vertical" >
+    
+    <LinearLayout
+        android:id="@+id/linearLayoutVisibleEvento"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="#FFCB2E"
+        android:onClick="mostrarDetalleEventoDesdeVista"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:id="@+id/textViewNombre"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:background="#AABBCC"
+            android:onClick="mostrarDetalleEvento" />
+
+	    <ImageView
+	        android:id="@+id/mostrarDescripcionCorta"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:src="@drawable/ver_descripcion_corta"
+	        android:onClick="mostrarDescripcionCorta"/>
+	</LinearLayout>
+
+   	<LinearLayout
+   	    android:id="@+id/linearLayoutOcultoEvento"
+   	    android:layout_width="fill_parent"
+   	    android:layout_height="wrap_content"
+   	    android:background="#474747"
+   	    android:dividerPadding="15dp"
+   	    android:onClick="mostrarDetalleEventoDesdeVista"
+   	    android:orientation="horizontal"
+   	    android:visibility="gone"
+   	    >
+
+		<TextView
+		    android:id="@+id/textDescripcionCorta"
+		    android:layout_width="fill_parent"
+		    android:layout_height="wrap_content"
+		    android:background="#002DB3"
+		    android:ems="10"
+		    android:inputType="textMultiLine" />
+
+	</LinearLayout>
+    
+</LinearLayout>

@@ -1,0 +1,42 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/LinearLayout1"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="#0040FF"
+    android:gravity="center_vertical"
+    android:orientation="vertical"
+    tools:context=".MainActivity" >
+
+    <Button
+        android:id="@+id/botonHistoria"
+        android:drawableLeft="@drawable/ic_action_action_settings"
+        android:onClick="mostrar"
+        android:text="@string/sitio"
+        android:tag="SITIO"
+        style="@style/botonesMainActivity" />
+
+    <Button
+        android:id="@+id/botonComer"
+        android:drawableLeft="@drawable/ic_action_action_settings"
+        android:onClick="mostrar"
+        android:text="@string/comer"
+        android:tag="COMER"
+        style="@style/botonesMainActivity" />
+    
+    <Button
+        android:id="@+id/botonDormir"
+        android:drawableLeft="@drawable/ic_action_action_settings"
+        android:onClick="mostrar"
+        android:text="@string/dormir"
+        android:tag="DORMIR"
+        style="@style/botonesMainActivity" />
+
+    <Button
+        android:id="@+id/botonActualizar"
+        android:drawableLeft="@drawable/ic_action_action_settings"
+        android:onClick="actualizar"
+        android:text="@string/eventosActualizar"
+        style="@style/botonesMainActivity" />
+    
+</LinearLayout>

@@ -1,0 +1,15 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.primos.visitamoraleja.MainActivity" >
+
+    
+       <item android:id="@+id/actionbar_inicio"
+        android:title="@string/actionbar_inicio"
+        android:orderInCategory="100"
+        app:showAsAction="ifRoom"
+        android:icon="@drawable/ic_actionbar_inicio"/>
+    
+    
+
+</menu>

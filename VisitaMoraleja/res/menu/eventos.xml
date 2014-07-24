@@ -1,0 +1,21 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.primos.visitamoraleja.MainActivity" >
+
+    
+    <item android:id="@+id/actionbar_share"
+        android:title="@string/actionbar_share"
+        app:actionProviderClass="android.support.v7.widget.ShareActionProvider"
+        app:showAsAction="ifRoom"
+        android:icon="@drawable/ic_action_nofavorito"/>
+    
+    <item android:id="@+id/actionbar_settings"
+        android:title="@string/actionbar_settings"
+        android:orderInCategory="100"
+        app:showAsAction="ifRoom"
+        android:icon="@drawable/ic_action_action_settings"/>
+    
+    
+
+</menu>
