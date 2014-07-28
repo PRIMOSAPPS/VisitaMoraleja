@@ -2,6 +2,7 @@ package com.primos.visitamoraleja;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.location.Criteria;
@@ -11,6 +12,8 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.widget.Toast;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -33,46 +36,56 @@ public class MapaLugaresActivity extends FragmentActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.mapa);
-		map = ((SupportMapFragment) getSupportFragmentManager()
-				.findFragmentById(R.id.map)).getMap();
+		
+		int status = GooglePlayServicesUtil.isGooglePlayServicesAvailable(getBaseContext());
+		 
+        // Showing status
+        if(status!=ConnectionResult.SUCCESS){ // Google Play Services are not available
+            int requestCode = 10;
+            Dialog dialog = GooglePlayServicesUtil.getErrorDialog(status, this, requestCode);
+            dialog.show();
+        } else {
+        	map = ((SupportMapFragment) getSupportFragmentManager()
+        			.findFragmentById(R.id.map)).getMap();
 
-		map.setMyLocationEnabled(true);
+        	map.setMyLocationEnabled(true);
 
-		// Recogemos el intent por si fue llamado desde otra activity
-		Intent llamadas = getIntent();
+        	// Recogemos el intent por si fue llamado desde otra activity
+        	Intent llamadas = getIntent();
 
-		// Si el mapa ha sido llamado desde MostrarLugarActivity
-		// vamos directamente al punto en el mapa.
+        	// Si el mapa ha sido llamado desde MostrarLugarActivity
+        	// vamos directamente al punto en el mapa.
 
-		double lt = llamadas.getDoubleExtra("latitud", 0);
-		double ln = llamadas.getDoubleExtra("longitud", 0);
+        	double lt = llamadas.getDoubleExtra("latitud", 0);
+        	double ln = llamadas.getDoubleExtra("longitud", 0);
 
-		insertaMarcador(map, llamadas.getStringExtra("nombre"), lt, ln);
+        	insertaMarcador(map, llamadas.getStringExtra("nombre"), lt, ln);
 
-		LatLng punto = new LatLng(lt, ln);
+        	LatLng punto = new LatLng(lt, ln);
 
-		// Centramos mapa en el punto elegido
-		CameraPosition camPos = new CameraPosition.Builder().target(punto)
-				.zoom(15) // Establecemos el zoom en 19
-				// .bearing(45) // Establecemos la orientacion con el noreste
-				// arriba
-				.tilt(30) // Bajamos el punto de vista de la camara 70 grados
-				.build();
-		CameraUpdate camUpd3 = CameraUpdateFactory.newCameraPosition(camPos);
-		map.animateCamera(camUpd3);
+        	// Centramos mapa en el punto elegido
+        	CameraPosition camPos = new CameraPosition.Builder().target(punto)
+        			.zoom(15) // Establecemos el zoom en 19
+        			// .bearing(45) // Establecemos la orientacion con el noreste
+        			// arriba
+        			.tilt(30) // Bajamos el punto de vista de la camara 70 grados
+        			.build();
+        	CameraUpdate camUpd3 = CameraUpdateFactory.newCameraPosition(camPos);
+        	map.animateCamera(camUpd3);
 
-		// Muestra las coordenadas de un punto cuando hacemos una pulsacion
-		// larga sobre el mapa
+        	// Muestra las coordenadas de un punto cuando hacemos una pulsacion
+        	// larga sobre el mapa
 
-		map.setOnMapLongClickListener(new OnMapLongClickListener() {
-			public void onMapLongClick(LatLng point) {
-				Toast.makeText(
-						MapaLugaresActivity.this,
-						getString(R.string.coordenadas) + " \n " + "Lat: "
-								+ point.latitude + "\n" + "Lng: "
-								+ point.longitude, Toast.LENGTH_SHORT).show();
-			} // onMapLongClick
-		});
+        	map.setOnMapLongClickListener(new OnMapLongClickListener() {
+        		public void onMapLongClick(LatLng point) {
+        			Toast.makeText(
+        					MapaLugaresActivity.this,
+        					getString(R.string.coordenadas) + " \n " + "Lat: "
+        							+ point.latitude + "\n" + "Lng: "
+        							+ point.longitude, Toast.LENGTH_SHORT).show();
+        		} // onMapLongClick
+        	});
+        }
 	} // Oncreate
 
 	// Metodo que inserta un Marker en el mapa pasandole el mapa, el id para
@@ -84,7 +97,7 @@ public class MapaLugaresActivity extends FragmentActivity {
 				.title(titulo));
 
 		Toast.makeText(MapaLugaresActivity.this,
-				titulo + ": estas a " + calculaDistancia(lat, lon),
+				titulo + ": " + calculaDistancia(lat, lon),
 				Toast.LENGTH_LONG).show();
 	}
 
@@ -126,7 +139,7 @@ public class MapaLugaresActivity extends FragmentActivity {
 				BigDecimal bd = new BigDecimal(results[0]);// resultados en metros
 				BigDecimal rounded = bd.setScale(2, RoundingMode.HALF_UP);
 				double distancia = rounded.doubleValue();
-				distanciaTexto = String.valueOf(distancia)
+				distanciaTexto = "estas a " + String.valueOf(distancia)
 						+ " metros de distancia.";
 				if (distancia > 1000) {
 					distancia = (Double) (distancia * 0.001f);// convierte de metros a
