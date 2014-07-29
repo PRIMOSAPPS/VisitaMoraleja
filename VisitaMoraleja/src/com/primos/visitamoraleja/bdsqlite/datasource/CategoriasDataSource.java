@@ -149,7 +149,7 @@ public class CategoriasDataSource extends AbstractDataSource {
 		resul.setDescripcion(cursor.getString(cursor.getColumnIndex(CategoriasSQLite.COLUMNA_DESCRIPCION)));
 		resul.setNombreIcono(cursor.getString(cursor.getColumnIndex(CategoriasSQLite.COLUMNA_NOMBRE_ICONO)));
 		resul.setNumeroSitios(cursor.getInt(cursor.getColumnIndex(CategoriasSQLite.COLUMNA_NUMERO_SITIOS)));
-		long ultimaActualizacion = cursor.getColumnIndex(CategoriasSQLite.COLUMNA_ULTIMA_ACTUALIZACION);
+		long ultimaActualizacion = cursor.getLong(cursor.getColumnIndex(CategoriasSQLite.COLUMNA_ULTIMA_ACTUALIZACION));
 		resul.setUltimaActualizacion(new Date(ultimaActualizacion));
 
 		return resul;

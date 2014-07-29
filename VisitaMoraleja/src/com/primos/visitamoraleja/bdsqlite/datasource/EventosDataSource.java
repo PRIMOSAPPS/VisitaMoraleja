@@ -172,7 +172,7 @@ public class EventosDataSource extends AbstractDataSource {
 		resul.setFin(new Date(fin));
 		int intActivo = cursor.getInt(cursor.getColumnIndex(SitiosSQLite.COLUMNA_ACTIVO));
 		resul.setActivo(ConversionesUtil.intToBoolean(intActivo));
-		long ultimaActualizacion = cursor.getColumnIndex(EventosSQLite.COLUMNA_ULTIMA_ACTUALIZACION);
+		long ultimaActualizacion = cursor.getLong(cursor.getColumnIndex(EventosSQLite.COLUMNA_ULTIMA_ACTUALIZACION));
 		resul.setUltimaActualizacion(new Date(ultimaActualizacion));
 		
 		return resul;

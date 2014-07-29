@@ -261,7 +261,7 @@ public class SitiosDataSource extends AbstractDataSource {
 		resul.setFavorito(ConversionesUtil.intToBoolean(intFavorito));
 		int intActivo = cursor.getInt(cursor.getColumnIndex(SitiosSQLite.COLUMNA_ACTIVO));
 		resul.setActivo(ConversionesUtil.intToBoolean(intActivo));
-		long ultimaActualizacion = cursor.getColumnIndex(SitiosSQLite.COLUMNA_ULTIMA_ACTUALIZACION);
+		long ultimaActualizacion = cursor.getLong(cursor.getColumnIndex(SitiosSQLite.COLUMNA_ULTIMA_ACTUALIZACION));
 		resul.setUltimaActualizacion(new Date(ultimaActualizacion));
 		
 		return resul;
