@@ -57,5 +57,26 @@ public class Notificacion implements Serializable {
 	public void setFechaFinValidez(Date fechaFinValidez) {
 		this.fechaFinValidez = fechaFinValidez;
 	}
+	
+	public boolean isActiva() {
+		boolean resul = false;
+		long ahoraMilis = new Date().getTime();
+		Date inicio = getFechaInicioValidez();
+		Date fin = getFechaFinValidez();
+		if(inicio == null && fin == null) {
+			resul = true;
+		} else if (inicio == null) {
+			long finMilis = fin.getTime();
+			resul = ahoraMilis < finMilis;
+		} else if (fin == null) {
+			long inicioMilis = inicio.getTime();
+			resul = ahoraMilis > inicioMilis;
+		} else {
+			long finMilis = fin.getTime();
+			long inicioMilis = inicio.getTime();
+			resul = ahoraMilis > inicioMilis && ahoraMilis < finMilis;
+		}
+		return resul;
+	}
 
 }

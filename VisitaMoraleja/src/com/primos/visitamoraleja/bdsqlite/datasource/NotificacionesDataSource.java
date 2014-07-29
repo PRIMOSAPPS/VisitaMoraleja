@@ -44,9 +44,9 @@ public class NotificacionesDataSource extends AbstractDataSource {
 	 */
 	public void eliminarPasadas() {
 		long fechaHoy = new Date().getTime();
-		String sql = "DELETE FROM " + NotificacionesSQLite.TABLE_NAME + " WHERE " +
-					NotificacionesSQLite.COLUMNA_FECHA_FIN_VALIDEZ + " < " + fechaHoy;
-		database.rawQuery(sql, null);
+		String whereClause = NotificacionesSQLite.COLUMNA_FECHA_FIN_VALIDEZ + " < ?";
+		String[] whereArgs = {Long.toString(fechaHoy)};
+		database.delete(NotificacionesSQLite.TABLE_NAME, whereClause, whereArgs);
 	}
 
 	/**
@@ -120,9 +120,9 @@ public class NotificacionesDataSource extends AbstractDataSource {
 		resul.setId(cursor.getLong(cursor.getColumnIndex(NotificacionesSQLite.COLUMNA_ID)));
 		resul.setTitulo(cursor.getString(cursor.getColumnIndex(NotificacionesSQLite.COLUMNA_TITULO)));
 		resul.setTexto(cursor.getString(cursor.getColumnIndex(NotificacionesSQLite.COLUMNA_TEXTO)));
-		long fechaInicioValidez = cursor.getColumnIndex(NotificacionesSQLite.COLUMNA_FECHA_INICIO_VALIDEZ);
+		long fechaInicioValidez = cursor.getLong(cursor.getColumnIndex(NotificacionesSQLite.COLUMNA_FECHA_INICIO_VALIDEZ));
 		resul.setFechaInicioValidez(new Date(fechaInicioValidez));
-		long fechaFinValidez = cursor.getColumnIndex(NotificacionesSQLite.COLUMNA_FECHA_FIN_VALIDEZ);
+		long fechaFinValidez = cursor.getLong(cursor.getColumnIndex(NotificacionesSQLite.COLUMNA_FECHA_FIN_VALIDEZ));
 		resul.setFechaFinValidez(new Date(fechaFinValidez));
 
 		return resul;

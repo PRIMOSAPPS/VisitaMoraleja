@@ -2,4 +2,6 @@
 <resources>
    <color name="rojo">#ff0000</color>
    <color name="verde">#00ff00</color>
+   <color name="notificacion_inactiva">#FA5858</color>
+   <color name="notificacion_activa">#81F781</color>
 </resources>

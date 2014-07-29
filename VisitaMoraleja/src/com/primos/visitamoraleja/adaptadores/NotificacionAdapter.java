@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.primos.visitamoraleja.R;
@@ -44,10 +45,18 @@ public class NotificacionAdapter extends BaseAdapter {
 		Notificacion notificacion = listaNotificaciones.get(position);
 		view.setTag(notificacion);
 		
+		if(notificacion.isActiva()) {
+			view.setBackgroundResource(R.color.notificacion_activa);
+		} else {
+			view.setBackgroundResource(R.color.notificacion_inactiva);
+		}
+		
 		TextView textTitulo = (TextView)view.findViewById(R.id.notificacionTitulo);
 		textTitulo.setText(notificacion.getTitulo());
 		TextView textTexto = (TextView)view.findViewById(R.id.notificacionTexto);
 		textTexto.setText(notificacion.getTexto());
+		ImageButton imageButtonDelete = (ImageButton)view.findViewById(R.id.notificacionDelete);
+		imageButtonDelete.setTag(notificacion);
 		
 		return view;
 	}

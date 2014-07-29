@@ -76,6 +76,8 @@ public class PashParseReceiver extends BroadcastReceiver {
 		notificacion.setFechaInicioValidez(dateFormat.parse(strFechaInicio));
 		String strFechaFin = json.getString("ffv");
 		notificacion.setFechaFinValidez(dateFormat.parse(strFechaFin));
+		Log.w(TAG, "Recibida notificacion con fecha inicio: " + strFechaInicio + " y fecha de fin: " + strFechaFin);
+		Log.w(TAG, "FECHAS PARSEADAS fecha inicio: " + notificacion.getFechaInicioValidez() + " y fecha de fin: " + notificacion.getFechaFinValidez());
 		
 		return notificacion;
 	}

@@ -5,6 +5,7 @@ import java.util.List;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
@@ -34,10 +35,19 @@ public class NotificacionesActivity extends Activity {
 			lstNotificaciones = new ArrayList<>();
 			lstNotificaciones.add(notificacion);
 		} else {
+			dataSource.eliminarPasadas();
 			lstNotificaciones = dataSource.getAll();
 		}
 		
 		setListAdapter(new NotificacionAdapter(this, lstNotificaciones));
+	}
+	
+	public void borrarNotificacion(View view) {
+		Notificacion notificacion = (Notificacion)view.getTag();
+		
+		dataSource.delete(notificacion);
+		setListAdapter(new NotificacionAdapter(this, dataSource.getAll()));
+		findViewById(R.id.lvNotificaciones).invalidate();
 	}
 	
 	protected ListView getListView() {
@@ -54,6 +64,7 @@ public class NotificacionesActivity extends Activity {
 	@Override
 	protected void onResume() {
 		dataSource.open();
+		dataSource.eliminarPasadas();
 		super.onResume();
 	}
 
