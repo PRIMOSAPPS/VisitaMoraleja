@@ -5,7 +5,6 @@ import java.util.List;
 import android.content.Context;
 import android.util.Log;
 
-import com.primos.visitamoraleja.almacenamiento.AlmacenamientoExterno;
 import com.primos.visitamoraleja.almacenamiento.AlmacenamientoFactory;
 import com.primos.visitamoraleja.almacenamiento.ItfAlmacenamiento;
 import com.primos.visitamoraleja.bdsqlite.datasource.CategoriasDataSource;

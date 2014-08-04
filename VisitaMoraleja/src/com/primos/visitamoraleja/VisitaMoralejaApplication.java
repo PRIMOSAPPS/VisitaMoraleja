@@ -10,6 +10,7 @@ import android.util.Log;
 
 
 public class VisitaMoralejaApplication extends Application {
+	private final static String TAG = "[VisitaMoralejaApplication]";
 
 	public VisitaMoralejaApplication() {
 		super();
@@ -27,12 +28,20 @@ public class VisitaMoralejaApplication extends Application {
 		UtilPropiedades propiedades = UtilPropiedades.getInstance();
 		String applicationId = propiedades.getProperty(UtilPropiedades.PROP_PARSE_APPLICATION_ID); 
         String clientKey = propiedades.getProperty(UtilPropiedades.PROP_PARSE_CLIENT_KEY);
-        Log.d("VisitaMoralejaApplication", "applicationId: " + applicationId);
-        Log.d("VisitaMoralejaApplication", "clientKey: " + clientKey);
+        Log.d(TAG, "applicationId: " + applicationId);
+        Log.d(TAG, "clientKey: " + clientKey);
 
 		Parse.initialize(this, applicationId, clientKey);
 		PushService.setDefaultPushCallback(this, MainActivity.class);
-		ParseInstallation.getCurrentInstallation().saveInBackground();
+		Runnable runableInicioParse = new Runnable() {
+			@Override
+			public void run() {
+				ParseInstallation.getCurrentInstallation().saveInBackground();
+			}
+		};
+		Thread th = new Thread(runableInicioParse, "ThreadInicioParse");
+		th.start();
+//		ParseInstallation.getCurrentInstallation().saveInBackground();
 	}
 
 	private void registraParse() {
