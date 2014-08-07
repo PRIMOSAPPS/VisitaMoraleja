@@ -48,6 +48,6 @@
     <string name="compartir2">, haz clic en este enlace para localizarme.</string>
     <string name="titulo_compartir">Compartir Lugar</string>
     <string name="title_activity_inicio">InicioActivity</string>
-    <string name="title_activity_notificaciones">NotificacionesActivity</string>
+    <string name="title_activity_notificaciones">Notificaciones</string>
 
 </resources>
