@@ -3,6 +3,7 @@ package com.primos.visitamoraleja.actualizador;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.http.HttpEntity;
@@ -26,6 +27,7 @@ import com.primos.visitamoraleja.excepcion.EventosException;
 import com.primos.visitamoraleja.util.UtilPropiedades;
 
 public class ConectorServidor {
+	private final static String TAG = "[ConectorServidor]";
 	private static String URL_GET_LISTA_CATEGORIAS = null;//"http://10.0.2.2/eventos/categorias/CategoriasToXML.php";
 	private static String URL_GET_LISTA_SITIOS = null;//"http://10.0.2.2/eventos/sitios/SitiosToXML.php";
 	private static String URL_GET_LISTA_EVENTOS = null;//"http://10.0.2.2/eventos/eventos/EventosToXML.php";
@@ -51,6 +53,9 @@ public class ConectorServidor {
 			URL_GET_LISTA_EVENTOS = servidor + rutaEventos;
 			URL_GET_LISTA_SITIOS = servidor + rutaSitios;
 		}
+		Log.d(TAG, "URL de las categorias para la actualizacion: " + URL_GET_LISTA_CATEGORIAS);
+		Log.d(TAG, "URL de los eventos para la actualizacion: " + URL_GET_LISTA_EVENTOS);
+		Log.d(TAG, "URL de los sitios para la actualizacion: " + URL_GET_LISTA_SITIOS);
 	}
 
 	/**
@@ -64,7 +69,7 @@ public class ConectorServidor {
 	 */
 	public List<Categoria> getListaCategorias(long ultimaActualizacion) throws EventosException {
 		try {
-			Log.w("[ConectorServidor]", "Pidiendo la actualizacion de sitios para la ultimaActualizacion: " + ultimaActualizacion);
+			Log.w(TAG, "Pidiendo la actualizacion de categorias para la ultimaActualizacion: " + ultimaActualizacion + " -- " + new Date(ultimaActualizacion));
 
 			HttpClient httpclient = new DefaultHttpClient();
 			/*Creamos el objeto de HttpClient que nos permitira conectarnos mediante peticiones http*/
@@ -85,7 +90,7 @@ public class ConectorServidor {
 			HttpEntity ent = resp.getEntity();/*y obtenemos una respuesta*/
 			
 			String text = EntityUtils.toString(ent);
-			Log.w("CATEGORIAS: ", text);
+			Log.w(TAG, text);
 			
 			InputStream is = new ByteArrayInputStream(text.getBytes());
 			
@@ -108,7 +113,7 @@ public class ConectorServidor {
 	 */
 	public List<Sitio> getListaSitios(long ultimaActualizacion, String idsCategoriasActualizacion) throws EventosException {
 		try {
-			Log.w("[ConectorServidor]", "Pidiendo la actualizacion de sitios para la ultimaActualizacion: " + ultimaActualizacion +
+			Log.w(TAG, "Pidiendo la actualizacion de sitios para la ultimaActualizacion: " + ultimaActualizacion +
 					" y categorias: " + idsCategoriasActualizacion);
 			HttpClient httpclient = new DefaultHttpClient();
 			/*Creamos el objeto de HttpClient que nos permitira conectarnos mediante peticiones http*/
@@ -134,7 +139,7 @@ public class ConectorServidor {
 			HttpEntity ent = resp.getEntity();/*y obtenemos una respuesta*/
 			
 			String text = EntityUtils.toString(ent);
-			Log.w("SITIOS: ", text);
+			Log.w(TAG, text);
 			
 			InputStream is = new ByteArrayInputStream(text.getBytes());
 			
@@ -157,7 +162,7 @@ public class ConectorServidor {
 	 */
 	public List<Evento> getListaEventos(long ultimaActualizacion, String idsCategoriasActualizacion) throws EventosException {
 		try {
-			Log.w("[ConectorServidor]", "Pidiendo la actualizacion de eventos para la ultimaActualizacion: " + ultimaActualizacion +
+			Log.w(TAG, "Pidiendo la actualizacion de eventos para la ultimaActualizacion: " + ultimaActualizacion +
 					" y categorias: " + idsCategoriasActualizacion);
 			HttpClient httpclient = new DefaultHttpClient();
 			/*Creamos el objeto de HttpClient que nos permitira conectarnos mediante peticiones http*/
@@ -181,7 +186,7 @@ public class ConectorServidor {
 			HttpEntity ent = resp.getEntity();/*y obtenemos una respuesta*/
 			
 			String text = EntityUtils.toString(ent);
-			Log.w("EVENTOS: ", text);
+			Log.w(TAG, text);
 			
 			InputStream is = new ByteArrayInputStream(text.getBytes());
 			

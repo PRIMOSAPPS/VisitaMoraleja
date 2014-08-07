@@ -1,5 +1,7 @@
 package com.primos.visitamoraleja.actualizador;
 
+import java.text.ParseException;
+import java.util.Date;
 import java.util.List;
 
 import android.content.Context;
@@ -16,6 +18,7 @@ import com.primos.visitamoraleja.contenidos.Evento;
 import com.primos.visitamoraleja.contenidos.Sitio;
 import com.primos.visitamoraleja.excepcion.EventosException;
 import com.primos.visitamoraleja.util.UtilConexion;
+import com.primos.visitamoraleja.util.UtilFechas;
 import com.primos.visitamoraleja.util.UtilPreferencias;
 
 /**
@@ -27,6 +30,7 @@ import com.primos.visitamoraleja.util.UtilPreferencias;
  *
  */
 public class AsyncTaskActualizador extends AsyncTask<Void, Void, AsyncTaskActualizador.ResultadoActualizacion> {
+	private final static String TAG = "AsyncTaskActualizador";
 	/**
 	 * Resultado de la accion en segundo plano, que indica si las actualizaciones se realizan correctamente
 	 * o se produce un error durante la actualizacion.
@@ -44,7 +48,7 @@ public class AsyncTaskActualizador extends AsyncTask<Void, Void, AsyncTaskActual
 	 * @param mostrarToast Indica si se debe mostrar un mensaje mediante la clase Toast con el resultado de la actualizacion.
 	 */
 	public AsyncTaskActualizador(Context contexto, boolean mostrarToast) {
-		Log.i("AsyncTaskActualizador", "INICIO");
+		Log.i(TAG, "INICIO");
 		this.contexto = contexto;
 		this.mostrarToast = mostrarToast;
 	}
@@ -63,10 +67,14 @@ public class AsyncTaskActualizador extends AsyncTask<Void, Void, AsyncTaskActual
 			dataSource.open();
 			
 			long ultimaActualizacion = dataSource.getUltimaActualizacion();
+			Date dateUltimaActualizacion = UtilFechas.fechaToUTC(new Date(ultimaActualizacion));
+			ultimaActualizacion = dateUltimaActualizacion.getTime();
 	
 			List<Categoria> lstCategorias = cs.getListaCategorias(ultimaActualizacion);
 			Actualizador actualizador = new Actualizador(contexto);
 			actualizador.actualizarCategorias(lstCategorias);
+		} catch (ParseException e) {
+			Log.e(TAG, "Excepcion al parsear la fecha para conseguir la ultima actualizacion en formato UTC: ", e);
 		} finally {
 			dataSource.close();
 		}
@@ -88,11 +96,15 @@ public class AsyncTaskActualizador extends AsyncTask<Void, Void, AsyncTaskActual
 			dataSource.open();
 			
 			long ultimaActualizacion = dataSource.getUltimaActualizacion();
-	
+			Date dateUltimaActualizacion = UtilFechas.fechaToUTC(new Date(ultimaActualizacion));
+			ultimaActualizacion = dateUltimaActualizacion.getTime();
+
 			List<Sitio> lstSitios = cs.getListaSitios(ultimaActualizacion, idsCategoriasActualizacion);
 			Actualizador actualizador = new Actualizador(contexto);
 			actualizador.actualizarSitios(lstSitios);
 
+		} catch (ParseException e) {
+			Log.e(TAG, "Excepcion al parsear la fecha para conseguir la ultima actualizacion en formato UTC: ", e);
 		} finally {
 			dataSource.close();
 		}
@@ -114,10 +126,14 @@ public class AsyncTaskActualizador extends AsyncTask<Void, Void, AsyncTaskActual
 			dataSource.open();
 			
 			long ultimaActualizacion = dataSource.getUltimaActualizacion();
-	
+			Date dateUltimaActualizacion = UtilFechas.fechaToUTC(new Date(ultimaActualizacion));
+			ultimaActualizacion = dateUltimaActualizacion.getTime();
+
 			List<Evento> lstEventos = cs.getListaEventos(ultimaActualizacion, idsCategoriasActualizacion);
 			Actualizador actualizador = new Actualizador(contexto);
 			actualizador.actualizarEventos(lstEventos);
+		} catch (ParseException e) {
+			Log.e(TAG, "Excepcion al parsear la fecha para conseguir la ultima actualizacion en formato UTC: ", e);
 		} finally {
 			dataSource.close();
 		}
@@ -172,7 +188,7 @@ public class AsyncTaskActualizador extends AsyncTask<Void, Void, AsyncTaskActual
 				actualizarEventos(idsCategoriasActualizacion);
 			}
 		} catch (EventosException e) {
-			Log.e("AsyncTaskActualizador", "Error leyendo la ultima actualizacion.", e);
+			Log.e(TAG, "Error leyendo la ultima actualizacion.", e);
 			return ResultadoActualizacion.KO;
 		}
 		return ResultadoActualizacion.OK;

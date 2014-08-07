@@ -1,7 +1,7 @@
 package com.primos.visitamoraleja.xml;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.xml.sax.Attributes;
@@ -12,6 +12,7 @@ import android.util.Log;
 
 import com.primos.visitamoraleja.contenidos.Categoria;
 import com.primos.visitamoraleja.util.ConversionesUtil;
+import com.primos.visitamoraleja.util.UtilFechas;
 
 /**
  * Parsea un XML para convertir su contenido en una lista de categorias.
@@ -22,7 +23,6 @@ public class ManejadorCategoriasXML extends DefaultHandler {
 	private StringBuilder cadena;
 	private List<Categoria> lstCategorias = null;
 	private Categoria categoria;
-	private SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
 	
 	@Override
 	public void startDocument() throws SAXException {
@@ -63,7 +63,8 @@ public class ManejadorCategoriasXML extends DefaultHandler {
 //				Bitmap icono = BitmapFactory.decodeByteArray(base64decoded, 0, base64decoded.length);
 				categoria.setIcono(ConversionesUtil.getBitmap(cadena));
 			} else if(localName.equals("ultimaActualizacion")) {
-				categoria.setUltimaActualizacion(sdf.parse(cadena.toString().trim()));
+				Date ultimaActualizacionDefault = UtilFechas.fechaFromUTC(cadena.toString().trim());
+				categoria.setUltimaActualizacion(ultimaActualizacionDefault);
 			} else if(localName.equals("categoria")) {
 				lstCategorias.add(categoria);
 			}

@@ -1,7 +1,7 @@
 package com.primos.visitamoraleja.xml;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.xml.sax.Attributes;
@@ -12,6 +12,7 @@ import android.util.Log;
 
 import com.primos.visitamoraleja.contenidos.Evento;
 import com.primos.visitamoraleja.util.ConversionesUtil;
+import com.primos.visitamoraleja.util.UtilFechas;
 
 /**
  * Parsea un XML para convertir su contenido en una lista de eventos.
@@ -23,7 +24,6 @@ public class ManejadorEventosXML extends DefaultHandler {
 	private StringBuilder cadena;
 	private List<Evento> lstEventos = null;
 	private Evento evento;
-	private SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
 	
 	@Override
 	public void startDocument() throws SAXException {
@@ -72,14 +72,17 @@ public class ManejadorEventosXML extends DefaultHandler {
 			} else if(localName.equals("longitud")) {
 				evento.setLongitud(Double.parseDouble(cadena.toString()));
 			} else if(localName.equals("inicio")) {
-				evento.setInicio(sdf.parse(cadena.toString().trim()));
+				Date fechaInicio = UtilFechas.fechaFromUTC(cadena.toString().trim());
+				evento.setInicio(fechaInicio);
 			} else if(localName.equals("fin")) {
-				evento.setFin(sdf.parse(cadena.toString().trim()));
+				Date fechaFin = UtilFechas.fechaFromUTC(cadena.toString().trim());
+				evento.setFin(fechaFin);
 			} else if(localName.equals("activo")) {
 				int valor = Integer.parseInt(cadena.toString());
 				evento.setActivo(ConversionesUtil.intToBoolean(valor));
 			} else if(localName.equals("ultimaActualizacion")) {
-				evento.setUltimaActualizacion(sdf.parse(cadena.toString().trim()));
+				Date ultimaActualizacionDefault = UtilFechas.fechaFromUTC(cadena.toString().trim());
+				evento.setUltimaActualizacion(ultimaActualizacionDefault);
 			} else if(localName.equals("evento")) {
 				lstEventos.add(evento);
 			}

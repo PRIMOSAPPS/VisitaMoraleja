@@ -2,6 +2,7 @@ package com.primos.visitamoraleja.xml;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.xml.sax.Attributes;
@@ -12,6 +13,7 @@ import android.util.Log;
 
 import com.primos.visitamoraleja.contenidos.Sitio;
 import com.primos.visitamoraleja.util.ConversionesUtil;
+import com.primos.visitamoraleja.util.UtilFechas;
 
 /**
  * Parsea un XML para convertir su contenido en una lista de sitios.
@@ -23,7 +25,6 @@ public class ManejadorSitiosXML extends DefaultHandler {
 	private StringBuilder cadena;
 	private List<Sitio> lstSitios = null;
 	private Sitio sitio;
-	private SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
 	
 	@Override
 	public void startDocument() throws SAXException {
@@ -111,7 +112,8 @@ public class ManejadorSitiosXML extends DefaultHandler {
 				int valor = Integer.parseInt(cadena.toString());
 				sitio.setActivo(ConversionesUtil.intToBoolean(valor));
 			} else if(localName.equals("ultimaActualizacion")) {
-				sitio.setUltimaActualizacion(sdf.parse(cadena.toString().trim()));
+				Date ultimaActualizacionDefault = UtilFechas.fechaFromUTC(cadena.toString().trim());
+				sitio.setUltimaActualizacion(ultimaActualizacionDefault);
 			} else if(localName.equals("sitio")) {
 				lstSitios.add(sitio);
 			}
