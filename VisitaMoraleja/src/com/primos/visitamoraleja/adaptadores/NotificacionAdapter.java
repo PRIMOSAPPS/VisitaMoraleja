@@ -54,7 +54,10 @@ public class NotificacionAdapter extends BaseAdapter {
 		TextView textTitulo = (TextView)view.findViewById(R.id.notificacionTitulo);
 		textTitulo.setText(notificacion.getTitulo());
 		TextView textTexto = (TextView)view.findViewById(R.id.notificacionTexto);
-		textTexto.setText(notificacion.getTexto());
+		String textoTmp = notificacion.getTexto();
+		textoTmp += "\n" + notificacion.getFechaInicioValidez();
+		textoTmp += "\n" + notificacion.getFechaFinValidez();
+		textTexto.setText(textoTmp);
 		ImageButton imageButtonDelete = (ImageButton)view.findViewById(R.id.notificacionDelete);
 		imageButtonDelete.setTag(notificacion);
 		

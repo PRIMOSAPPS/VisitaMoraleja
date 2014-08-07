@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ListAdapter;
@@ -74,4 +75,10 @@ public class NotificacionesActivity extends Activity {
 		super.onPause();
 	}
 
+	@Override
+	public void onBackPressed() {
+		super.onBackPressed();
+		Intent intent = new Intent(this, MainActivity.class);
+    	startActivity(intent);
+	}
 }

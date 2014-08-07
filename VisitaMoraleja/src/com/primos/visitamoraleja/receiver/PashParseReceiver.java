@@ -22,7 +22,7 @@ import com.primos.visitamoraleja.contenidos.Notificacion;
 
 public class PashParseReceiver extends BroadcastReceiver {
 	private static final String TAG = "PushSenseiReceiver";
-	private SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH");
+	private SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 
 	@Override
 	public void onReceive(Context context, Intent intent) {
@@ -45,6 +45,7 @@ public class PashParseReceiver extends BroadcastReceiver {
 			
             Log.d(TAG, "Recibida una notificacion: " + notificacion.getTexto());
             
+            long[] patronVibracion = {500};
             //Esto hace posible crear la notificación
             NotificationCompat.Builder mBuilder =
                     new NotificationCompat.Builder(context)
@@ -53,6 +54,7 @@ public class PashParseReceiver extends BroadcastReceiver {
                             .setContentText(notificacion.getTexto())
                             .setContentIntent(resultPendingIntent)
                             .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
+                            .setVibrate(patronVibracion)
                             .setAutoCancel(true);
 
             NotificationManager mNotificationManager =
