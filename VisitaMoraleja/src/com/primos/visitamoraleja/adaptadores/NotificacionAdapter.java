@@ -3,6 +3,7 @@ package com.primos.visitamoraleja.adaptadores;
 import java.util.List;
 
 import android.app.Activity;
+import android.graphics.drawable.GradientDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,12 +45,24 @@ public class NotificacionAdapter extends BaseAdapter {
 		
 		Notificacion notificacion = listaNotificaciones.get(position);
 		view.setTag(notificacion);
+		GradientDrawable background = (GradientDrawable)view.getBackground();
 		
+		int resColorBorde;
+		int resColorFondo;
 		if(notificacion.isActiva()) {
-			view.setBackgroundResource(R.color.notificacion_activa);
+			resColorFondo = R.color.notificacion_activa;
+			resColorBorde = R.color.verde;
+//			view.setBackgroundResource(R.color.notificacion_activa);
 		} else {
-			view.setBackgroundResource(R.color.notificacion_inactiva);
+			resColorFondo = R.color.notificacion_inactiva;
+			resColorBorde = R.color.rojo;
+//			view.setBackgroundResource(R.color.notificacion_inactiva);
 		}
+		
+		int colorBorde = actividad.getResources().getColor(resColorBorde);
+		int colorFondo = actividad.getResources().getColor(resColorFondo);
+		background.setStroke(2, colorBorde);
+		background.setColor(colorFondo);
 		
 		TextView textTitulo = (TextView)view.findViewById(R.id.notificacionTitulo);
 		textTitulo.setText(notificacion.getTitulo());
