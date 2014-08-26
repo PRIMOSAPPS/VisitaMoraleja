@@ -105,6 +105,7 @@ public class ImageAdapter extends BaseAdapter {
 		ItfAlmacenamiento almacenamiento = AlmacenamientoFactory.getAlmacenamiento(myContext);
 		Bitmap bmp = almacenamiento.getImagenSitio(sitio.getId(), getNombreImagen(position));
 		iv.setImageBitmap(bmp);
+		iv.setTag(bmp);
 
 		// Image should be scaled somehow
 		// iv.setScaleType(ImageView.ScaleType.CENTER);

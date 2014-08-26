@@ -107,6 +107,29 @@ public class EventosDataSource extends AbstractDataSource {
 		return resul;
 	}
 	
+	private List<Evento> getListaEventosByCursor(Cursor cursor) {
+		List<Evento> resul = new ArrayList<Evento>();
+		cursor.moveToFirst();
+	    while (!cursor.isAfterLast()) {
+			Evento evento = cursorToObject(cursor);
+			Log.d("[EventosDataSource]", "Leyendo un evento del cursor: " + evento);
+			resul.add(evento);
+			cursor.moveToNext();
+		}
+	    return resul;
+	}
+	
+	public List<Evento> getBySitioId(long id) {
+		List<Evento> resul = new ArrayList<Evento>();
+		String where = EventosSQLite.COLUMNA_ID_SITIO + " = " + id;
+		Cursor cursor = database.query(EventosSQLite.TABLE_NAME,
+				allColumns, where, null, null, null, null);
+		resul = getListaEventosByCursor(cursor);
+		cursor.close();
+		
+		return resul;
+	}
+
 	/**
 	 * Devuelve la fecha de la ultima actualizacion de la tabla
 	 * @param idPoblacion
@@ -133,14 +156,8 @@ public class EventosDataSource extends AbstractDataSource {
 		Cursor cursor = database.query(EventosSQLite.TABLE_NAME,
 				allColumns, null, null, null, null, null);
 
-		cursor.moveToFirst();
-		while (!cursor.isAfterLast()) {
-			Evento evento = cursorToObject(cursor);
-			Log.i("BORRAR", "EL EVENTO: " + evento);
-
-			resul.add(evento);
-			cursor.moveToNext();
-		}
+		resul = getListaEventosByCursor(cursor);
+		cursor.close();
 		// make sure to close the cursor
 		cursor.close();
 		return resul;

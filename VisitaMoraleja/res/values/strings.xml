@@ -8,6 +8,7 @@
     <string name="actionbar_share">Comp</string>
     <string name="actionbar_favorito">Favorito</string>
     <string name="actionbar_inicio">Inicio</string>
+    <string name="actionbar_eventos">Eventos</string>
     <string name="coordenadas">LatLong:</string>
     <string name="eventos">Eventos</string>
     <string name="historia">Historia</string>
@@ -49,5 +50,7 @@
     <string name="titulo_compartir">Compartir Lugar</string>
     <string name="title_activity_inicio">InicioActivity</string>
     <string name="title_activity_notificaciones">Notificaciones</string>
+    <string name="title_activity_lista_eventos">Eventos</string>
+    <string name="title_activity_detalle_evento_temporal">DetalleEventoTemporalActivity</string>
 
 </resources>

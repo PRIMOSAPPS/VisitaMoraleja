@@ -97,4 +97,25 @@ public class UtilFechas {
 	    Date fromGmt = new Date(dateUTC.getTime() + sdfDefault.getOffset(ahora.getTime()));
 	    return fromGmt;
 	}
+	
+	
+	public static boolean isActivaFechaActual(Date inicio, Date fin) {
+		boolean resul = false;
+		long ahoraMilis = new Date().getTime();
+		if(inicio == null && fin == null) {
+			resul = true;
+		} else if (inicio == null) {
+			long finMilis = fin.getTime();
+			resul = ahoraMilis < finMilis;
+		} else if (fin == null) {
+			long inicioMilis = inicio.getTime();
+			resul = ahoraMilis > inicioMilis;
+		} else {
+			long finMilis = fin.getTime();
+			long inicioMilis = inicio.getTime();
+			resul = ahoraMilis > inicioMilis && ahoraMilis < finMilis;
+		}
+		return resul;
+	}
+
 }

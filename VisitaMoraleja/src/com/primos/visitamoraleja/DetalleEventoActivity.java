@@ -1,10 +1,13 @@
 package com.primos.visitamoraleja;
 
+import java.util.List;
+
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,18 +25,23 @@ import android.widget.ViewSwitcher;
 
 import com.primos.visitamoraleja.adaptadores.ImageAdapter;
 import com.primos.visitamoraleja.bdsqlite.datasource.CategoriasDataSource;
+import com.primos.visitamoraleja.bdsqlite.datasource.EventosDataSource;
 import com.primos.visitamoraleja.bdsqlite.datasource.SitiosDataSource;
 import com.primos.visitamoraleja.contenidos.Categoria;
+import com.primos.visitamoraleja.contenidos.Evento;
 import com.primos.visitamoraleja.contenidos.Sitio;
 
 public class DetalleEventoActivity extends ActionBarListActivity implements
 		AdapterView.OnItemSelectedListener, ViewSwitcher.ViewFactory,
 		OnClickListener {
+	private final static String TAG = "[DetalleEventoActivity]";
 	private SitiosDataSource dataSource = null;
+	private EventosDataSource eventosDataSource = null;
 	private Sitio sitio = null;
 	int mFlipping = 0; // Initially flipping is off
 	Button mButton; // Reference to button available in the layout to start and
 					// stop the flipper
+	private List<Evento> lstEventosSitio;
 
 	private String getTxtDatosSitio(Sitio sitio) {
 		StringBuilder strBuild = new StringBuilder();
@@ -62,6 +70,8 @@ public class DetalleEventoActivity extends ActionBarListActivity implements
 		super.onCreate(savedInstanceState);
 		dataSource = new SitiosDataSource(this);
 		dataSource.open();
+		eventosDataSource = new EventosDataSource(this);
+		eventosDataSource.open();
 		// setContentView(R.layout.activity_detalle_evento);
 		setContentView(R.layout.fragment_detalle_evento);
 
@@ -97,7 +107,7 @@ public class DetalleEventoActivity extends ActionBarListActivity implements
 		textTelefono.setText(sitio.getTelefonosFijos());
 
 		textViewTextoLargo1.setText(sitio.getTextoLargo1());
-
+		
 		myGallery.setOnItemSelectedListener(new OnItemSelectedListener() {
 
 			public void onItemSelected(AdapterView<?> parent, View v,
@@ -106,6 +116,7 @@ public class DetalleEventoActivity extends ActionBarListActivity implements
 				for (int i = 0; i < 30; i++) {
 					str += "   selected option: " + position + "-" + i;
 				}
+				
 			}
 
 			public void onNothingSelected(AdapterView<?> parent) {
@@ -305,6 +316,11 @@ public class DetalleEventoActivity extends ActionBarListActivity implements
 		case R.id.actionbar_favorito:
 			cambiarEstadoFavorito(item);
 			return true;
+		case R.id.actionbar_eventos:
+			Intent iEventos = new Intent(this, ListaEventosActivity.class);
+			iEventos.putExtra(ListaEventosActivity.ID_SITIO, sitio.getId());
+			startActivity(iEventos);
+			return true;
 		}
 		return false;
 	}
@@ -339,6 +355,12 @@ public class DetalleEventoActivity extends ActionBarListActivity implements
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.detalle_evento, menu);
 		asignarIconoFavorito(menu.findItem(R.id.actionbar_favorito));
+		lstEventosSitio = eventosDataSource.getBySitioId(sitio.getId());
+		Log.d(TAG, "Numero de eventos para el sitio " + sitio.getNombre() + " es " + lstEventosSitio.size());
+		if(lstEventosSitio.isEmpty()) {
+			MenuItem item = menu.findItem(R.id.actionbar_eventos);
+			item.setVisible(false);
+		}
 		return true;
 	}
 
@@ -356,6 +378,7 @@ public class DetalleEventoActivity extends ActionBarListActivity implements
 	@Override
 	public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2,
 			long arg3) {
+		Log.d("IMAGEN", "Mostrada imagen");
 	}
 
 	@Override
@@ -366,12 +389,14 @@ public class DetalleEventoActivity extends ActionBarListActivity implements
 	@Override
 	protected void onResume() {
 		dataSource.open();
+		eventosDataSource.open();
 		super.onResume();
 	}
 
 	@Override
 	protected void onPause() {
 		dataSource.close();
+		eventosDataSource.close();
 		super.onPause();
 	}
 }

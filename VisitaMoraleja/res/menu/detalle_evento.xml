@@ -7,15 +7,18 @@
     
     
     
+    <item android:id="@+id/actionbar_eventos"
+        android:title="@string/actionbar_eventos"
+        app:showAsAction="ifRoom"
+        android:icon="@drawable/ic_action_evento"/>
+    
     <item android:id="@+id/actionbar_inicio"
         android:title="@string/actionbar_inicio"
-        
         app:showAsAction="ifRoom"
         android:icon="@drawable/ic_actionbar_inicio"/>
     
      <item android:id="@+id/actionbar_favorito"
         android:title="@string/actionbar_favorito"
-        
         app:showAsAction="ifRoom"
         android:icon="@android:drawable/btn_star_big_off"/>
     

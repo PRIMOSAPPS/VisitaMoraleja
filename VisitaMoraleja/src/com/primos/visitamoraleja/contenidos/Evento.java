@@ -3,6 +3,8 @@ package com.primos.visitamoraleja.contenidos;
 import java.io.Serializable;
 import java.util.Date;
 
+import com.primos.visitamoraleja.util.UtilFechas;
+
 import android.graphics.Bitmap;
 
 public class Evento implements Serializable {
@@ -213,7 +215,15 @@ public class Evento implements Serializable {
 		this.icono = icono;
 	}
 
-
+	/**
+	 * Devuelve true si la fecha actual esta entre el inicio y el fin del evento
+	 * @return
+	 */
+	public boolean isActivoPorFecha() {
+		Date inicio = getInicio();
+		Date fin = getFin();
+		return UtilFechas.isActivaFechaActual(inicio, fin);
+	}
 
 	@Override
 	public String toString() {
