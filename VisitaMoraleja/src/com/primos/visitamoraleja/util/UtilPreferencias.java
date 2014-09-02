@@ -2,6 +2,7 @@ package com.primos.visitamoraleja.util;
 
 import java.util.List;
 
+import com.primos.visitamoraleja.MapaLugaresActivity;
 import com.primos.visitamoraleja.PreferenciasActivity;
 import com.primos.visitamoraleja.bdsqlite.datasource.CategoriasDataSource;
 import com.primos.visitamoraleja.contenidos.Categoria;
@@ -105,5 +106,33 @@ public class UtilPreferencias {
 		}
 		return resul;
 	}
+	
+	/**
+	 * Devuelve true si esta activada la opcion de calcular la ruta por defecto
+	 * @param contexto
+	 * @return
+	 */
+	public static boolean isCalcularRutaAutomaticamente(Context contexto) {
+		Log.w("[UtilPreferencias]", "Se comprueba si las rutas deben calcularse automaticamente.");
+		
+		SharedPreferences ratePrefs = PreferenceManager
+                .getDefaultSharedPreferences(contexto);
+		return ratePrefs.getBoolean(PreferenciasActivity.PREFERENCIA_CALCULAR_RUTAS_DEFECTO, true);
+	}
 
+	/**
+	 * Devuelve el medio de transporte por defecto para calcular la ruta.
+	 * @param contexto
+	 * @return
+	 */
+	public static String getMedioTransporteDefectoRuta(Context contexto) {
+		Log.w("[UtilPreferencias]", "Devuelve el valor por defecto para el calculo de la ruta.");
+		
+		SharedPreferences ratePrefs = PreferenceManager
+                .getDefaultSharedPreferences(contexto);
+		
+		String resul = ratePrefs.getString(PreferenciasActivity.PREFERENCIA_TRANSPORTE_RUTA_DEFECTO, MapaLugaresActivity.COCHE);
+		Log.w("[UtilPreferencias]", "El medio de transporte por defecto es: " + resul);
+		return resul;
+	}
 }

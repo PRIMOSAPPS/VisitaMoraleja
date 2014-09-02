@@ -37,6 +37,15 @@
     <string name="pref_actualizar_solo_categorias">Actualizar categorias</string>
     <string name="pref_actualizar_solo_categorias_sum">Solamente actualiza la información de las categorias seleccionadas</string>
     <string name="pref_cat_config_categorias_actualizar">Configuracion actualizacion por categorias</string>
+    <string name="pref_cat_config_opciones_ruta">Configuracion del calculo de rutas</string>
+    <string name="pref_calcular_ruta_defecto_sum">Calcular ruta por defecto</string>
+    <string name="pref_calcular_ruta_defecto">Calcular ruta por defecto</string>
+    <string name="pref_calcular_ruta_coche_sum">Calcular ruta por defecto para coche</string>
+    <string name="pref_calcular_ruta_coche">Coche</string>
+    <string name="pref_calcular_ruta_bici_sum">Calcular ruta por defecto para bici</string>
+    <string name="pref_calcular_ruta_bici">Bicicleta</string>
+        <string name="pref_calcular_ruta_andando_sum">Calcular ruta por defecto andando</string>
+    <string name="pref_calcular_ruta_andando">Andando</string>
     <string name="title_activity_main">ViewFlipper Demo</string>
     <string name="str_img1">Image1</string>
     <string name="str_img2">Image2</string>

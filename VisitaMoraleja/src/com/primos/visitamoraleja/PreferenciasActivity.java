@@ -19,6 +19,9 @@ public class PreferenciasActivity extends PreferenceActivity {
 	public final static String PREFIJO_PREFERENCIA_CATEGORIAS = "categoria_";
 	public final static String PREFERENCIA_ACTUALIZAR_POR_CATEGORIAS = "pref_actualizar_categorias";
 	public final static String PREFERENCIA_ACTUALIZAR_AUTOMATICAMENTE = "pref_actualizar_automaticamente";
+	public final static String PREFERENCIA_CALCULAR_RUTAS_DEFECTO = "pref_calcular_rutas_defecto";
+	public final static String PREFERENCIA_CATE_OPCIONES_RUTA = "pref_cate_opciones_ruta";
+	public final static String PREFERENCIA_TRANSPORTE_RUTA_DEFECTO = "pref_transporte_ruta_defecto";
 	
 	private CategoriasDataSource dataSource;
 	
@@ -61,6 +64,17 @@ public class PreferenciasActivity extends PreferenceActivity {
 				return true;
 			}
 		});
+		
+		final CheckBoxPreference checkBoxCacularRutas = (CheckBoxPreference)findPreference(PREFERENCIA_CALCULAR_RUTAS_DEFECTO);
+		final PreferenceCategory categoriaOpcionesRuta = (PreferenceCategory)findPreference(PREFERENCIA_CATE_OPCIONES_RUTA);
+		checkBoxCacularRutas.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+			@Override
+			public boolean onPreferenceChange(Preference preference, Object newValue) {
+				categoriaOpcionesRuta.setEnabled(!checkBoxCacularRutas.isChecked());
+				return true;
+			}
+		});
+		
 		targetCategory.setEnabled(checkBoxPreference.isChecked());
 
 	}

@@ -17,4 +17,24 @@
         android:title="@string/pref_cat_config_categorias_actualizar" >
     </PreferenceCategory>
 
+    <PreferenceCategory
+        android:key="pref_cate_check_opciones_ruta"
+        android:title="@string/pref_cat_config_opciones_ruta" >
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="pref_calcular_rutas_defecto"
+            android:summary="@string/pref_calcular_ruta_defecto_sum"
+            android:title="@string/pref_calcular_ruta_defecto" />
+    </PreferenceCategory>
+    
+    <PreferenceCategory
+        android:key="pref_cate_opciones_ruta" >
+        <ListPreference
+            android:defaultValue="Coche"
+            android:entries="@array/textOpcionesTransporte"
+            android:entryValues="@array/valoresOpcionesTransporte"
+            android:key="pref_transporte_ruta_defecto"
+            android:title="Selecciona el modo de transporte" />
+    </PreferenceCategory>
+
 </PreferenceScreen>

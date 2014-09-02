@@ -1,15 +1,23 @@
 package com.primos.visitamoraleja;
-import java.math.BigDecimal;
-import java.math.RoundingMode;
+import java.util.List;
 
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.text.Html;
+import android.view.Menu;
+import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.ListAdapter;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -18,19 +26,34 @@ import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
+import com.google.android.gms.maps.Projection;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
+import com.primos.visitamoraleja.prueba.JSONParser;
+import com.primos.visitamoraleja.util.ObjRuta;
+import com.primos.visitamoraleja.util.UtilMapas;
+import com.primos.visitamoraleja.util.UtilPreferencias;
 
 /* Clase que se encarga de mostrar los datos (Foto, nombre, descripcion y coordenadas) de un lugar
  * almacenado. Esta clase pude ser llamada desde ListaLugaresActivity o al pulsar sobre
  * un marcador en MapaLugaresActivity
  */
 public class MapaLugaresActivity extends FragmentActivity {
-	GoogleMap map;
+	public final static String COCHE = "driving";
+	private final static String BICI = "bicycling";
+	private final static String ANDANDO = "walking";
+	private final static String TAG = "[MapaLugaresActivity]";
+	private GoogleMap map;
 	// Cursor cursor;
-	String id;
+	private String id;
+	
+	private double latitudDestino;
+	private double longitudDestino;
+	private ObjRuta objRuta;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +72,7 @@ public class MapaLugaresActivity extends FragmentActivity {
         			.findFragmentById(R.id.map)).getMap();
 
         	map.setMyLocationEnabled(true);
+        	Projection p = map.getProjection();
 
         	// Recogemos el intent por si fue llamado desde otra activity
         	Intent llamadas = getIntent();
@@ -56,12 +80,14 @@ public class MapaLugaresActivity extends FragmentActivity {
         	// Si el mapa ha sido llamado desde MostrarLugarActivity
         	// vamos directamente al punto en el mapa.
 
-        	double lt = llamadas.getDoubleExtra("latitud", 0);
-        	double ln = llamadas.getDoubleExtra("longitud", 0);
+        	latitudDestino = llamadas.getDoubleExtra("latitud", 0);
+        	longitudDestino = llamadas.getDoubleExtra("longitud", 0);
 
-        	insertaMarcador(map, llamadas.getStringExtra("nombre"), lt, ln);
+        	String nombreSitio = llamadas.getStringExtra("nombre");
+        	insertaMarcador(map, nombreSitio, latitudDestino, longitudDestino);
+        	setTitle(nombreSitio);
 
-        	LatLng punto = new LatLng(lt, ln);
+        	LatLng punto = getLatLngDestino();
 
         	// Centramos mapa en el punto elegido
         	CameraPosition camPos = new CameraPosition.Builder().target(punto)
@@ -85,8 +111,18 @@ public class MapaLugaresActivity extends FragmentActivity {
         							+ point.longitude, Toast.LENGTH_SHORT).show();
         		} // onMapLongClick
         	});
+        	
+        	boolean calcularAutomaticamente = UtilPreferencias.isCalcularRutaAutomaticamente(this);
+        	if(calcularAutomaticamente) {
+        		String medioTransporte = UtilPreferencias.getMedioTransporteDefectoRuta(this);
+        		mostrarRuta(medioTransporte);
+        	}
         }
 	} // Oncreate
+	
+	private LatLng getLatLngDestino () {
+		return new LatLng(latitudDestino, longitudDestino);
+	}
 
 	// Metodo que inserta un Marker en el mapa pasandole el mapa, el id para
 	// localizarlo
@@ -95,19 +131,14 @@ public class MapaLugaresActivity extends FragmentActivity {
 			double lon) {
 		mapa.addMarker(new MarkerOptions().position(new LatLng(lat, lon))
 				.title(titulo));
-
-		Toast.makeText(MapaLugaresActivity.this,
-				titulo + ": " + calculaDistancia(lat, lon),
-				Toast.LENGTH_LONG).show();
 	}
-
-	private String calculaDistancia(Double lat, Double lon) {
-
+	
+	private LatLng getPosActual() {
+		LatLng resul = null;
 		// Obtenemos una referencia al LocationManager y creamos el objeto
 		// para gestionar las localizaciones
 		LocationManager locationManager = (LocationManager) this
 				.getSystemService(Context.LOCATION_SERVICE);
-
 		// Definimos un objeto de la clase Criteria para decidir que
 		// caracteristicas tiene que tener
 		// nuestro proveedor de localizacion en este caso queremos obtener
@@ -117,8 +148,6 @@ public class MapaLugaresActivity extends FragmentActivity {
 
 		// Cargamos el nombre del proveedor obtenido en un proveedor
 		String proveedor = locationManager.getBestProvider(criteria, true);
-
-		String distanciaTexto = "No ha sido posible calcular la posicion actual.";
 		if(proveedor != null) {
 			// Almacenamos la ultima posicion uqe se obtuvo a traves del
 			// proveedor de busquedas asignado
@@ -126,33 +155,166 @@ public class MapaLugaresActivity extends FragmentActivity {
 					.getLastKnownLocation(proveedor);
 
 			if(posicionActual != null) {
-				Double latitudActual = posicionActual.getLatitude();
-				Double longitudActual = posicionActual.getLongitude();
-	
-				double endLatitude = lat;
-				double endLongitude = lon;
-	
-				float[] results = new float[3];
-				Location.distanceBetween(latitudActual, longitudActual, endLatitude,
-						endLongitude, results);
-	
-				BigDecimal bd = new BigDecimal(results[0]);// resultados en metros
-				BigDecimal rounded = bd.setScale(2, RoundingMode.HALF_UP);
-				double distancia = rounded.doubleValue();
-				distanciaTexto = "estas a " + String.valueOf(distancia)
-						+ " metros de distancia.";
-				if (distancia > 1000) {
-					distancia = (Double) (distancia * 0.001f);// convierte de metros a
-					// Kilometros
-					bd = new BigDecimal(distancia);
-					rounded = bd.setScale(2, RoundingMode.HALF_UP);
-					distancia = rounded.doubleValue();
-					distanciaTexto = String.valueOf(distancia) + " Kms. de distancia.";
-				}
+				resul = new LatLng(posicionActual.getLatitude(), posicionActual.getLongitude());
 			}
 		}
-
-		return distanciaTexto;
+		return resul;
 	}
+	
+	///////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////
+	public void mostrarOpciones(View view) {
+		View btnMostrarOpciones = findViewById(R.id.btnMostrarOpciones);
+		View opciones = findViewById(R.id.lyOpcionesMapa);
+		int visible = View.VISIBLE;
+		int backGroundBtnOpciones = R.drawable.ic_actionbar_ocultar_opciones;
+		if(opciones.getVisibility() == View.VISIBLE) {
+			visible = View.GONE;
+			backGroundBtnOpciones = R.drawable.ic_actionbar_mostrar_opciones;
+		}
+		opciones.setVisibility(visible);
+		btnMostrarOpciones.setBackgroundResource(backGroundBtnOpciones);
+	}
+	
+	private void mostrarRuta(String modo) {
+		CalcRutaAsyncTask calcRutaAyncTask = new CalcRutaAsyncTask(modo);
+		calcRutaAyncTask.execute((Void)null);
+	}
+	
+	public void mostrarIndicacionesRuta(View view) {
+		Dialog myDialog = new Dialog(this);
+	    myDialog.setContentView(R.layout.lista_instrucciones_ruta);
+	    ListView lv = (ListView)myDialog.findViewById(R.id.lvListaInstrucciones);
+	    final List<String> listaPasos = objRuta.getLstPasosTexto();
+	    ListAdapter adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1,
+	    		listaPasos) {
+	    	public String getItem(int position) {
+	             return Html.fromHtml(listaPasos.get(position)).toString();
+	        }
+	    };
+	    lv.setAdapter(adapter);
+	    myDialog.show();
+	}
+	
+	public void mostrarRuta(View view) {
+		String modo = (String)view.getTag();
+		//calculaDistancia(latitudDestino, longitudDestino, modo);
+		mostrarRuta(modo);
+	}
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		// Inflate the menu; this adds items to the action bar if it is present.
+		getMenuInflater().inflate(R.menu.detalle_evento, menu);
+		return true;
+	}
+	
+	private ObjRuta pintarRuta(ObjRuta objRuta) {
+		map.clear();
+		List<PolylineOptions> lstLatLong = objRuta.getLstLatLong();
+		for(PolylineOptions polyLineOption : lstLatLong) {
+			polyLineOption.width(4);
+			polyLineOption.color(Color.BLUE);
+			polyLineOption.geodesic(true);
+            Polyline line = map.addPolyline(polyLineOption);
 
+		}
+		return objRuta;
+	}
+	
+	private void pintarRuta(String result, String modo) {
+    	UtilMapas utilMapas = new UtilMapas();
+        if(result == null){
+        	// Si no tenemos resultado de la consulta a google, al menos calculamos la distancia si tenemos la posicion actual.
+        	LatLng posActual = getPosActual();
+        	if(posActual != null) {
+        		LatLng posDestino = getLatLngDestino();
+        		// Distancia en metros
+        		double distancia = utilMapas.calculaDistancia(posActual, posDestino);
+        		String unidades = " m";
+        		if (distancia > 1000) {
+        			distancia = utilMapas.convertirMetrosKilometros(distancia);
+        			unidades = " km";
+        		}
+            	String mensaje = " No ha sido posible calcula la ruta. La distancia aproximada es " + distancia + unidades;
+    			Toast.makeText(
+    					MapaLugaresActivity.this,
+    					mensaje,
+    					Toast.LENGTH_SHORT).show();
+        	}
+        } else {
+        	objRuta = utilMapas.crearDatosRuta(result);
+        	pintarRuta(objRuta);
+        	
+        	// Se muestra el mensaje con información
+        	String mensaje = " La distancia es: " + objRuta.getDistancia() + "\n"
+        			+ " El tiempo estimado es: " + objRuta.getTiempo();
+			Toast.makeText(
+					MapaLugaresActivity.this,
+					mensaje,
+					Toast.LENGTH_SHORT).show();
+
+        }
+	}
+	
+	/**
+	 * Clase qe realiza la llamada al API de google para conseguir losdatos de la ruta en formato JSON.
+	 * @author h
+	 *
+	 */
+	private class CalcRutaAsyncTask extends AsyncTask<Void, Void, String>{
+	    private ProgressDialog progressDialog;
+	    private String url;
+	    private String modo;
+
+	    CalcRutaAsyncTask(String modo){
+	        this.modo = modo;
+	    }
+
+	    @Override
+	    protected void onPreExecute() {
+	        super.onPreExecute();
+	        progressDialog = new ProgressDialog(MapaLugaresActivity.this);
+	        progressDialog.setMessage("Calculando la ruta, por favor espera...");
+	        progressDialog.setIndeterminate(true);
+	        progressDialog.show();
+	        
+	        UtilMapas utilMapas = new UtilMapas();
+        	LatLng posDestino = new LatLng(latitudDestino, longitudDestino);
+        	LatLng posActual = getPosActual();
+        	if(posActual == null) {
+        		mostrarMensajeToast("No ha sido posible calcular la posición actual. Lo sentimos.");
+        	} else {
+        		url = utilMapas.montarUrlPeticionRutaJSON(posActual, posDestino, modo);
+        	}
+	    }
+	    
+	    private void mostrarMensajeToast(String mensaje) {
+			Toast.makeText(
+					MapaLugaresActivity.this,
+					mensaje,
+					Toast.LENGTH_SHORT).show();
+		}
+
+	    @Override
+	    protected String doInBackground(Void... params) {
+	    	String resul = null;
+	    	if(url != null) {
+		        JSONParser jParser = new JSONParser();
+		        resul = jParser.getJSONFromUrl(url);
+	    	}
+	        return resul;
+	    }
+
+	    @Override
+	    protected void onPostExecute(String result) {
+	        super.onPostExecute(result);   
+	        progressDialog.hide();
+	        if(result == null) {
+	        	mostrarMensajeToast("No ha sido posible calcular la ruta. Lo sentimos.");
+	        } else {
+	        	pintarRuta(result, modo);
+	        }
+	    }
+	}
 }// MapaLugaresActivity
