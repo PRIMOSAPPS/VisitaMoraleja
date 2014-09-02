@@ -22,16 +22,16 @@
             android:paddingTop="20dp" >
 
             <LinearLayout
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
                 android:orientation="vertical" >
 
                 <Button
                     android:id="@+id/botonConoce"
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
                     android:layout_weight="1"
                     android:background="@drawable/ic_conoce"
                     android:onClick="mostrar"
@@ -47,16 +47,16 @@
             </LinearLayout>
 
             <LinearLayout
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
                 android:orientation="vertical" >
 
                 <Button
                     android:id="@+id/botonTapas"
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
                     android:layout_weight="1.35"
                     android:background="@drawable/feo"
                     android:onClick="mostrar"
@@ -81,16 +81,16 @@
             android:paddingTop="20dp" >
 
             <LinearLayout
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
                 android:orientation="vertical" >
 
                 <Button
                     android:id="@+id/botonComer"
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
                     android:layout_weight="1"
                     android:background="@drawable/ic_comer"
                     android:onClick="mostrar"
@@ -106,8 +106,8 @@
             </LinearLayout>
 
             <LinearLayout
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
                 android:orientation="vertical"
@@ -115,8 +115,8 @@
 
                 <Button
                     android:id="@+id/botonComprar"
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
                     android:layout_weight="1"
                     android:background="@drawable/ic_decompras"
                     android:onClick="mostrar"
@@ -141,8 +141,8 @@
             android:paddingTop="20dp" >
 
             <LinearLayout
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
                 android:orientation="vertical"
@@ -150,8 +150,8 @@
 
                 <Button
                     android:id="@+id/botonServicios"
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
                     android:layout_weight="1"
                     android:background="@drawable/ic_servicios"
                     android:onClick="mostrar"
@@ -167,8 +167,8 @@
             </LinearLayout>
 
             <LinearLayout
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
                 android:orientation="vertical"
@@ -176,8 +176,8 @@
 
                 <Button
                     android:id="@+id/botonFavoritos"
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
                     android:background="@drawable/ic_favoritos"
                     android:onClick="mostrarFavoritos" />
 
