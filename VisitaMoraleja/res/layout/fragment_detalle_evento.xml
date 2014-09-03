@@ -95,7 +95,7 @@
                         android:paddingLeft="10dp"
                         android:textColor="#FFFFFF"
                         android:textStyle="bold" />
-
+  		
                     <TextView
                         android:id="@+id/textTelefono"
                         android:layout_width="fill_parent"
@@ -103,7 +103,11 @@
                         android:layout_weight="20"
                         android:gravity="center"
                         android:textColor="#FFFFFF"
+                        
                         android:textStyle="bold" />
+                    
+                    
+               
                 </LinearLayout>
             </TableRow>
 
@@ -142,6 +146,19 @@
                         android:onClick="localizarSitio"
                         android:paddingLeft="20dp"
                         android:tag="SITIO" />
+                    
+                     <Button
+                        
+                        
+                        android:id="@+id/botonWeb"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/bolamundo"
+                        android:onClick="visitarWeb"
+                         android:layout_marginRight="10dp"
+                        android:paddingRight="20dp"
+                        android:tag="SITIO"/>
 
                      <Button
                         android:id="@+id/botonCompartir"

@@ -6,6 +6,8 @@ import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.Html;
+import android.text.method.LinkMovementMethod;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.Menu;
@@ -22,6 +24,7 @@ import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewSwitcher;
+
 
 import com.primos.visitamoraleja.adaptadores.ImageAdapter;
 import com.primos.visitamoraleja.bdsqlite.datasource.CategoriasDataSource;
@@ -75,11 +78,16 @@ public class DetalleEventoActivity extends ActionBarListActivity implements
 		// setContentView(R.layout.activity_detalle_evento);
 		setContentView(R.layout.fragment_detalle_evento);
 
-		TextView textViewDatosSitio = (TextView) findViewById(R.id.textDireccion);
+		TextView textViewDireccion = (TextView) findViewById(R.id.textDireccion);
 		final TextView textViewTextoLargo1 = (TextView) findViewById(R.id.tvTextoLargo1);
 		TextView textNombreSitio = (TextView) findViewById(R.id.textNombreSitio);
 		TextView textNombreSitio2 = (TextView) findViewById(R.id.textNombreSitio2);
 		TextView textTelefono = (TextView) findViewById(R.id.textTelefono);
+		TextView web = (TextView) findViewById(R.id.botonWeb);
+		
+		
+		//TextView url = (TextView) findViewById(R.id.web);
+		String url = null;
 		textViewTextoLargo1.setMovementMethod(new ScrollingMovementMethod());
 
 		Button botonTelefono = (Button) findViewById(R.id.botonTelefono);
@@ -87,12 +95,14 @@ public class DetalleEventoActivity extends ActionBarListActivity implements
 		Button botonCompartir = (Button) findViewById(R.id.botonCompartir);
 		Button botonFacebook = (Button) findViewById(R.id.botonFacebook);
 		Button botonTwiter = (Button) findViewById(R.id.botonTwiter);
+		Button botonWeb = (Button) findViewById(R.id.botonWeb);
 
 		botonTelefono.setOnClickListener(this);
 		botonLocalizar.setOnClickListener(this);
 		botonCompartir.setOnClickListener(this);
 		botonFacebook.setOnClickListener(this);
 		botonTwiter.setOnClickListener(this);
+		botonWeb.setOnClickListener(this);
 
 		long idSitio = (long) getIntent().getExtras().get("idSitio");
 		this.sitio = dataSource.getById(idSitio);
@@ -100,12 +110,30 @@ public class DetalleEventoActivity extends ActionBarListActivity implements
 		Gallery myGallery = (Gallery) findViewById(R.id.gallery);
 		myGallery.setAdapter(new ImageAdapter(this, this, sitio));
 
-		textViewDatosSitio.setText(getTxtDatosSitio(sitio));
-		textViewDatosSitio.setText(sitio.getDireccion());
+		//textViewDireccion.setText(getTxtDatosSitio(sitio));
+		textViewDireccion.setText(sitio.getDireccion()+" - "+sitio.getPoblacion());
 		textNombreSitio.setText(sitio.getNombre());
 		textNombreSitio2.setText(sitio.getNombre());
-		textTelefono.setText(sitio.getTelefonosFijos());
-
+		
+		if (sitio.getTelefonosFijos().length()>0) {
+			if (sitio.getTelefonosMoviles().length()>0) {
+				textTelefono.setText(sitio.getTelefonosFijos()+" / "+sitio.getTelefonosMoviles());
+			}else {
+				textTelefono.setText(sitio.getTelefonosFijos());
+			}
+		}else {
+			if (sitio.getTelefonosMoviles().length()>0) {
+				textTelefono.setText(sitio.getTelefonosMoviles());
+			}else {
+				textTelefono.setText(sitio.getTelefonosFijos());
+			}
+			}	
+		
+		
+		
+		
+	
+		
 		textViewTextoLargo1.setText(sitio.getTextoLargo1());
 		
 		myGallery.setOnItemSelectedListener(new OnItemSelectedListener() {
@@ -135,14 +163,13 @@ public class DetalleEventoActivity extends ActionBarListActivity implements
 
 	}
 
+	
+	
 	// Recogemos la pulsación en los 5 botones de la minificha
 	public void onClick(View boton_pulsado) {
-		// TextView campo_texto = (TextView)findViewById(R.id.tvPrincipal);
-		// //Definimos el campo de texto
+		
 		String lugar = sitio.getNombre();
-		// String lati= String.valueOf(sitio.getLatitud());
-		//String latitud = String.valueOf(sitio.getLatitud());
-		//String longitud = String.valueOf(sitio.getLongitud());
+	
 		Double latitud = sitio.getLatitud();
 		Double longitud = sitio.getLongitud();
 
@@ -154,8 +181,7 @@ public class DetalleEventoActivity extends ActionBarListActivity implements
 			localizarSitio(lugar, latitud, longitud);
 			break;
 		case R.id.botonCompartir:
-			// Toast.makeText(getBaseContext(),"1-"+ sitio.getLatitud()
-			// +"/"+sitio.getLongitud(),Toast.LENGTH_SHORT).show();
+		
 			compartirLugar(lugar, sitio.getLatitud(), sitio.getLongitud());
 			break;
 
@@ -165,13 +191,45 @@ public class DetalleEventoActivity extends ActionBarListActivity implements
 		case R.id.botonTwiter:
 			mostrarTwiter(sitio.getTwitter());
 			break;
-
+		case R.id.botonWeb:
+			
+			visitarWeb(sitio.getWeb());
+			break;
 		default:
 			break;
 		}
 
 	}
 
+	// Abre Internet para ir al sitio WEB del anunciante, si no lo tiene
+		// aparece un mensajito.
+		// NO SE SI SERIA MEJOR LO DEL MENSAJITO O QUE NO APARECIERA EL ICONO DE
+		// TWITER, pero pienso que hay que
+		// motivar a las empresas para que esten en las redes sociales.
+		private void visitarWeb(String url) {
+			try {
+				
+				if (url.length() > 0) {
+					
+					
+					Uri irWeb = Uri.parse(url);
+					Intent intent = new Intent(Intent.ACTION_VIEW, irWeb);
+					startActivity(intent);
+				} else {
+					// si el sitio no tiene WEB
+					Toast.makeText(getBaseContext(), "NO DISPONIBLE",
+							Toast.LENGTH_SHORT).show();
+				}
+
+			} catch (ActivityNotFoundException activityException) {
+				// si se produce un error, se muestra en el LOGCAT
+				Toast.makeText(getBaseContext(), "No se pudo acceder a la WEB",
+						Toast.LENGTH_SHORT).show();
+				
+			}
+		}
+
+	
 	// Abre Internet para ir al sitio Twiter del anunciante, si no lo tiene
 	// aparece un mensajito.
 	// NO SE SI SERIA MEJOR LO DEL MENSAJITO O QUE NO APARECIERA EL ICONO DE
@@ -180,7 +238,6 @@ public class DetalleEventoActivity extends ActionBarListActivity implements
 	private void mostrarTwiter(String twitter) {
 		try {
 			if (twitter.length() > 0) {
-				// realiza la llamada
 				Uri irTwiter = Uri.parse(twitter);
 				Intent intent = new Intent(Intent.ACTION_VIEW, irTwiter);
 				startActivity(intent);
