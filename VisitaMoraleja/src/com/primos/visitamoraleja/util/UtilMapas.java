@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -100,6 +101,8 @@ public class UtilMapas {
 	        urlString.append(",");
 	        urlString.append(Double.toString( longitudDestino));
 	        urlString.append("&sensor=false&mode=" + modo + "&alternatives=true");
+	        String idioma = Locale.getDefault().getLanguage();
+	        urlString.append("&language=" + idioma);
 	        Log.d(TAG, "URL: " + urlString.toString());
 	        resul = urlString.toString();
 		}
@@ -118,6 +121,8 @@ public class UtilMapas {
             //Tranform the string into a json object
            final JSONObject json = new JSONObject(result);
            JSONArray routeArray = json.getJSONArray("routes");
+           String status = json.getString("status");
+           resul.setStatus(status);
            JSONObject routes = routeArray.getJSONObject(0);
            
            // Conseguimos los pasos en texto, el tiempo y la distancia

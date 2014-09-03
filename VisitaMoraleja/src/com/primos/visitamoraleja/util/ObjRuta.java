@@ -13,6 +13,10 @@ import com.google.android.gms.maps.model.PolylineOptions;
  *
  */
 public class ObjRuta {
+	// De moemnto solo se usan OK y SIN_RUTA_EN_GMAP, pero dejo definidos el resto por si los usamos
+	public enum ResultadosRuta {OK, SIN_POS_ACTUAL, SIN_CONEXION_GMAP, ERROR_PARSEO_JSON, SIN_RUTA_EN_GMAP};
+
+	private ResultadosRuta resultadoRuta;
 	private String distancia;
 	private String tiempo;
 	private List<String> lstPasosTexto = new ArrayList<>();
@@ -48,6 +52,24 @@ public class ObjRuta {
 	
 	public void addPolyLineOptions(PolylineOptions polyLineOption) {
 		lstPolyLineOptions.add(polyLineOption);
+	}
+
+	public ResultadosRuta getResultadoRuta() {
+		return resultadoRuta;
+	}
+
+	public void setResultadoRuta(ResultadosRuta resultadoRuta) {
+		this.resultadoRuta = resultadoRuta;
+	}
+
+	public void setStatus(String status) {
+		if(status == null) {
+			this.resultadoRuta = ResultadosRuta.SIN_CONEXION_GMAP;
+		} else if(status.equals("OK")) {
+			this.resultadoRuta = ResultadosRuta.OK;
+		} else if(status.equals("ZERO_RESULTS")) {
+			this.resultadoRuta = ResultadosRuta.SIN_RUTA_EN_GMAP;
+		}
 	}
 
 }

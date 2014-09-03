@@ -35,6 +35,7 @@ import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.primos.visitamoraleja.prueba.JSONParser;
 import com.primos.visitamoraleja.util.ObjRuta;
+import com.primos.visitamoraleja.util.ObjRuta.ResultadosRuta;
 import com.primos.visitamoraleja.util.UtilMapas;
 import com.primos.visitamoraleja.util.UtilPreferencias;
 
@@ -92,8 +93,7 @@ public class MapaLugaresActivity extends FragmentActivity {
         	// Centramos mapa en el punto elegido
         	CameraPosition camPos = new CameraPosition.Builder().target(punto)
         			.zoom(15) // Establecemos el zoom en 19
-        			// .bearing(45) // Establecemos la orientacion con el noreste
-        			// arriba
+        			// .bearing(45) // Establecemos la orientacion con el noreste arriba
         			.tilt(30) // Bajamos el punto de vista de la camara 70 grados
         			.build();
         	CameraUpdate camUpd3 = CameraUpdateFactory.newCameraPosition(camPos);
@@ -101,7 +101,6 @@ public class MapaLugaresActivity extends FragmentActivity {
 
         	// Muestra las coordenadas de un punto cuando hacemos una pulsacion
         	// larga sobre el mapa
-
         	map.setOnMapLongClickListener(new OnMapLongClickListener() {
         		public void onMapLongClick(LatLng point) {
         			Toast.makeText(
@@ -120,19 +119,32 @@ public class MapaLugaresActivity extends FragmentActivity {
         }
 	} // Oncreate
 	
+	/**
+	 * Devuelve las coordenadas de destino
+	 * @return
+	 */
 	private LatLng getLatLngDestino () {
 		return new LatLng(latitudDestino, longitudDestino);
 	}
 
-	// Metodo que inserta un Marker en el mapa pasandole el mapa, el id para
-	// localizarlo
-	// despues en la Base de Datos, el titulo, y las coordenadas
+	/**
+	 * Metodo que inserta un Marker en el mapa pasandole el mapa, el id para localizarlo
+	 * despues, el titulo, y las coordenadas
+	 * @param mapa
+	 * @param titulo
+	 * @param lat
+	 * @param lon
+	 */
 	private void insertaMarcador(GoogleMap mapa, String titulo, double lat,
 			double lon) {
 		mapa.addMarker(new MarkerOptions().position(new LatLng(lat, lon))
 				.title(titulo));
 	}
 	
+	/**
+	 * Devuelve la posicion actual si es posible, null si no lo es
+	 * @return
+	 */
 	private LatLng getPosActual() {
 		LatLng resul = null;
 		// Obtenemos una referencia al LocationManager y creamos el objeto
@@ -222,37 +234,47 @@ public class MapaLugaresActivity extends FragmentActivity {
 		return objRuta;
 	}
 	
+	/**
+	 * Si no ha sido posible calcular la ruta en googlemaps, intentamos conseguir la posicion actual. Si la conseguimos
+	 * calculamos la distancia.
+	 */
+	private void mostrarDistancia(String mensaje) {
+    	UtilMapas utilMapas = new UtilMapas();
+    	// Si no tenemos resultado de la consulta a google, al menos calculamos la distancia si tenemos la posicion actual.
+    	LatLng posActual = getPosActual();
+    	if(posActual != null) {
+    		LatLng posDestino = getLatLngDestino();
+    		// Distancia en metros
+    		double distancia = utilMapas.calculaDistancia(posActual, posDestino);
+    		String unidades = " m";
+    		if (distancia > 1000) {
+    			distancia = utilMapas.convertirMetrosKilometros(distancia);
+    			unidades = " km";
+    		}
+        	String mensajeCompleto = mensaje +" La distancia aproximada es " + distancia + unidades;
+			Toast.makeText(
+					MapaLugaresActivity.this, mensajeCompleto,
+					Toast.LENGTH_SHORT).show();
+    	}
+	}
+	
 	private void pintarRuta(String result, String modo) {
     	UtilMapas utilMapas = new UtilMapas();
         if(result == null){
-        	// Si no tenemos resultado de la consulta a google, al menos calculamos la distancia si tenemos la posicion actual.
-        	LatLng posActual = getPosActual();
-        	if(posActual != null) {
-        		LatLng posDestino = getLatLngDestino();
-        		// Distancia en metros
-        		double distancia = utilMapas.calculaDistancia(posActual, posDestino);
-        		String unidades = " m";
-        		if (distancia > 1000) {
-        			distancia = utilMapas.convertirMetrosKilometros(distancia);
-        			unidades = " km";
-        		}
-            	String mensaje = " No ha sido posible calcula la ruta. La distancia aproximada es " + distancia + unidades;
-    			Toast.makeText(
-    					MapaLugaresActivity.this,
-    					mensaje,
-    					Toast.LENGTH_SHORT).show();
-        	}
+        	mostrarDistancia(" No ha sido posible calcula la ruta.");
         } else {
         	objRuta = utilMapas.crearDatosRuta(result);
-        	pintarRuta(objRuta);
-        	
-        	// Se muestra el mensaje con información
-        	String mensaje = " La distancia es: " + objRuta.getDistancia() + "\n"
-        			+ " El tiempo estimado es: " + objRuta.getTiempo();
-			Toast.makeText(
-					MapaLugaresActivity.this,
-					mensaje,
-					Toast.LENGTH_SHORT).show();
+        	if(objRuta.getResultadoRuta() == ResultadosRuta.SIN_RUTA_EN_GMAP) {
+        		mostrarDistancia(" No se ha podido calcular la ruta para el medio de transporte indicado.");
+        	} else {
+        		pintarRuta(objRuta);
+	        	// Se muestra el mensaje con información
+	        	String mensaje = " La distancia es: " + objRuta.getDistancia() + "\n"
+	        			+ " El tiempo estimado es: " + objRuta.getTiempo();
+				Toast.makeText(
+						MapaLugaresActivity.this, mensaje,
+						Toast.LENGTH_SHORT).show();
+        	}
 
         }
 	}
@@ -282,19 +304,10 @@ public class MapaLugaresActivity extends FragmentActivity {
 	        UtilMapas utilMapas = new UtilMapas();
         	LatLng posDestino = new LatLng(latitudDestino, longitudDestino);
         	LatLng posActual = getPosActual();
-        	if(posActual == null) {
-        		mostrarMensajeToast("No ha sido posible calcular la posición actual. Lo sentimos.");
-        	} else {
+        	if(posActual != null) {
         		url = utilMapas.montarUrlPeticionRutaJSON(posActual, posDestino, modo);
         	}
 	    }
-	    
-	    private void mostrarMensajeToast(String mensaje) {
-			Toast.makeText(
-					MapaLugaresActivity.this,
-					mensaje,
-					Toast.LENGTH_SHORT).show();
-		}
 
 	    @Override
 	    protected String doInBackground(Void... params) {
@@ -311,7 +324,10 @@ public class MapaLugaresActivity extends FragmentActivity {
 	        super.onPostExecute(result);   
 	        progressDialog.hide();
 	        if(result == null) {
-	        	mostrarMensajeToast("No ha sido posible calcular la ruta. Lo sentimos.");
+	        	String mensaje = "No ha sido posible calcular la ruta. Lo sentimos.";
+				Toast.makeText(
+						MapaLugaresActivity.this, mensaje,
+						Toast.LENGTH_SHORT).show();
 	        } else {
 	        	pintarRuta(result, modo);
 	        }
