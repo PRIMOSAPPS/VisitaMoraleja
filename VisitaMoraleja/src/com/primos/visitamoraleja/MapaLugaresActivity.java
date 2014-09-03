@@ -39,7 +39,8 @@ import com.primos.visitamoraleja.util.ObjRuta.ResultadosRuta;
 import com.primos.visitamoraleja.util.UtilMapas;
 import com.primos.visitamoraleja.util.UtilPreferencias;
 
-/* Clase que se encarga de mostrar los datos (Foto, nombre, descripcion y coordenadas) de un lugar
+/**
+ * Clase que se encarga de mostrar los datos (Foto, nombre, descripcion y coordenadas) de un lugar
  * almacenado. Esta clase pude ser llamada desde ListaLugaresActivity o al pulsar sobre
  * un marcador en MapaLugaresActivity
  */
