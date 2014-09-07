@@ -16,8 +16,10 @@ import android.text.Html;
 import android.view.Menu;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -121,6 +123,9 @@ public class MapaLugaresActivity extends FragmentActivity {
         	boolean calcularAutomaticamente = UtilPreferencias.isCalcularRutaAutomaticamente(this);
         	if(calcularAutomaticamente) {
         		String medioTransporte = UtilPreferencias.getMedioTransporteDefectoRuta(this);
+        		// Marcamos la opcion de transporte, que puede no ser la configurada
+        		// si ha cambiado la configuracion
+        		marcaCheck(medioTransporte);
         		mostrarRuta(medioTransporte);
         	}
         }
@@ -200,6 +205,31 @@ public class MapaLugaresActivity extends FragmentActivity {
 		calcRutaAyncTask.execute((Void)null);
 	}
 	
+	/**
+	 * Desmarca todas las opciones de transporte
+	 */
+	private void uncheckOpciones() {
+		RadioGroup radioGroup = (RadioGroup)findViewById(R.id.rgnMostrarOpciones);
+		radioGroup.clearCheck();
+	}
+	
+	/**
+	 * Marca como checkeada la opcion correspondiente segun el Stringrecibido
+	 * @param view
+	 */
+	private void marcaCheck(String opcion) {
+		RadioGroup radioGroup = (RadioGroup)findViewById(R.id.rgnMostrarOpciones);
+		int idopcion = -1;
+		if(COCHE.equals(opcion)) {
+			idopcion = R.id.rbRutaCoche;
+		} else if(BICI.equals(opcion)) {
+			idopcion = R.id.rbRutaBici;
+		} else if(ANDANDO.equals(opcion)) {
+			idopcion = R.id.rbRutaAndando;
+		}
+		radioGroup.check(idopcion);
+	}
+	
 	public void mostrarIndicacionesRuta(View view) {
 		Dialog myDialog = new Dialog(this);
 	    myDialog.setContentView(R.layout.lista_instrucciones_ruta);
@@ -266,14 +296,22 @@ public class MapaLugaresActivity extends FragmentActivity {
 				Toast.LENGTH_LONG).show();
 	}
 	
+	private void cambiarVisibilidadBotonIndicaciones(int visibilidad) {
+		Button boton = (Button)findViewById(R.id.btnIndicacionesRuta);
+		boton.setVisibility(visibilidad);
+	}
+	
 	private void pintarRuta(String result, String modo) {
     	UtilMapas utilMapas = new UtilMapas();
         if(result == null){
         	mostrarDistancia(" No ha sido posible calcular la ruta. Lo sentimos.");
+	        // Desmarcamos todas las opcioens de la ruta, por si no es posible calcularla
+	        uncheckOpciones();
         } else {
         	objRuta = utilMapas.crearDatosRuta(result);
         	if(objRuta.getResultadoRuta() == ResultadosRuta.OK) {
         		pintarRuta(objRuta);
+        		cambiarVisibilidadBotonIndicaciones(View.VISIBLE);
 	        	// Se muestra el mensaje con información
 	        	String mensaje = " La distancia es: " + objRuta.getDistancia() + "\n"
 	        			+ " El tiempo estimado es: " + objRuta.getTiempo();
@@ -282,8 +320,9 @@ public class MapaLugaresActivity extends FragmentActivity {
 						Toast.LENGTH_SHORT).show();
         	} else {
         		mostrarDistancia(" No se ha podido calcular la ruta para el medio de transporte indicado.");
+    	        // Desmarcamos todas las opcioens de la ruta, por si no es posible calcularla
+    	        uncheckOpciones();
         	}
-
         }
 	}
 	
