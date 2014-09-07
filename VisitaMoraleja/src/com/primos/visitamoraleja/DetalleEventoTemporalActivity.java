@@ -16,9 +16,10 @@ import com.primos.visitamoraleja.bdsqlite.datasource.EventosDataSource;
 import com.primos.visitamoraleja.contenidos.Evento;
 
 public class DetalleEventoTemporalActivity extends Activity {
+	public final static String ID_EVENTO = "idEvento";
+	public final static String EVENTO = "evento";
 	private final static String TAG = "[" + DetalleEventoTemporalActivity.class.getName() + "]";
 	private SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-	public final static String ID_EVENTO = "idEvento";
 	private EventosDataSource dataSource = null;
 	private Evento evento;
 
@@ -56,6 +57,9 @@ public class DetalleEventoTemporalActivity extends Activity {
 		lanzarmapa.putExtra("nombre", evento.getNombre());
 		lanzarmapa.putExtra("latitud", evento.getLatitud());
 		lanzarmapa.putExtra("longitud", evento.getLongitud());
+		lanzarmapa.putExtra(MapaLugaresActivity.ORIGEN, EVENTO);
+		lanzarmapa.putExtra(MapaLugaresActivity.ID_RECIBIDO, evento.getId());
+
 		startActivity(lanzarmapa);
 		finish();
 	}

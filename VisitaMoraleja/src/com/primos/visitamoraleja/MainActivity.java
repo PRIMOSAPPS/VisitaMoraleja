@@ -1,9 +1,7 @@
 package com.primos.visitamoraleja;
 
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.provider.Settings.Secure;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -11,14 +9,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
-import com.parse.Parse;
-import com.parse.ParseACL;
-import com.parse.ParseInstallation;
-import com.parse.PushService;
 import com.primos.visitamoraleja.actualizador.AsyncTaskActualizador;
 import com.primos.visitamoraleja.actualizador.ThreadActualizador;
 import com.primos.visitamoraleja.util.UtilPreferencias;
-import com.primos.visitamoraleja.util.UtilPropiedades;
 
 
 

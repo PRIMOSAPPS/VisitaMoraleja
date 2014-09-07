@@ -15,6 +15,7 @@ import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.primos.visitamoraleja.util.ObjRuta.ResultadosRuta;
 
 public class UtilMapas {
 	private final static String URL_MAPS_GOOGLE_APIS_JSON = "http://maps.googleapis.com/maps/api/directions/json";
@@ -139,7 +140,9 @@ public class UtilMapas {
            
            // Conseguimos los puntos para pintar el trazado de la ruta
            recogerPasosLatLong(resul, routes);
+           resul.setResultadoRuta(ResultadosRuta.OK);
 	    } catch (JSONException e) {
+	    	resul.setResultadoRuta(ResultadosRuta.ERROR_PARSEO_JSON);
 	    	Log.e(TAG, "Error en el parseo de JSON: " + e.getMessage(), e);
 	    }
 		return resul;

@@ -6,8 +6,6 @@ import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.text.Html;
-import android.text.method.LinkMovementMethod;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.Menu;
@@ -25,7 +23,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewSwitcher;
 
-
 import com.primos.visitamoraleja.adaptadores.ImageAdapter;
 import com.primos.visitamoraleja.bdsqlite.datasource.CategoriasDataSource;
 import com.primos.visitamoraleja.bdsqlite.datasource.EventosDataSource;
@@ -37,6 +34,8 @@ import com.primos.visitamoraleja.contenidos.Sitio;
 public class DetalleEventoActivity extends ActionBarListActivity implements
 		AdapterView.OnItemSelectedListener, ViewSwitcher.ViewFactory,
 		OnClickListener {
+	public final static String ID_SITIO = "idSitio";
+	public final static String SITIO = "sitio";
 	private final static String TAG = "[DetalleEventoActivity]";
 	private SitiosDataSource dataSource = null;
 	private EventosDataSource eventosDataSource = null;
@@ -104,7 +103,7 @@ public class DetalleEventoActivity extends ActionBarListActivity implements
 		botonTwiter.setOnClickListener(this);
 		botonWeb.setOnClickListener(this);
 
-		long idSitio = (long) getIntent().getExtras().get("idSitio");
+		long idSitio = (long) getIntent().getExtras().get(ID_SITIO);
 		this.sitio = dataSource.getById(idSitio);
 
 		Gallery myGallery = (Gallery) findViewById(R.id.gallery);
@@ -127,12 +126,7 @@ public class DetalleEventoActivity extends ActionBarListActivity implements
 			}else {
 				textTelefono.setText(sitio.getTelefonosFijos());
 			}
-			}	
-		
-		
-		
-		
-	
+		}	
 		
 		textViewTextoLargo1.setText(sitio.getTextoLargo1());
 		
@@ -259,16 +253,13 @@ public class DetalleEventoActivity extends ActionBarListActivity implements
 	// Muy pronto estará terminado
 	private void localizarSitio(String lugar, Double latitud, Double longitud) {
 		Intent lanzarmapa = new Intent(this, MapaLugaresActivity.class);
-		
-
-		//Intent ir = new Intent(MostrarLugarActivity.this,MapaLugaresActivity.class);
 
 		// Vamos a pasar los valores que necesita MapaLugarActivity
-	
 		lanzarmapa.putExtra("nombre", sitio.getNombre());
 		lanzarmapa.putExtra("latitud", latitud);
 		lanzarmapa.putExtra("longitud", longitud);
-		
+		lanzarmapa.putExtra(MapaLugaresActivity.ORIGEN, SITIO);
+		lanzarmapa.putExtra(MapaLugaresActivity.ID_RECIBIDO, sitio.getId());
 		
 		 
 		 startActivity(lanzarmapa);

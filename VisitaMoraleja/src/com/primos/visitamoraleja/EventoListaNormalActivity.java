@@ -48,7 +48,7 @@ public class EventoListaNormalActivity extends  ActionBarListActivity {
 		Sitio sitio = (Sitio)view.getTag();
 
 		Intent intent = new Intent(this, DetalleEventoActivity.class);
-		intent.putExtra("idSitio", sitio.getId());
+		intent.putExtra(DetalleEventoActivity.ID_SITIO, sitio.getId());
     	startActivity(intent);
 	}
 

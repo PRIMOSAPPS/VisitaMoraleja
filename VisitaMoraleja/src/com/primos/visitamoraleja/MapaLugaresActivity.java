@@ -45,13 +45,17 @@ import com.primos.visitamoraleja.util.UtilPreferencias;
  * un marcador en MapaLugaresActivity
  */
 public class MapaLugaresActivity extends FragmentActivity {
+	public final static String ID_RECIBIDO = "idRecibido";
+	public final static String ORIGEN = "origen";
+	
 	public final static String COCHE = "driving";
 	private final static String BICI = "bicycling";
 	private final static String ANDANDO = "walking";
 	private final static String TAG = "[MapaLugaresActivity]";
 	private GoogleMap map;
 	// Cursor cursor;
-	private String id;
+	private long idRecibido;
+	private String origen;
 	
 	private double latitudDestino;
 	private double longitudDestino;
@@ -84,6 +88,8 @@ public class MapaLugaresActivity extends FragmentActivity {
 
         	latitudDestino = llamadas.getDoubleExtra("latitud", 0);
         	longitudDestino = llamadas.getDoubleExtra("longitud", 0);
+        	idRecibido = llamadas.getLongExtra(ID_RECIBIDO, -1);
+        	origen = llamadas.getStringExtra(ORIGEN);
 
         	String nombreSitio = llamadas.getStringExtra("nombre");
         	insertaMarcador(map, nombreSitio, latitudDestino, longitudDestino);
@@ -243,6 +249,7 @@ public class MapaLugaresActivity extends FragmentActivity {
     	UtilMapas utilMapas = new UtilMapas();
     	// Si no tenemos resultado de la consulta a google, al menos calculamos la distancia si tenemos la posicion actual.
     	LatLng posActual = getPosActual();
+    	String mensajeCompleto = mensaje;
     	if(posActual != null) {
     		LatLng posDestino = getLatLngDestino();
     		// Distancia en metros
@@ -252,22 +259,20 @@ public class MapaLugaresActivity extends FragmentActivity {
     			distancia = utilMapas.convertirMetrosKilometros(distancia);
     			unidades = " km";
     		}
-        	String mensajeCompleto = mensaje +" La distancia aproximada es " + distancia + unidades;
-			Toast.makeText(
-					MapaLugaresActivity.this, mensajeCompleto,
-					Toast.LENGTH_SHORT).show();
+        	mensajeCompleto += " La distancia aproximada es " + distancia + unidades;
     	}
+		Toast.makeText(
+				MapaLugaresActivity.this, mensajeCompleto,
+				Toast.LENGTH_LONG).show();
 	}
 	
 	private void pintarRuta(String result, String modo) {
     	UtilMapas utilMapas = new UtilMapas();
         if(result == null){
-        	mostrarDistancia(" No ha sido posible calcula la ruta.");
+        	mostrarDistancia(" No ha sido posible calcular la ruta. Lo sentimos.");
         } else {
         	objRuta = utilMapas.crearDatosRuta(result);
-        	if(objRuta.getResultadoRuta() == ResultadosRuta.SIN_RUTA_EN_GMAP) {
-        		mostrarDistancia(" No se ha podido calcular la ruta para el medio de transporte indicado.");
-        	} else {
+        	if(objRuta.getResultadoRuta() == ResultadosRuta.OK) {
         		pintarRuta(objRuta);
 	        	// Se muestra el mensaje con información
 	        	String mensaje = " La distancia es: " + objRuta.getDistancia() + "\n"
@@ -275,6 +280,8 @@ public class MapaLugaresActivity extends FragmentActivity {
 				Toast.makeText(
 						MapaLugaresActivity.this, mensaje,
 						Toast.LENGTH_SHORT).show();
+        	} else {
+        		mostrarDistancia(" No se ha podido calcular la ruta para el medio de transporte indicado.");
         	}
 
         }
@@ -324,14 +331,26 @@ public class MapaLugaresActivity extends FragmentActivity {
 	    protected void onPostExecute(String result) {
 	        super.onPostExecute(result);   
 	        progressDialog.hide();
-	        if(result == null) {
-	        	String mensaje = "No ha sido posible calcular la ruta. Lo sentimos.";
-				Toast.makeText(
-						MapaLugaresActivity.this, mensaje,
-						Toast.LENGTH_SHORT).show();
-	        } else {
-	        	pintarRuta(result, modo);
-	        }
+	        pintarRuta(result, modo);
 	    }
+	}
+
+	@Override
+	public void onBackPressed() {
+		super.onBackPressed();
+		Class<?> clase = null;
+		String nombreParametro = null;
+		Intent volver = null;
+		if(DetalleEventoActivity.SITIO.equals(origen)) {
+			clase = DetalleEventoActivity.class;
+			nombreParametro = DetalleEventoActivity.ID_SITIO;
+		} else if(DetalleEventoTemporalActivity.EVENTO.equals(origen)) {
+			clase = DetalleEventoTemporalActivity.class;
+			nombreParametro = DetalleEventoTemporalActivity.ID_EVENTO;
+		}
+		volver = new Intent(this, clase);
+		volver.putExtra(nombreParametro, idRecibido);
+		 
+		startActivity(volver);
 	}
 }// MapaLugaresActivity
