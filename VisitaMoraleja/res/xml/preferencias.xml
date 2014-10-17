@@ -34,7 +34,7 @@
             android:entries="@array/textOpcionesTransporte"
             android:entryValues="@array/valoresOpcionesTransporte"
             android:key="pref_transporte_ruta_defecto"
-            android:title="Selecciona el modo de transporte" />
+            android:title="@string/pref_cat_expli_config_opciones_ruta" />
     </PreferenceCategory>
 
 </PreferenceScreen>

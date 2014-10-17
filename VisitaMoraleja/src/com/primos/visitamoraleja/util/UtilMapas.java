@@ -124,23 +124,25 @@ public class UtilMapas {
            JSONArray routeArray = json.getJSONArray("routes");
            String status = json.getString("status");
            resul.setStatus(status);
-           JSONObject routes = routeArray.getJSONObject(0);
-           
-           // Conseguimos los pasos en texto, el tiempo y la distancia
-           JSONArray pasosArray = routes.getJSONArray("legs");
-           JSONObject pasosObject = pasosArray.getJSONObject(0);
-           JSONObject distancia = pasosObject.getJSONObject("distance");
-           JSONObject duracion = pasosObject.getJSONObject("duration");
-           resul.setDistancia(distancia.getString("text"));
-           resul.setTiempo(duracion.getString("text"));
-           JSONArray legsArray = pasosObject.getJSONArray("steps");
-
-           // Recogemos las instrucciones en texto
-           recogerPasosTexto(resul, legsArray);
-           
-           // Conseguimos los puntos para pintar el trazado de la ruta
-           recogerPasosLatLong(resul, routes);
-           resul.setResultadoRuta(ResultadosRuta.OK);
+           if(resul.getResultadoRuta() == ResultadosRuta.OK) {
+	           JSONObject routes = routeArray.getJSONObject(0);
+	           
+	           // Conseguimos los pasos en texto, el tiempo y la distancia
+	           JSONArray pasosArray = routes.getJSONArray("legs");
+	           JSONObject pasosObject = pasosArray.getJSONObject(0);
+	           JSONObject distancia = pasosObject.getJSONObject("distance");
+	           JSONObject duracion = pasosObject.getJSONObject("duration");
+	           resul.setDistancia(distancia.getString("text"));
+	           resul.setTiempo(duracion.getString("text"));
+	           JSONArray legsArray = pasosObject.getJSONArray("steps");
+	
+	           // Recogemos las instrucciones en texto
+	           recogerPasosTexto(resul, legsArray);
+	           
+	           // Conseguimos los puntos para pintar el trazado de la ruta
+	           recogerPasosLatLong(resul, routes);
+	           resul.setResultadoRuta(ResultadosRuta.OK);
+           }
 	    } catch (JSONException e) {
 	    	resul.setResultadoRuta(ResultadosRuta.ERROR_PARSEO_JSON);
 	    	Log.e(TAG, "Error en el parseo de JSON: " + e.getMessage(), e);

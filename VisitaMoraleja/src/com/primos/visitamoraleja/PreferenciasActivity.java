@@ -48,7 +48,7 @@ public class PreferenciasActivity extends PreferenceActivity {
 
 	        CheckBoxPreference checkBoxPreference = new CheckBoxPreference(this);
 	        //make sure each key is unique  
-	        checkBoxPreference.setTitle(categoria.getNombre());
+	        checkBoxPreference.setTitle(categoria.getDescripcion());
 	        String key = PREFIJO_PREFERENCIA_CATEGORIAS + categoria.getId();
 	        checkBoxPreference.setKey(key);
 	        checkBoxPreference.setChecked(ratePrefs.getBoolean(key, false));

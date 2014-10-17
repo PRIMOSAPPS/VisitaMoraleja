@@ -62,6 +62,7 @@ public class MapaLugaresActivity extends FragmentActivity {
 	private double latitudDestino;
 	private double longitudDestino;
 	private ObjRuta objRuta;
+	private String nombreSitio;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -93,7 +94,7 @@ public class MapaLugaresActivity extends FragmentActivity {
         	idRecibido = llamadas.getLongExtra(ID_RECIBIDO, -1);
         	origen = llamadas.getStringExtra(ORIGEN);
 
-        	String nombreSitio = llamadas.getStringExtra("nombre");
+        	nombreSitio = llamadas.getStringExtra("nombre");
         	insertaMarcador(map, nombreSitio, latitudDestino, longitudDestino);
         	setTitle(nombreSitio);
 
@@ -268,6 +269,7 @@ public class MapaLugaresActivity extends FragmentActivity {
             Polyline line = map.addPolyline(polyLineOption);
 
 		}
+		insertaMarcador(map, nombreSitio, latitudDestino, longitudDestino);
 		return objRuta;
 	}
 	
@@ -309,7 +311,16 @@ public class MapaLugaresActivity extends FragmentActivity {
 	        uncheckOpciones();
         } else {
         	objRuta = utilMapas.crearDatosRuta(result);
-        	if(objRuta.getResultadoRuta() == ResultadosRuta.OK) {
+        	// Si la ruta es en bici y no se ha encontrado una ruta se busca la ruta andando
+        	if(BICI.equals(modo) && objRuta.getResultadoRuta() == ResultadosRuta.SIN_RUTA_EN_GMAP) {
+        		CalcRutaAsyncTask calcRutaAyncTask = new CalcRutaAsyncTask(ANDANDO);
+        		calcRutaAyncTask.execute((Void)null);
+        		String mensaje = "No se ha podido calcular la ruta en bici. Se cambia a una ruta andando.";
+				Toast.makeText(
+						MapaLugaresActivity.this, mensaje,
+						Toast.LENGTH_LONG).show();
+				marcaCheck(ANDANDO);
+        	} else if(objRuta.getResultadoRuta() == ResultadosRuta.OK) {
         		pintarRuta(objRuta);
         		cambiarVisibilidadBotonIndicaciones(View.VISIBLE);
 	        	// Se muestra el mensaje con información
@@ -324,6 +335,7 @@ public class MapaLugaresActivity extends FragmentActivity {
     	        uncheckOpciones();
         	}
         }
+//        return resul;
 	}
 	
 	/**
