@@ -7,9 +7,6 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.InputFilter;
-import android.text.Spanned;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -85,6 +82,8 @@ public class DialogoAutocompletar extends Dialog {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position,
 					long id) {
+				// Ocultamos el dialogo.
+				hide();
 				SitioAutocompletar sitioAutoCompletar = adapter.getItem(position);
 				Sitio sitio = sitioAutoCompletar.getSitio();
 		    	Intent intent = new Intent(getContext(), DetalleEventoActivity.class);
