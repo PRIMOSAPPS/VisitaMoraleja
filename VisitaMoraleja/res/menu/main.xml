@@ -3,11 +3,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.primos.visitamoraleja.MainActivity" >
     
-    <item android:id="@+id/actionbar_share"
-        android:title="@string/actionbar_share"
-        app:actionProviderClass="android.support.v7.widget.ShareActionProvider"
+    <item android:id="@+id/actionbar_buscar"
+        android:title="@string/actionbar_buscar"
         app:showAsAction="always"
-        android:icon="@drawable/ic_actionbar_compartir"/>
+        android:icon="@drawable/abc_ic_search"/>
     
     <item android:id="@+id/actionbar_notificaciones"
         android:title="@string/actionbar_notificacion"

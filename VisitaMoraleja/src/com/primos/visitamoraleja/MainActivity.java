@@ -12,6 +12,7 @@ import android.widget.Toast;
 import com.primos.visitamoraleja.actualizador.AsyncTaskActualizador;
 import com.primos.visitamoraleja.actualizador.ThreadActualizador;
 import com.primos.visitamoraleja.util.UtilPreferencias;
+import com.primos.visitamoraleja.views.DialogoAutocompletar;
 
 
 
@@ -64,10 +65,18 @@ public class MainActivity extends ActionBarActivity{
     	intent.putExtra("favoritos", "true");
     	startActivity(intent);
 	}
+
+	private void buscar() {
+		DialogoAutocompletar myDialog = new DialogoAutocompletar(this);
+        myDialog.show();
+	}
 	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 	    switch (item.getItemId()) {
+	        case R.id.actionbar_buscar:
+	        	buscar();
+	            return true;
 	        case R.id.actionbar_share:
 	        	Toast.makeText(this, "Se ha seleccionado COMPARTIR.", Toast.LENGTH_LONG).show();
 	            return true;

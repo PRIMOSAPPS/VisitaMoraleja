@@ -233,6 +233,7 @@ public class MapaLugaresActivity extends FragmentActivity {
 	
 	public void mostrarIndicacionesRuta(View view) {
 		Dialog myDialog = new Dialog(this);
+		myDialog.setTitle(R.string.title_dialog_indicaciones_ruta);
 	    myDialog.setContentView(R.layout.lista_instrucciones_ruta);
 	    ListView lv = (ListView)myDialog.findViewById(R.id.lvListaInstrucciones);
 	    final List<String> listaPasos = objRuta.getLstPasosTexto();
