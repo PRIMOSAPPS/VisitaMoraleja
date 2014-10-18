@@ -117,11 +117,4 @@ public class EventoListaNormalActivity extends  ActionBarListActivity {
 		}
 	}
 
-	@Override
-	public void onBackPressed() {
-		super.onBackPressed();
-		Intent intent = new Intent(this, MainActivity.class);
-    	startActivity(intent);
-	}
-
 }
