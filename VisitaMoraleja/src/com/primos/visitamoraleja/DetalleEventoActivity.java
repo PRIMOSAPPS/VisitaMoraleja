@@ -45,28 +45,6 @@ public class DetalleEventoActivity extends ActionBarListActivity implements
 					// stop the flipper
 	private List<Evento> lstEventosSitio;
 
-	private String getTxtDatosSitio(Sitio sitio) {
-		StringBuilder strBuild = new StringBuilder();
-
-		if (sitio.getDireccion() != null) {
-			strBuild.append(sitio.getDireccion() + "\n");
-		}
-		if (sitio.getTelefonosFijos() != null) {
-			strBuild.append(sitio.getTelefonosFijos() + "\n");
-		}
-		if (sitio.getTelefonosMoviles() != null) {
-			strBuild.append(sitio.getTelefonosMoviles() + "\n");
-		}
-		if (sitio.getFacebook() != null) {
-			strBuild.append(sitio.getFacebook() + "\n");
-		}
-		if (sitio.getTwitter() != null) {
-			strBuild.append(sitio.getTwitter() + "\n");
-		}
-
-		return strBuild.toString();
-	}
-
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -146,7 +124,6 @@ public class DetalleEventoActivity extends ActionBarListActivity implements
 			}
 
 		});
-		dataSource.actualizar(sitio);
 		
 		// Se asigna el titulo del action bar
 		CategoriasDataSource categoriaDataSource = new CategoriasDataSource(this);
