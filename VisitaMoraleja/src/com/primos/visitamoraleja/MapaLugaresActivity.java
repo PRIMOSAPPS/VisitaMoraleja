@@ -1,6 +1,8 @@
 package com.primos.visitamoraleja;
 import java.util.List;
 
+import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -8,11 +10,13 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.location.Criteria;
 import android.location.Location;
+import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.text.Html;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -46,7 +50,7 @@ import com.primos.visitamoraleja.util.UtilPreferencias;
  * almacenado. Esta clase pude ser llamada desde ListaLugaresActivity o al pulsar sobre
  * un marcador en MapaLugaresActivity
  */
-public class MapaLugaresActivity extends FragmentActivity {
+public class MapaLugaresActivity extends FragmentActivity implements LocationListener {
 	public final static String ID_RECIBIDO = "idRecibido";
 	public final static String ORIGEN = "origen";
 	
@@ -63,11 +67,18 @@ public class MapaLugaresActivity extends FragmentActivity {
 	private double longitudDestino;
 	private ObjRuta objRuta;
 	private String nombreSitio;
+	private LatLng posActual;
+	private LocationManager locationManager;
+	private String proveedor;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.mapa);
+		
+		locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
+	    Criteria criteria = new Criteria();
+	    proveedor = locationManager.getBestProvider(criteria, false);
 		
 		int status = GooglePlayServicesUtil.isGooglePlayServicesAvailable(getBaseContext());
 		 
@@ -154,12 +165,24 @@ public class MapaLugaresActivity extends FragmentActivity {
 				.title(titulo));
 	}
 	
+	private boolean isLocationActivated() {
+		return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) ||
+				locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+	}
+	
+	private void mostrarAvisoLocalizacionInhabilitada() {
+		Builder dialog = new AlertDialog.Builder(this);
+		dialog.setTitle("GPS inhabilitado");
+		dialog.setMessage("Para poder calcular la ruta es necesario activar la localizacion.");
+	    dialog.show();
+	}
+	
 	/**
 	 * Devuelve la posicion actual si es posible, null si no lo es
 	 * @return
 	 */
 	private LatLng getPosActual() {
-		LatLng resul = null;
+		posActual = null;
 		// Obtenemos una referencia al LocationManager y creamos el objeto
 		// para gestionar las localizaciones
 		LocationManager locationManager = (LocationManager) this
@@ -172,7 +195,7 @@ public class MapaLugaresActivity extends FragmentActivity {
 		criteria.setAccuracy(Criteria.ACCURACY_FINE);
 
 		// Cargamos el nombre del proveedor obtenido en un proveedor
-		String proveedor = locationManager.getBestProvider(criteria, true);
+		proveedor = locationManager.getBestProvider(criteria, true);
 		if(proveedor != null) {
 			// Almacenamos la ultima posicion uqe se obtuvo a traves del
 			// proveedor de busquedas asignado
@@ -180,10 +203,10 @@ public class MapaLugaresActivity extends FragmentActivity {
 					.getLastKnownLocation(proveedor);
 
 			if(posicionActual != null) {
-				resul = new LatLng(posicionActual.getLatitude(), posicionActual.getLongitude());
+				posActual = new LatLng(posicionActual.getLatitude(), posicionActual.getLongitude());
 			}
 		}
-		return resul;
+		return posActual;
 	}
 	
 	///////////////////////////////////////////////////////////
@@ -356,17 +379,21 @@ public class MapaLugaresActivity extends FragmentActivity {
 	    @Override
 	    protected void onPreExecute() {
 	        super.onPreExecute();
-	        progressDialog = new ProgressDialog(MapaLugaresActivity.this);
-	        progressDialog.setMessage("Calculando la ruta, por favor espera...");
-	        progressDialog.setIndeterminate(true);
-	        progressDialog.show();
-	        
-	        UtilMapas utilMapas = new UtilMapas();
-        	LatLng posDestino = new LatLng(latitudDestino, longitudDestino);
-        	LatLng posActual = getPosActual();
-        	if(posActual != null) {
-        		url = utilMapas.montarUrlPeticionRutaJSON(posActual, posDestino, modo);
-        	}
+			if(!isLocationActivated()) {
+				mostrarAvisoLocalizacionInhabilitada();
+			} else {
+		        progressDialog = new ProgressDialog(MapaLugaresActivity.this);
+		        progressDialog.setMessage("Calculando la ruta, por favor espera...");
+		        progressDialog.setIndeterminate(true);
+		        progressDialog.show();
+		        
+		        UtilMapas utilMapas = new UtilMapas();
+	        	LatLng posDestino = new LatLng(latitudDestino, longitudDestino);
+	        	LatLng posActual = getPosActual();
+	        	if(posActual != null) {
+	        		url = utilMapas.montarUrlPeticionRutaJSON(posActual, posDestino, modo);
+	        	}
+			}
 	    }
 
 	    @Override
@@ -382,8 +409,12 @@ public class MapaLugaresActivity extends FragmentActivity {
 	    @Override
 	    protected void onPostExecute(String result) {
 	        super.onPostExecute(result);   
-	        progressDialog.hide();
-	        pintarRuta(result, modo);
+			if(progressDialog != null) {
+				progressDialog.hide();
+			}
+			if(isLocationActivated()) {
+				pintarRuta(result, modo);
+			}
 	    }
 	}
 
@@ -404,5 +435,38 @@ public class MapaLugaresActivity extends FragmentActivity {
 		volver.putExtra(nombreParametro, idRecibido);
 		 
 		startActivity(volver);
+	}
+
+	@Override
+	public void onLocationChanged(Location location) {
+		posActual = new LatLng(location.getLatitude(), location.getLongitude());
+        Log.d(TAG, "Localizacion cambiada: Latitud: " + posActual.latitude + " : Longitud" + posActual.longitude);
+	}
+
+	@Override
+	public void onProviderDisabled(String provider) {
+		
+	}
+
+	@Override
+	public void onProviderEnabled(String provider) {
+		
+	}
+
+	@Override
+	public void onStatusChanged(String provider, int status, Bundle extras) {
+		
+	}
+
+	@Override
+	protected void onPause() {
+		super.onPause();
+		locationManager.removeUpdates(this);
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+		locationManager.requestLocationUpdates(proveedor, 400, 1, this);
 	}
 }// MapaLugaresActivity
