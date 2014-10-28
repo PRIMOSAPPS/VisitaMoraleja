@@ -67,6 +67,7 @@ public class EventoListaNormalActivity extends  ActionBarListActivity {
 		int id = item.getItemId();
 		if (id == R.id.actionbar_inicio ) {
         	Intent i = new Intent(this, MainActivity.class);
+        	i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         	i.putExtra(MainActivity.ACTUALIZAR, false);
             startActivity(i);
 			return true;

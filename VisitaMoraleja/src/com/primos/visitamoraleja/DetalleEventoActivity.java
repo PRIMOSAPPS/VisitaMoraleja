@@ -335,6 +335,7 @@ public class DetalleEventoActivity extends ActionBarListActivity implements
 		switch (item.getItemId()) {
 		case R.id.actionbar_inicio:
 			Intent i = new Intent(this, MainActivity.class);
+			i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 			i.putExtra(MainActivity.ACTUALIZAR, false);
 			startActivity(i);
 			return true;
