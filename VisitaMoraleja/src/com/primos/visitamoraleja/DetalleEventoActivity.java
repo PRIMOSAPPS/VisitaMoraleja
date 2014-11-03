@@ -74,12 +74,18 @@ public class DetalleEventoActivity extends ActionBarListActivity implements
 		Button botonTwiter = (Button) findViewById(R.id.botonTwiter);
 		Button botonWeb = (Button) findViewById(R.id.botonWeb);
 
-		botonTelefono.setOnClickListener(this);
-		botonLocalizar.setOnClickListener(this);
+		
+		//miBotonB.setVisibility(View.GONE);
+		//ocultarBoton(sitio);
+		
+		
+		
+		//botonTelefono.setOnClickListener(this);
+		//botonLocalizar.setOnClickListener(this);
 		botonCompartir.setOnClickListener(this);
-		botonFacebook.setOnClickListener(this);
-		botonTwiter.setOnClickListener(this);
-		botonWeb.setOnClickListener(this);
+		//botonFacebook.setOnClickListener(this);
+		//botonTwiter.setOnClickListener(this);
+		//botonWeb.setOnClickListener(this);
 
 		long idSitio = (long) getIntent().getExtras().get(ID_SITIO);
 		this.sitio = dataSource.getById(idSitio);
@@ -95,16 +101,47 @@ public class DetalleEventoActivity extends ActionBarListActivity implements
 		if (sitio.getTelefonosFijos().length()>0) {
 			if (sitio.getTelefonosMoviles().length()>0) {
 				textTelefono.setText(sitio.getTelefonosFijos()+" / "+sitio.getTelefonosMoviles());
+				botonTelefono.setOnClickListener(this);
 			}else {
 				textTelefono.setText(sitio.getTelefonosFijos());
 			}
 		}else {
 			if (sitio.getTelefonosMoviles().length()>0) {
 				textTelefono.setText(sitio.getTelefonosMoviles());
+				botonTelefono.setOnClickListener(this);
 			}else {
 				textTelefono.setText(sitio.getTelefonosFijos());
+				botonTelefono.setVisibility(View.INVISIBLE);
+				botonTelefono.setOnClickListener(this);
+				
 			}
 		}	
+		
+		//Oculta botón Localizar si no tiene Coordenadas.
+		if (sitio.getLatitud()>0) {
+			botonLocalizar.setOnClickListener(this);
+		}else {
+			botonLocalizar.setVisibility(View.INVISIBLE);
+		}
+		//Oculta botón Facebook si no tiene Facebook.
+		if (sitio.getFacebook().length()>0) {
+			botonFacebook.setOnClickListener(this);
+		}else {
+			botonFacebook.setVisibility(View.INVISIBLE);
+		}
+		//Oculta botón Twiter si no tiene Twiter.
+		if (sitio.getTwitter().length()>0) {
+			botonTwiter.setOnClickListener(this);
+		}else {
+			botonTwiter.setVisibility(View.INVISIBLE);
+		}
+		//Oculta botón web si no tiene web.
+		if (sitio.getWeb().length()>0) {
+			botonWeb.setOnClickListener(this);
+		}else {
+			botonWeb.setVisibility(View.INVISIBLE);
+		}
+		
 		
 		textViewTextoLargo1.setText(sitio.getTextoLargo1());
 		
@@ -136,7 +173,7 @@ public class DetalleEventoActivity extends ActionBarListActivity implements
 
 	
 	
-	// Recogemos la pulsación en los 5 botones de la minificha
+	// Recogemos la pulsaciÃ³n en los 5 botones de la minificha
 	public void onClick(View boton_pulsado) {
 		
 		String lugar = sitio.getNombre();
@@ -188,6 +225,7 @@ public class DetalleEventoActivity extends ActionBarListActivity implements
 					startActivity(intent);
 				} else {
 					// si el sitio no tiene WEB
+					
 					Toast.makeText(getBaseContext(), "NO DISPONIBLE",
 							Toast.LENGTH_SHORT).show();
 				}
@@ -227,7 +265,7 @@ public class DetalleEventoActivity extends ActionBarListActivity implements
 		}
 	}
 
-	// Muy pronto estará terminado
+	// Muy pronto estarÃ¡ terminado
 	private void localizarSitio(String lugar, Double latitud, Double longitud) {
 		Intent lanzarmapa = new Intent(this, MapaLugaresActivity.class);
 
@@ -274,7 +312,7 @@ public class DetalleEventoActivity extends ActionBarListActivity implements
 	}
 
 	// Seleccionar de una lista de aplicaciones instaladas en el movil, una para
-	// enviar una notificación a quien quiera
+	// enviar una notificaciÃ³n a quien quiera
 	// para indicar donde se encuentra ese lugar en concreto, sigue con el
 	// problema de los decimales en lat y long.
 	private void compartirLugar(String lugar, Double lat, Double lon) {
@@ -300,8 +338,8 @@ public class DetalleEventoActivity extends ActionBarListActivity implements
 
 	// Lanza el DIAL para que solo sonlo con pulsar un boton se realice una
 	// llamada, lo hice con llamda directa, pero
-	// aparte que había que modificar permisos en el manifest qu eno me gustan
-	// ni a la gente tampoco, me parecía
+	// aparte que habÃ­a que modificar permisos en el manifest qu eno me gustan
+	// ni a la gente tampoco, me parecÃ­a
 	// demasiado atrevido.
 	private void realizarLlamada(String numero) {
 		// TODO Auto-generated method stub
