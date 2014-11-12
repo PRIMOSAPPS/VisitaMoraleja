@@ -140,7 +140,7 @@ public class SitiosDataSource extends AbstractDataSource {
 	 */
 	public List<Sitio> getByFavorito(int favorito) {
 		List<Sitio> resul = new ArrayList<Sitio>();
-		String where = SitiosSQLite.COLUMNA_FAVORITO + " = " + favorito;
+		String where = SitiosSQLite.COLUMNA_FAVORITO + " = " + favorito + " AND " + SitiosSQLite.COLUMNA_ACTIVO + " = 1 ";
 		Cursor cursor = database.query(SitiosSQLite.TABLE_NAME,
 				allColumns, where, null, null, null, ORDER_BY_RANKING);
 		cursor.moveToFirst();
@@ -167,7 +167,7 @@ public class SitiosDataSource extends AbstractDataSource {
 			catDataSource.open();
 			Categoria categoria = catDataSource.getByNombre(nombreCat);
 	
-			String where = SitiosSQLite.COLUMNA_ID_CATEGORIA + " = " + categoria.getId();
+			String where = SitiosSQLite.COLUMNA_ID_CATEGORIA + " = " + categoria.getId() + " AND " + SitiosSQLite.COLUMNA_ACTIVO + " = 1 ";
 			Cursor cursor = database.query(SitiosSQLite.TABLE_NAME,
 					allColumns, where, null, null, null, ORDER_BY_RANKING);
 			cursor.moveToFirst();
@@ -209,8 +209,9 @@ public class SitiosDataSource extends AbstractDataSource {
 	public List<Sitio> getAll() {
 		List<Sitio> resul = new ArrayList<Sitio>();
 
+		String seleccion =  SitiosSQLite.COLUMNA_ACTIVO + " = 1 ";
 		Cursor cursor = database.query(SitiosSQLite.TABLE_NAME,
-				allColumns, null, null, null, null, ORDER_BY_RANKING);
+				allColumns, seleccion, null, null, null, ORDER_BY_RANKING);
 
 		cursor.moveToFirst();
 		while (!cursor.isAfterLast()) {

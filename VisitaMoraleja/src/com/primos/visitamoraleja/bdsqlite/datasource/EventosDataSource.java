@@ -121,7 +121,7 @@ public class EventosDataSource extends AbstractDataSource {
 	
 	public List<Evento> getBySitioId(long id) {
 		List<Evento> resul = new ArrayList<Evento>();
-		String where = EventosSQLite.COLUMNA_ID_SITIO + " = " + id;
+		String where = EventosSQLite.COLUMNA_ID_SITIO + " = " + id + " AND " + EventosSQLite.COLUMNA_ACTIVO + " = 1";
 		Cursor cursor = database.query(EventosSQLite.TABLE_NAME,
 				allColumns, where, null, null, null, null);
 		resul = getListaEventosByCursor(cursor);
@@ -153,8 +153,9 @@ public class EventosDataSource extends AbstractDataSource {
 	public List<Evento> getAll() {
 		List<Evento> resul = new ArrayList<Evento>();
 
+		String seleccion = EventosSQLite.COLUMNA_ACTIVO + " = 1";
 		Cursor cursor = database.query(EventosSQLite.TABLE_NAME,
-				allColumns, null, null, null, null, null);
+				allColumns, seleccion, null, null, null, null);
 
 		resul = getListaEventosByCursor(cursor);
 		cursor.close();
