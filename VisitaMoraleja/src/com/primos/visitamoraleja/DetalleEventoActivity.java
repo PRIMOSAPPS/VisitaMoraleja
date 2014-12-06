@@ -6,14 +6,14 @@ import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.text.method.ScrollingMovementMethod;
+import android.util.Base64;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.webkit.WebView;
 import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.Button;
 import android.widget.Gallery;
 import android.widget.ImageSwitcher;
@@ -37,6 +37,8 @@ public class DetalleEventoActivity extends ActionBarListActivity implements
 	public final static String ID_SITIO = "idSitio";
 	public final static String SITIO = "sitio";
 	private final static String TAG = "[DetalleEventoActivity]";
+	private final static String mimeType = "text/html";
+	private final static String encoding = "UTF-8";
 	private SitiosDataSource dataSource = null;
 	private EventosDataSource eventosDataSource = null;
 	private Sitio sitio = null;
@@ -56,17 +58,13 @@ public class DetalleEventoActivity extends ActionBarListActivity implements
 		setContentView(R.layout.fragment_detalle_evento);
 
 		TextView textViewDireccion = (TextView) findViewById(R.id.textDireccion);
-		final TextView textViewTextoLargo1 = (TextView) findViewById(R.id.tvTextoLargo1);
+		final WebView webViewTextoLargo1 = (WebView) findViewById(R.id.wvSitioTextoLargo1);
+		final WebView webViewTextoLargo2 = (WebView) findViewById(R.id.wvSitioTextoLargo2);
 		TextView textNombreSitio = (TextView) findViewById(R.id.textNombreSitio);
 		TextView textNombreSitio2 = (TextView) findViewById(R.id.textNombreSitio2);
 		TextView textTelefono = (TextView) findViewById(R.id.textTelefono);
-		TextView web = (TextView) findViewById(R.id.botonWeb);
 		
 		
-		//TextView url = (TextView) findViewById(R.id.web);
-		String url = null;
-		textViewTextoLargo1.setMovementMethod(new ScrollingMovementMethod());
-
 		Button botonTelefono = (Button) findViewById(R.id.botonTelefono);
 		Button botonLocalizar = (Button) findViewById(R.id.botonLocalizar);
 		Button botonCompartir = (Button) findViewById(R.id.botonCompartir);
@@ -143,24 +141,13 @@ public class DetalleEventoActivity extends ActionBarListActivity implements
 		}
 		
 		
-		textViewTextoLargo1.setText(sitio.getTextoLargo1());
-		
-		myGallery.setOnItemSelectedListener(new OnItemSelectedListener() {
-
-			public void onItemSelected(AdapterView<?> parent, View v,
-					int position, long id) {
-				String str = " selected option: " + position;
-				for (int i = 0; i < 30; i++) {
-					str += "   selected option: " + position + "-" + i;
-				}
-				
-			}
-
-			public void onNothingSelected(AdapterView<?> parent) {
-				textViewTextoLargo1.setText("Nothing selected");
-			}
-
-		});
+//		textViewTextoLargo1.setText(sitio.getTextoLargo1());
+		String txtTextoLargo1 = sitio.getTextoLargo1();
+		String txtTextoLargo2 = sitio.getTextoLargo2();
+		String datosTextoLargo1 = new String(Base64.decode(txtTextoLargo1, Base64.DEFAULT));
+		String datosTextoLargo2 = new String(Base64.decode(txtTextoLargo2, Base64.DEFAULT));
+		webViewTextoLargo1.loadDataWithBaseURL(null, datosTextoLargo1, mimeType, encoding, null);
+		webViewTextoLargo2.loadDataWithBaseURL(null, datosTextoLargo2, mimeType, encoding, null);
 		
 		// Se asigna el titulo del action bar
 		CategoriasDataSource categoriaDataSource = new CategoriasDataSource(this);

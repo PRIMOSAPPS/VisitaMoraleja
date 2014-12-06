@@ -203,15 +203,26 @@
             android:layout_height="wrap_content"
             android:background="#FFFFFF" />
 
-        <TextView
-            android:id="@+id/tvTextoLargo1"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
+
+        <WebView
+            android:id="@+id/wvSitioTextoLargo1"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
             android:background="#FFFFFF"
             android:gravity="bottom"
             android:scrollbars="vertical"
-            android:text="Medium Text"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
+            android:layout_weight="1"
+            />
+
+        <WebView
+            android:id="@+id/wvSitioTextoLargo2"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:background="#FFFFFF"
+            android:gravity="bottom"
+            android:scrollbars="vertical"
+            android:layout_weight="1"
+            />
     </LinearLayout>
 
 </ScrollView>
