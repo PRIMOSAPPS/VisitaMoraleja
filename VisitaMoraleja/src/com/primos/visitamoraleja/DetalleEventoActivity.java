@@ -144,10 +144,8 @@ public class DetalleEventoActivity extends ActionBarListActivity implements
 //		textViewTextoLargo1.setText(sitio.getTextoLargo1());
 		String txtTextoLargo1 = sitio.getTextoLargo1();
 		String txtTextoLargo2 = sitio.getTextoLargo2();
-		String datosTextoLargo1 = new String(Base64.decode(txtTextoLargo1, Base64.DEFAULT));
-		String datosTextoLargo2 = new String(Base64.decode(txtTextoLargo2, Base64.DEFAULT));
-		webViewTextoLargo1.loadDataWithBaseURL(null, datosTextoLargo1, mimeType, encoding, null);
-		webViewTextoLargo2.loadDataWithBaseURL(null, datosTextoLargo2, mimeType, encoding, null);
+		webViewTextoLargo1.loadDataWithBaseURL(null, txtTextoLargo1, mimeType, encoding, null);
+		webViewTextoLargo2.loadDataWithBaseURL(null, txtTextoLargo2, mimeType, encoding, null);
 		
 		// Se asigna el titulo del action bar
 		CategoriasDataSource categoriaDataSource = new CategoriasDataSource(this);

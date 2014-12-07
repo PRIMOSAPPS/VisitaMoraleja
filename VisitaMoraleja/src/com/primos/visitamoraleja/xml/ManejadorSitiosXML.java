@@ -9,6 +9,7 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
+import android.util.Base64;
 import android.util.Log;
 
 import com.primos.visitamoraleja.contenidos.Sitio;
@@ -62,9 +63,13 @@ public class ManejadorSitiosXML extends DefaultHandler {
 			} else if(localName.equals("textoCorto3")) {
 				sitio.setTextoCorto3(cadena.toString());
 			} else if(localName.equals("textoLargo1")) {
-				sitio.setTextoLargo1(cadena.toString());
+				String textoLargoBase64 = cadena.toString();
+				String datosTextoLargo = new String(Base64.decode(textoLargoBase64, Base64.DEFAULT));
+				sitio.setTextoLargo1(datosTextoLargo);
 			} else if(localName.equals("textoLargo2")) {
-				sitio.setTextoLargo2(cadena.toString());
+				String textoLargoBase64 = cadena.toString();
+				String datosTextoLargo = new String(Base64.decode(textoLargoBase64, Base64.DEFAULT));
+				sitio.setTextoLargo2(datosTextoLargo);
 			} else if(localName.equals("nombreLogotipo")) {
 				sitio.setNombreLogotipo(cadena.toString());
 			} else if(localName.equals("logotipo")) {
