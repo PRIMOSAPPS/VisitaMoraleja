@@ -6,7 +6,6 @@ import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Base64;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -27,6 +26,7 @@ import com.primos.visitamoraleja.adaptadores.ImageAdapter;
 import com.primos.visitamoraleja.bdsqlite.datasource.CategoriasDataSource;
 import com.primos.visitamoraleja.bdsqlite.datasource.EventosDataSource;
 import com.primos.visitamoraleja.bdsqlite.datasource.SitiosDataSource;
+import com.primos.visitamoraleja.constantes.Constantes;
 import com.primos.visitamoraleja.contenidos.Categoria;
 import com.primos.visitamoraleja.contenidos.Evento;
 import com.primos.visitamoraleja.contenidos.Sitio;
@@ -37,8 +37,6 @@ public class DetalleEventoActivity extends ActionBarListActivity implements
 	public final static String ID_SITIO = "idSitio";
 	public final static String SITIO = "sitio";
 	private final static String TAG = "[DetalleEventoActivity]";
-	private final static String mimeType = "text/html";
-	private final static String encoding = "UTF-8";
 	private SitiosDataSource dataSource = null;
 	private EventosDataSource eventosDataSource = null;
 	private Sitio sitio = null;
@@ -59,7 +57,6 @@ public class DetalleEventoActivity extends ActionBarListActivity implements
 
 		TextView textViewDireccion = (TextView) findViewById(R.id.textDireccion);
 		final WebView webViewTextoLargo1 = (WebView) findViewById(R.id.wvSitioTextoLargo1);
-		final WebView webViewTextoLargo2 = (WebView) findViewById(R.id.wvSitioTextoLargo2);
 		TextView textNombreSitio = (TextView) findViewById(R.id.textNombreSitio);
 		TextView textNombreSitio2 = (TextView) findViewById(R.id.textNombreSitio2);
 		TextView textTelefono = (TextView) findViewById(R.id.textTelefono);
@@ -144,8 +141,8 @@ public class DetalleEventoActivity extends ActionBarListActivity implements
 //		textViewTextoLargo1.setText(sitio.getTextoLargo1());
 		String txtTextoLargo1 = sitio.getTextoLargo1();
 		String txtTextoLargo2 = sitio.getTextoLargo2();
-		webViewTextoLargo1.loadDataWithBaseURL(null, txtTextoLargo1, mimeType, encoding, null);
-		webViewTextoLargo2.loadDataWithBaseURL(null, txtTextoLargo2, mimeType, encoding, null);
+		String textoWebView = txtTextoLargo1 + "<div style='clear:both;'></div>" + txtTextoLargo2;
+		webViewTextoLargo1.loadDataWithBaseURL(null, textoWebView, Constantes.mimeType, Constantes.encoding, null);
 		
 		// Se asigna el titulo del action bar
 		CategoriasDataSource categoriaDataSource = new CategoriasDataSource(this);

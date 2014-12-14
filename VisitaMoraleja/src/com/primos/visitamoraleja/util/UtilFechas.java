@@ -64,7 +64,7 @@ public class UtilFechas {
 	 * @return
 	 * @throws ParseException
 	 */
-	private static Date parseFromStrDefault(String strDate) throws ParseException {
+	public static Date parseFromStrDefault(String strDate) throws ParseException {
 		sdf.setTimeZone(TIMEZONE_DEFAULT);
 		return sdf.parse(strDate);
 	}

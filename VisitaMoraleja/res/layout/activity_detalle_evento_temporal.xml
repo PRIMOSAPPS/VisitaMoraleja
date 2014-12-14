@@ -72,22 +72,16 @@
 			    />
             
 		</LinearLayout>
-	    
-        <TextView
-            android:id="@+id/tvTexto1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="#FFFFFF" />
 
-        <TextView
-            android:id="@+id/tvTexto2"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
+        <WebView
+            android:id="@+id/wvEventoTextoLargo1"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
             android:background="#FFFFFF"
             android:gravity="bottom"
             android:scrollbars="vertical"
-            android:text="Medium Text"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
+            android:layout_weight="1"
+            />
     </LinearLayout>
 
 </ScrollView>

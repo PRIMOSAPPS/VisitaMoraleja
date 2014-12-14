@@ -8,6 +8,7 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
+import android.util.Base64;
 import android.util.Log;
 
 import com.primos.visitamoraleja.contenidos.Evento;
@@ -53,16 +54,20 @@ public class ManejadorEventosXML extends DefaultHandler {
 			} else if(localName.equals("idSitio")) {
 				evento.setIdSitio(Long.parseLong(cadena.toString()));
 			} else if(localName.equals("idCategoria")) {
-					evento.setIdCategoria(Long.parseLong(cadena.toString()));
+				evento.setIdCategoria(Long.parseLong(cadena.toString()));
 			} else if(localName.equals("nombre")) {
 				evento.setNombre(cadena.toString());
 			} else if(localName.equals("esEvento")) {
 				int valor = Integer.parseInt(cadena.toString());
 				evento.setEsEvento(ConversionesUtil.intToBoolean(valor));
 			} else if(localName.equals("texto1")) {
-				evento.setTexto1(cadena.toString());
+				String textoLargoBase64 = cadena.toString();
+				String datosTextoLargo = new String(Base64.decode(textoLargoBase64, Base64.DEFAULT));
+				evento.setTexto1(datosTextoLargo);
 			} else if(localName.equals("texto2")) {
-				evento.setTexto2(cadena.toString());
+				String textoLargoBase64 = cadena.toString();
+				String datosTextoLargo = new String(Base64.decode(textoLargoBase64, Base64.DEFAULT));
+				evento.setTexto2(datosTextoLargo);
 			} else if(localName.equals("nombreIcono")) {
 				evento.setNombreIcono(cadena.toString());
 			} else if(localName.equals("icono")) {
@@ -72,10 +77,10 @@ public class ManejadorEventosXML extends DefaultHandler {
 			} else if(localName.equals("longitud")) {
 				evento.setLongitud(Double.parseDouble(cadena.toString()));
 			} else if(localName.equals("inicio")) {
-				Date fechaInicio = UtilFechas.fechaFromUTC(cadena.toString().trim());
+				Date fechaInicio = UtilFechas.parseFromStrDefault(cadena.toString().trim());
 				evento.setInicio(fechaInicio);
 			} else if(localName.equals("fin")) {
-				Date fechaFin = UtilFechas.fechaFromUTC(cadena.toString().trim());
+				Date fechaFin = UtilFechas.parseFromStrDefault(cadena.toString().trim());
 				evento.setFin(fechaFin);
 			} else if(localName.equals("activo")) {
 				int valor = Integer.parseInt(cadena.toString());
