@@ -7,6 +7,8 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -20,6 +22,11 @@ import com.primos.visitamoraleja.contenidos.Sitio;
 
 public class DialogoAutocompletar extends Dialog {
 	private AutoCompleteTextView textoAutocompletar;
+	/**
+	 * Indica el numero de sitios encontrados a partir de los que se oculta el teclado automaticamente. Si
+	 * el numero de sitios encontrados es menor o igual este valor se oculta.
+	 */
+	private final static int NUM_RESULTADOS_OCULTAR_TECLADO = 4;
 
 	/**
 	 * Clase creada para no tener que cambiar el metodo toString de la clase Sitio
@@ -69,14 +76,39 @@ public class DialogoAutocompletar extends Dialog {
 		List<Sitio> lstSitios = sitiosDataSource.getAll();
 		sitiosDataSource.close();
 
-		List<SitioAutocompletar> lstSitiosAutocompletar = new ArrayList<>();
-		for(Sitio sitio : lstSitios) {
-			lstSitiosAutocompletar.add(new SitioAutocompletar(sitio));
-		}
+		List<SitioAutocompletar> lstSitiosAutocompletar = toSitiosAutoCompletar(lstSitios);
 		
 		final ArrayAdapter<SitioAutocompletar> adapter = new ArrayAdapter<SitioAutocompletar>(getContext(),
-                android.R.layout.simple_dropdown_item_1line, (SitioAutocompletar[])lstSitiosAutocompletar.toArray(new SitioAutocompletar[0]));
+                android.R.layout.simple_dropdown_item_1line, lstSitiosAutocompletar);
         textoAutocompletar.setAdapter(adapter);
+        
+        textoAutocompletar.addTextChangedListener(new TextWatcher() {
+			
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before, int count) {
+				SitiosDataSource sitiosDataSource = new SitiosDataSource(getContext());
+				sitiosDataSource.open();
+				List<Sitio> lstResultados = sitiosDataSource.getBusqueda(s.toString());
+				adapter.clear();
+				List<SitioAutocompletar> lstAutocompletar = toSitiosAutoCompletar(lstResultados);
+				for(SitioAutocompletar sitioAutoCompletar : lstAutocompletar) {
+					adapter.add(sitioAutoCompletar);
+				}
+				if(lstAutocompletar.size() <= NUM_RESULTADOS_OCULTAR_TECLADO) {
+					textoAutocompletar.dismissDropDown();
+				}
+				sitiosDataSource.close();
+			}
+			
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count,
+					int after) {
+			}
+			
+			@Override
+			public void afterTextChanged(Editable s) {
+			}
+		});
 		// Al seleccionar uno, lo abrimos.
 		setOnItemClickListener(new OnItemClickListener() {
 			@Override
@@ -94,8 +126,24 @@ public class DialogoAutocompletar extends Dialog {
 		});
 	}
 	
+	private List<SitioAutocompletar> toSitiosAutoCompletar(List<Sitio> lstSitios) {
+		List<SitioAutocompletar> resul = new ArrayList<>();
+		for(Sitio sitio : lstSitios) {
+			resul.add(new SitioAutocompletar(sitio));
+		}
+		return resul;
+	}
+	
 	public void setOnItemClickListener(OnItemClickListener itemClickListener) {
 		textoAutocompletar.setOnItemClickListener(itemClickListener);
+	}
+
+	@Override
+	public void show() {
+		super.show();
+		// Cuando se muestra, el teclado esta oculto (creo que por ser ArrayAdapter)
+		// Forzamos que se muestre
+		((AutoCompleteTextViewPrimos)textoAutocompletar).mostrarTeclado();
 	}
 	
 

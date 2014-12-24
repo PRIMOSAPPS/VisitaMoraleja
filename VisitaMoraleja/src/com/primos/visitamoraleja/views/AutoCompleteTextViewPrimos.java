@@ -40,4 +40,22 @@ public class AutoCompleteTextViewPrimos extends AutoCompleteTextView {
     	}
 //    	showDropDown();
     }
+    
+    /**
+     * Metodo para forzar que se muestre el teclado
+     */
+    public void mostrarTeclado() {
+		InputMethodManager imm = (InputMethodManager)getContext().getSystemService(
+			      Context.INPUT_METHOD_SERVICE);
+		imm.toggleSoftInput(InputMethodManager.SHOW_FORCED,
+				InputMethodManager.HIDE_IMPLICIT_ONLY);
+	}
+    
+ // Desactivamos el filtro de autocomplete
+    @Override
+    protected void performFiltering(final CharSequence text, final int keyCode) {
+        String filterText = "";
+        super.performFiltering(filterText, keyCode);
+    }
+    
 }

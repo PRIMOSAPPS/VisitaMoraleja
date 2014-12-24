@@ -4,9 +4,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager.LayoutParams;
 import android.widget.Toast;
 
 import com.primos.visitamoraleja.actualizador.AsyncTaskActualizador;
@@ -68,6 +70,10 @@ public class MainActivity extends ActionBarActivity{
 
 	private void buscar() {
 		DialogoAutocompletar myDialog = new DialogoAutocompletar(this);
+		LayoutParams wmlp = myDialog.getWindow().getAttributes();
+		wmlp.gravity = Gravity.TOP;
+		wmlp.y = 50;
+		
         myDialog.show();
 	}
 	

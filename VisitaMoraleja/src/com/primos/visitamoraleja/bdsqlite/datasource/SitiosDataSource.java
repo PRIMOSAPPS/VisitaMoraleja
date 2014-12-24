@@ -50,6 +50,11 @@ public class SitiosDataSource extends AbstractDataSource {
 			SitiosSQLite.COLUMNA_FAVORITO,
 			SitiosSQLite.COLUMNA_ACTIVO,
 			SitiosSQLite.COLUMNA_ULTIMA_ACTUALIZACION};
+
+	private String[] columnsBusqueda = { SitiosSQLite.COLUMNA_ID,
+			SitiosSQLite.COLUMNA_NOMBRE,
+			SitiosSQLite.COLUMNA_POBLACION,
+			};
 	
 
 	public SitiosDataSource(Context context) {
@@ -226,6 +231,24 @@ public class SitiosDataSource extends AbstractDataSource {
 		return resul;
 	}
 
+	public List<Sitio> getBusqueda(String texto) {
+		List<Sitio> resul = new ArrayList<Sitio>();
+
+		String seleccion =  SitiosSQLite.COLUMNA_ACTIVO + " = 1 AND " + SitiosSQLite.COLUMNA_NOMBRE + " like '%" + texto + "%'";
+		Cursor cursor = database.query(SitiosSQLite.TABLE_NAME,
+				allColumns, seleccion, null, null, null, ORDER_BY_RANKING);
+
+		cursor.moveToFirst();
+		while (!cursor.isAfterLast()) {
+			Sitio sitio = cursorToObject(cursor);
+
+			resul.add(sitio);
+			cursor.moveToNext();
+		}
+		cursor.close();
+		return resul;
+	}
+	
 	/**
 	 * Convierte un cursor recibido de una consulta a la base de datos en un objeto Evento.
 	 * @param cursor

@@ -2,12 +2,14 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:gravity="top"
     android:orientation="vertical" >
 
     <TextView
         android:id="@+id/textView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="top"
         android:layout_margin="10dp"
         android:text="@string/texto_autocompletar" />
 
@@ -15,9 +17,12 @@
         android:id="@+id/autoCompleteTextViewBusqueda"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
+        android:layout_gravity="top"
         android:layout_margin="10dp"
-        android:ems="10">
+        android:completionThreshold="1"
+        android:ems="10"
+        android:gravity="top"
+        android:selectAllOnFocus="true" >
 
         <requestFocus />
     </com.primos.visitamoraleja.views.AutoCompleteTextViewPrimos>
