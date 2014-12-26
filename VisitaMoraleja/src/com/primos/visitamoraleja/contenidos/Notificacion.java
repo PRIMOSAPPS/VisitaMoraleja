@@ -12,6 +12,7 @@ public class Notificacion implements Serializable {
 	private static final long serialVersionUID = 8881102854923668978L;
 	
 	private long id;
+	private long idSitio;
 	private String titulo;
 	private String texto;
 	private Date fechaInicioValidez;
@@ -26,6 +27,14 @@ public class Notificacion implements Serializable {
 
 	public void setId(long id) {
 		this.id = id;
+	}
+
+	public long getIdSitio() {
+		return idSitio;
+	}
+
+	public void setIdSitio(long idSitio) {
+		this.idSitio = idSitio;
 	}
 
 	public String getTitulo() {

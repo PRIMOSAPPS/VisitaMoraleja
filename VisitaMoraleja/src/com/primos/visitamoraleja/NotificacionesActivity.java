@@ -13,12 +13,14 @@ import android.widget.ListView;
 
 import com.primos.visitamoraleja.adaptadores.NotificacionAdapter;
 import com.primos.visitamoraleja.bdsqlite.datasource.NotificacionesDataSource;
+import com.primos.visitamoraleja.bdsqlite.datasource.SitiosDataSource;
 import com.primos.visitamoraleja.contenidos.Notificacion;
 
 public class NotificacionesActivity extends ActionBarListActivity {
 	public final static String NOTIFICACION = "notificacion";
 	
 	private NotificacionesDataSource dataSource = null;
+	private SitiosDataSource dataSourceSitios = null;
 	private ListView mListView = null;
 
 	@Override
@@ -28,6 +30,8 @@ public class NotificacionesActivity extends ActionBarListActivity {
 		
 		dataSource = new NotificacionesDataSource(this);
 		dataSource.open();
+		dataSourceSitios = new SitiosDataSource(this);
+		dataSourceSitios.open();
 		
 		Bundle extras = getIntent().getExtras();
 		// Si se recibe una notificacion solo se muestra esta
@@ -42,6 +46,17 @@ public class NotificacionesActivity extends ActionBarListActivity {
 		}
 		
 		setListAdapter(new NotificacionAdapter(this, lstNotificaciones));
+	}
+	
+	public void mostrarDetalleSitio(View view) {
+		Notificacion notificacion = (Notificacion)view.getTag();
+
+		long idSitio = notificacion.getIdSitio();
+		if(idSitio > -1) {
+			Intent intent = new Intent(this, DetalleEventoActivity.class);
+			intent.putExtra(DetalleEventoActivity.ID_SITIO, idSitio);
+	    	startActivity(intent);
+		}
 	}
 
 	@Override
@@ -89,12 +104,14 @@ public class NotificacionesActivity extends ActionBarListActivity {
 	protected void onResume() {
 		dataSource.open();
 		dataSource.eliminarPasadas();
+		dataSourceSitios.open();
 		super.onResume();
 	}
 
 	@Override
 	protected void onPause() {
 		dataSource.close();
+		dataSourceSitios.close();
 		super.onPause();
 	}
 }

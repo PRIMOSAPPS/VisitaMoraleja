@@ -19,6 +19,7 @@ import com.primos.visitamoraleja.contenidos.Notificacion;
  */
 public class NotificacionesDataSource extends AbstractDataSource {
 	private static String[] allColumns = { NotificacionesSQLite.COLUMNA_ID,
+			NotificacionesSQLite.COLUMNA_ID_SITIO,
 			NotificacionesSQLite.COLUMNA_TITULO,
 			NotificacionesSQLite.COLUMNA_TEXTO,
 			NotificacionesSQLite.COLUMNA_FECHA_INICIO_VALIDEZ,
@@ -118,6 +119,7 @@ public class NotificacionesDataSource extends AbstractDataSource {
 	private Notificacion cursorToObject(Cursor cursor) {
 		Notificacion resul = new Notificacion();
 		resul.setId(cursor.getLong(cursor.getColumnIndex(NotificacionesSQLite.COLUMNA_ID)));
+		resul.setIdSitio(cursor.getLong(cursor.getColumnIndex(NotificacionesSQLite.COLUMNA_ID_SITIO)));
 		resul.setTitulo(cursor.getString(cursor.getColumnIndex(NotificacionesSQLite.COLUMNA_TITULO)));
 		resul.setTexto(cursor.getString(cursor.getColumnIndex(NotificacionesSQLite.COLUMNA_TEXTO)));
 		long fechaInicioValidez = cursor.getLong(cursor.getColumnIndex(NotificacionesSQLite.COLUMNA_FECHA_INICIO_VALIDEZ));
@@ -137,6 +139,7 @@ public class NotificacionesDataSource extends AbstractDataSource {
 	private ContentValues eventoToObject(Notificacion notificacion) {
 		ContentValues valores = new ContentValues();
 		valores.put(NotificacionesSQLite.COLUMNA_ID, notificacion.getId());
+		valores.put(NotificacionesSQLite.COLUMNA_ID_SITIO, notificacion.getIdSitio());
 		valores.put(NotificacionesSQLite.COLUMNA_TITULO, notificacion.getTitulo());
 		valores.put(NotificacionesSQLite.COLUMNA_TEXTO,
 				notificacion.getTexto());

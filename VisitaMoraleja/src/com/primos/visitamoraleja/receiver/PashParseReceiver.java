@@ -72,6 +72,7 @@ public class PashParseReceiver extends BroadcastReceiver {
 				"com.parse.Data"));
 		Notificacion notificacion = new Notificacion();
 		notificacion.setId(json.getLong("id"));
+		notificacion.setIdSitio(json.getLong("idSitio"));
 		notificacion.setTitulo(json.getString("titulo"));
 		notificacion.setTexto(json.getString("texto"));
 		String strFechaInicio = json.getString("fiv");
