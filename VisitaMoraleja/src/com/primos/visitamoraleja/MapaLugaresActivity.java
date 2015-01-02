@@ -393,6 +393,7 @@ public class MapaLugaresActivity extends FragmentActivity implements LocationLis
 				Toast.makeText(
 						MapaLugaresActivity.this, mensaje,
 						Toast.LENGTH_SHORT).show();
+				marcaCheck(medioTransporte);
         	} else {
         		mostrarDistancia(" No se ha podido calcular la ruta para el medio de transporte indicado.");
     	        // Desmarcamos todas las opcioens de la ruta, por si no es posible calcularla
