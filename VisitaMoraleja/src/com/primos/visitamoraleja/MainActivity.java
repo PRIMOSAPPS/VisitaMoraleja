@@ -39,11 +39,7 @@ public class MainActivity extends ActionBarActivity{
 
 		if(actualizar && UtilPreferencias.actualizacionAutomatica(this)) {
 			Log.i("MainActivity", "Se realiza la actualizacion por estar activada");
-//			AsyncTaskActualizador actualizador = new AsyncTaskActualizador(this, false);
-//			actualizador.execute((Void)null);
-			
-			ThreadActualizador actualizador = new ThreadActualizador(this);
-			actualizador.start();
+			actualizar();
 		}
 		Log.d("Prueba", "En main activity 2");
 
@@ -102,9 +98,18 @@ public class MainActivity extends ActionBarActivity{
         startActivity(i);
 	}
 	
+	private void actualizar() {
+//		AsyncTaskActualizador actualizador = new AsyncTaskActualizador(this, false);
+//		actualizador.execute((Void)null);
+		
+		ThreadActualizador actualizador = new ThreadActualizador(this);
+		actualizador.start();
+	}
+	
 	public void actualizar(View view) {
-		AsyncTaskActualizador actualizador = new AsyncTaskActualizador(this, true);
-		actualizador.execute((Void)null);
+		actualizar();
+//		AsyncTaskActualizador actualizador = new AsyncTaskActualizador(this, true);
+//		actualizador.execute((Void)null);
 	}
 
 }
