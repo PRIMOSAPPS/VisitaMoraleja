@@ -30,7 +30,7 @@
     <PreferenceCategory
         android:key="pref_cate_opciones_ruta" >
         <ListPreference
-            android:defaultValue="Coche"
+            android:defaultValue="driving"
             android:entries="@array/textOpcionesTransporte"
             android:entryValues="@array/valoresOpcionesTransporte"
             android:key="pref_transporte_ruta_defecto"
