@@ -6,6 +6,12 @@
         android:key="pref_actualizar_automaticamente"
         android:summary="@string/pref_actualizar_automaticamente_sum"
         android:title="@string/pref_actualizar_automaticamente" />
+    
+    <Preference android:title="@string/actualizar_ahora"
+        android:selectable="true"
+        android:defaultValue="actualizar"
+        android:key="actualizar_ahora"/>
+    
     <CheckBoxPreference
         android:defaultValue="false"
         android:key="pref_actualizar_categorias"

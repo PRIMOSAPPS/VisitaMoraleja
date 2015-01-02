@@ -67,5 +67,6 @@
     <string name="texto_autocompletar">Escriba al menos 2 caracteres para comenzar a autocompletar.</string>
     <string name="title_dialog_buscador">Buscador</string>
     <string name="title_dialog_indicaciones_ruta">Listado de indicaciones</string>
+    <string name="actualizar_ahora">Actualizar ahora</string>
     
 </resources>
