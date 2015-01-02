@@ -160,17 +160,19 @@ public class UtilMapas {
 		boolean resul = false;
 		boolean geodesic = false;
 
-		List<PolylineOptions> lstLatLong = objRuta.getLstLatLong();
-		Log.d(TAG, "PosActual: " + posActual);
-		for(PolylineOptions polyLine : lstLatLong) {
-			// Cada polyLine esta formado por dos puntos -- ver recogerPasosLatLong --
-			List<LatLng> lstPoints = polyLine.getPoints();
-			for(LatLng latLng : lstPoints) {
-				Log.d(TAG, "PosActual en listaPuntos: " + latLng);
-			}
-			if(PolyUtil.isLocationOnPath(posActual, lstPoints, geodesic, MAX_DISTANCIA_RECALCULO_RUTA)) {
-				resul = true;
-				break;
+		if(objRuta != null) {
+			List<PolylineOptions> lstLatLong = objRuta.getLstLatLong();
+			Log.d(TAG, "PosActual: " + posActual);
+			for(PolylineOptions polyLine : lstLatLong) {
+				// Cada polyLine esta formado por dos puntos -- ver recogerPasosLatLong --
+				List<LatLng> lstPoints = polyLine.getPoints();
+				for(LatLng latLng : lstPoints) {
+					Log.d(TAG, "PosActual en listaPuntos: " + latLng);
+				}
+				if(PolyUtil.isLocationOnPath(posActual, lstPoints, geodesic, MAX_DISTANCIA_RECALCULO_RUTA)) {
+					resul = true;
+					break;
+				}
 			}
 		}
 		
