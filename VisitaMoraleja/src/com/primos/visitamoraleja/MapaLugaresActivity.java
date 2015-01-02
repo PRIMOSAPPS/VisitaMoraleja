@@ -16,7 +16,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.text.Html;
-import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -53,6 +52,8 @@ import com.primos.visitamoraleja.util.UtilPreferencias;
 public class MapaLugaresActivity extends FragmentActivity implements LocationListener {
 	public final static String ID_RECIBIDO = "idRecibido";
 	public final static String ORIGEN = "origen";
+	private static final long TIEMPO_MIN = 10 * 1000 ; // 10 segundos
+	private static final long DISTANCIA_MIN = 5 ; // 5 metros
 	
 	public final static String COCHE = "driving";
 	private final static String BICI = "bicycling";
@@ -63,6 +64,15 @@ public class MapaLugaresActivity extends FragmentActivity implements LocationLis
 	private long idRecibido;
 	private String origen;
 	
+	/**
+	 * Medio de transporte por el que se calcula la ruta.
+	 */
+	private String medioTransporte;
+	/**
+	 * Indica si se debe realizar el calculo de la ruta automaticamente 
+	 */
+	private boolean calcularAutomaticamente;
+	
 	private double latitudDestino;
 	private double longitudDestino;
 	private ObjRuta objRuta;
@@ -70,6 +80,8 @@ public class MapaLugaresActivity extends FragmentActivity implements LocationLis
 	private LatLng posActual;
 	private LocationManager locationManager;
 	private String proveedor;
+	private UtilMapas utilMapas = new UtilMapas();
+
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -88,6 +100,7 @@ public class MapaLugaresActivity extends FragmentActivity implements LocationLis
             Dialog dialog = GooglePlayServicesUtil.getErrorDialog(status, this, requestCode);
             dialog.show();
         } else {
+    		medioTransporte = UtilPreferencias.getMedioTransporteDefectoRuta(this);
         	map = ((SupportMapFragment) getSupportFragmentManager()
         			.findFragmentById(R.id.map)).getMap();
 
@@ -125,16 +138,15 @@ public class MapaLugaresActivity extends FragmentActivity implements LocationLis
         	map.setOnMapLongClickListener(new OnMapLongClickListener() {
         		public void onMapLongClick(LatLng point) {
         			Toast.makeText(
-        					MapaLugaresActivity.this,
-        					getString(R.string.coordenadas) + " \n " + "Lat: "
-        							+ point.latitude + "\n" + "Lng: "
-        							+ point.longitude, Toast.LENGTH_SHORT).show();
-        		} // onMapLongClick
+    					MapaLugaresActivity.this,
+    					getString(R.string.coordenadas) + " \n " + "Lat: "
+							+ point.latitude + "\n" + "Lng: "
+							+ point.longitude, Toast.LENGTH_SHORT).show();
+        		}
         	});
         	
-        	boolean calcularAutomaticamente = UtilPreferencias.isCalcularRutaAutomaticamente(this);
+        	calcularAutomaticamente = UtilPreferencias.isCalcularRutaAutomaticamente(this);
         	if(calcularAutomaticamente) {
-        		String medioTransporte = UtilPreferencias.getMedioTransporteDefectoRuta(this);
         		// Marcamos la opcion de transporte, que puede no ser la configurada
         		// si ha cambiado la configuracion
         		marcaCheck(medioTransporte);
@@ -178,33 +190,58 @@ public class MapaLugaresActivity extends FragmentActivity implements LocationLis
 	}
 	
 	/**
+	 * Devuelve la posicion actual segun posicion por GPS
+	 * @return
+	 */
+	private Location getPosActualGPS() {
+		return locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+	}
+	
+	/**
+	 * Devuelve la posicion actual segun posicion por RED
+	 * @return
+	 */
+	private Location getPosActualRED() {
+		return locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+	}
+	
+	/**
+	 * Devuelve la posicion actual segun posicion por OTRO
+	 * @return
+	 */
+	private Location getPosActualOTRO() {
+		return locationManager.getLastKnownLocation(LocationManager.PASSIVE_PROVIDER);
+	}
+	
+	/**
 	 * Devuelve la posicion actual si es posible, null si no lo es
 	 * @return
 	 */
 	private LatLng getPosActual() {
 		posActual = null;
-		// Obtenemos una referencia al LocationManager y creamos el objeto
-		// para gestionar las localizaciones
-		LocationManager locationManager = (LocationManager) this
-				.getSystemService(Context.LOCATION_SERVICE);
-		// Definimos un objeto de la clase Criteria para decidir que
-		// caracteristicas tiene que tener
-		// nuestro proveedor de localizacion en este caso queremos obtener
-		// uno con bastante precision
-		Criteria criteria = new Criteria();
-		criteria.setAccuracy(Criteria.ACCURACY_FINE);
-
-		// Cargamos el nombre del proveedor obtenido en un proveedor
-		proveedor = locationManager.getBestProvider(criteria, true);
-		if(proveedor != null) {
-			// Almacenamos la ultima posicion uqe se obtuvo a traves del
-			// proveedor de busquedas asignado
-			Location posicionActual = locationManager
-					.getLastKnownLocation(proveedor);
-
-			if(posicionActual != null) {
-				posActual = new LatLng(posicionActual.getLatitude(), posicionActual.getLongitude());
+		
+		Location locationActual = getPosActualGPS();
+		if(locationActual == null) {
+			locationActual = getPosActualRED();
+			if(locationActual == null) {
+				locationActual = getPosActualOTRO();
+//				if(locationActual != null) {
+//					Log.d(TAG, "Posicion segun OTRO");
+//					Toast.makeText(
+//							MapaLugaresActivity.this, "Posicion segun OTRO", Toast.LENGTH_SHORT).show();
+//				}
+//			} else {
+//				Log.d(TAG, "Posicion segun RED");
+//				Toast.makeText(
+//						MapaLugaresActivity.this, "Posicion segun RED", Toast.LENGTH_SHORT).show();
 			}
+//		} else {
+//			Log.d(TAG, "Posicion segun GPS");
+//			Toast.makeText(
+//					MapaLugaresActivity.this, "Posicion segun GPS", Toast.LENGTH_SHORT).show();
+		}
+		if(locationActual != null) {
+			posActual = new LatLng(locationActual.getLatitude(), locationActual.getLongitude());
 		}
 		return posActual;
 	}
@@ -225,6 +262,9 @@ public class MapaLugaresActivity extends FragmentActivity implements LocationLis
 	}
 	
 	private void mostrarRuta(String modo) {
+//		Toast.makeText(
+//				MapaLugaresActivity.this, "Mostrar RUTA PARA MEDIO DE TRANSPORTE: " + modo, Toast.LENGTH_SHORT).show();
+
 		CalcRutaAsyncTask calcRutaAyncTask = new CalcRutaAsyncTask(modo);
 		calcRutaAyncTask.execute((Void)null);
 	}
@@ -244,6 +284,7 @@ public class MapaLugaresActivity extends FragmentActivity implements LocationLis
 	private void marcaCheck(String opcion) {
 		RadioGroup radioGroup = (RadioGroup)findViewById(R.id.rgnMostrarOpciones);
 		int idopcion = -1;
+		medioTransporte = opcion;
 		if(COCHE.equals(opcion)) {
 			idopcion = R.id.rbRutaCoche;
 		} else if(BICI.equals(opcion)) {
@@ -271,9 +312,9 @@ public class MapaLugaresActivity extends FragmentActivity implements LocationLis
 	}
 	
 	public void mostrarRuta(View view) {
-		String modo = (String)view.getTag();
+		medioTransporte = (String)view.getTag();
 		//calculaDistancia(latitudDestino, longitudDestino, modo);
-		mostrarRuta(modo);
+		mostrarRuta(medioTransporte);
 	}
 	
 	@Override
@@ -302,7 +343,6 @@ public class MapaLugaresActivity extends FragmentActivity implements LocationLis
 	 * calculamos la distancia.
 	 */
 	private void mostrarDistancia(String mensaje) {
-    	UtilMapas utilMapas = new UtilMapas();
     	// Si no tenemos resultado de la consulta a google, al menos calculamos la distancia si tenemos la posicion actual.
     	LatLng posActual = getPosActual();
     	String mensajeCompleto = mensaje;
@@ -389,7 +429,9 @@ public class MapaLugaresActivity extends FragmentActivity implements LocationLis
 		        
 		        UtilMapas utilMapas = new UtilMapas();
 	        	LatLng posDestino = new LatLng(latitudDestino, longitudDestino);
-	        	LatLng posActual = getPosActual();
+	        	if(posActual == null) {
+	        		posActual = getPosActual();
+	        	}
 	        	if(posActual != null) {
 	        		url = utilMapas.montarUrlPeticionRutaJSON(posActual, posDestino, modo);
 	        	}
@@ -440,7 +482,19 @@ public class MapaLugaresActivity extends FragmentActivity implements LocationLis
 	@Override
 	public void onLocationChanged(Location location) {
 		posActual = new LatLng(location.getLatitude(), location.getLongitude());
-        Log.d(TAG, "Localizacion cambiada: Latitud: " + posActual.latitude + " : Longitud" + posActual.longitude);
+//		Toast.makeText(
+//				MapaLugaresActivity.this, "Nueva posicion encontrada", Toast.LENGTH_SHORT).show();
+		if(calcularAutomaticamente) {
+//	        Log.d(TAG, "Localizacion cambiada: Latitud: " + posActual.latitude + " : Longitud" + posActual.longitude);
+			if(!utilMapas.posicionEnRuta(objRuta, posActual)) {
+//				Toast.makeText(
+//						MapaLugaresActivity.this, "Posicion fuera de ruta", Toast.LENGTH_SHORT).show();
+				mostrarRuta(medioTransporte);
+			}
+//		} else {
+//			Toast.makeText(
+//					MapaLugaresActivity.this, "Desactivado el calculo automatico de ruta.", Toast.LENGTH_SHORT).show();
+		}
 	}
 
 	@Override
@@ -467,6 +521,6 @@ public class MapaLugaresActivity extends FragmentActivity implements LocationLis
 	@Override
 	protected void onResume() {
 		super.onResume();
-		locationManager.requestLocationUpdates(proveedor, 400, 1, this);
+		locationManager.requestLocationUpdates(proveedor, TIEMPO_MIN, DISTANCIA_MIN, this);
 	}
 }// MapaLugaresActivity

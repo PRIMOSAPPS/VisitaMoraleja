@@ -16,12 +16,18 @@ import android.util.Log;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.primos.visitamoraleja.util.ObjRuta.ResultadosRuta;
+import com.primos.visitamoraleja.util.otros.PolyUtil;
 
 public class UtilMapas {
 	private final static String URL_MAPS_GOOGLE_APIS_JSON = "http://maps.googleapis.com/maps/api/directions/json";
 	private final static String AMP_PARAM_ORIGIN = "?origin=";
 	private final static String AMP_PARAM_DSETINATION = "&destination=";
 	private final static String TAG = "[UtilMapas]";
+	
+	/**
+	 * Maxima distanca permitida desde la posicion actual a la ruta para no recalcularla
+	 */
+	private static int MAX_DISTANCIA_RECALCULO_RUTA = 20;
 	
 //	private MapaLugaresActivity actividad;
 //	private GoogleMap map;
@@ -147,6 +153,27 @@ public class UtilMapas {
 	    	resul.setResultadoRuta(ResultadosRuta.ERROR_PARSEO_JSON);
 	    	Log.e(TAG, "Error en el parseo de JSON: " + e.getMessage(), e);
 	    }
+		return resul;
+	}
+	
+	public boolean posicionEnRuta(ObjRuta objRuta, LatLng posActual) {
+		boolean resul = false;
+		boolean geodesic = false;
+
+		List<PolylineOptions> lstLatLong = objRuta.getLstLatLong();
+		Log.d(TAG, "PosActual: " + posActual);
+		for(PolylineOptions polyLine : lstLatLong) {
+			// Cada polyLine esta formado por dos puntos -- ver recogerPasosLatLong --
+			List<LatLng> lstPoints = polyLine.getPoints();
+			for(LatLng latLng : lstPoints) {
+				Log.d(TAG, "PosActual en listaPuntos: " + latLng);
+			}
+			if(PolyUtil.isLocationOnPath(posActual, lstPoints, geodesic, MAX_DISTANCIA_RECALCULO_RUTA)) {
+				resul = true;
+				break;
+			}
+		}
+		
 		return resul;
 	}
 	
