@@ -21,7 +21,7 @@ import com.primos.visitamoraleja.util.ConversionesUtil;
  *
  */
 public class SitiosDataSource extends AbstractDataSource {
-	private final static String ORDER_BY_RANKING = " ranking DESC ";
+	private final static String ORDER_BY_RANKING = " ranking DESC, nombre ASC ";
 
 	// Database fields
 	private String[] allColumns = { SitiosSQLite.COLUMNA_ID,
