@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="10dp" >
+
+    <TextView
+        android:id="@+id/desarrollada_por"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:lineSpacingExtra="12sp"
+        android:text="@string/acerca_de_desarrollada_por"
+        android:textSize="12sp" />
+
+    <TextView
+        android:id="@+id/acerca_de_miguel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="12sp"
+        android:lineSpacingExtra="12sp"
+        android:text="@string/acerca_de_miguel" />
+    <TextView
+        android:id="@+id/acerca_de_felix"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="12sp"
+        android:lineSpacingExtra="12sp"
+        android:text="@string/acerca_de_felix" />
+    
+    <TextView
+        android:id="@+id/acerca_de_telefono"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:autoLink="phone"
+        android:textSize="12sp"
+        android:lineSpacingExtra="12sp"
+        android:text="@string/acerca_de_telefono" />
+
+    <TextView
+        android:id="@+id/acerca_de_correo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:autoLink="email"
+        android:textSize="12sp"
+        android:lineSpacingExtra="12sp"
+        android:text="@string/acerca_de_correo" />
+    
+    <TextView
+        android:id="@+id/acerca_de_http_appmoraleja"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:autoLink="web"
+        android:textSize="12sp"
+        android:lineSpacingExtra="12sp"
+        android:text="@string/acerca_de_http_appmoraleja" />
+    
+    <TextView
+        android:id="@+id/acerca_de_http_royma"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:autoLink="web"
+        android:textSize="12sp"
+        android:lineSpacingExtra="12sp"
+        android:text="@string/acerca_de_http_royma" />
+    
+</LinearLayout>

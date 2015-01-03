@@ -2,6 +2,7 @@ package com.primos.visitamoraleja;
 
 import java.util.List;
 
+import android.app.Dialog;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
@@ -11,7 +12,10 @@ import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceManager;
+import android.text.Html;
+import android.text.Spanned;
 import android.util.Log;
+import android.widget.TextView;
 
 import com.primos.visitamoraleja.actualizador.ThreadActualizador;
 import com.primos.visitamoraleja.bdsqlite.datasource.CategoriasDataSource;
@@ -25,6 +29,7 @@ public class PreferenciasActivity extends PreferenceActivity {
 	public final static String PREFERENCIA_CATE_OPCIONES_RUTA = "pref_cate_opciones_ruta";
 	public final static String PREFERENCIA_TRANSPORTE_RUTA_DEFECTO = "pref_transporte_ruta_defecto";
 	public final static String PREFERENCIA_ACTUALIZAR_AHORA = "actualizar_ahora";
+	public final static String PREFERENCIA_ACERCA_DE = "acerca_de";
 	
 	private CategoriasDataSource dataSource;
 	
@@ -81,7 +86,6 @@ public class PreferenciasActivity extends PreferenceActivity {
 		targetCategory.setEnabled(checkBoxPreference.isChecked());
 		Preference actualizarAhora = (Preference)findPreference(PREFERENCIA_ACTUALIZAR_AHORA);
 		actualizarAhora.setOnPreferenceClickListener(new OnPreferenceClickListener() {
-			
 			@Override
 			public boolean onPreferenceClick(Preference preference) {
 				Log.w("[Preferencias]", "Se actualizan los datos.");
@@ -89,6 +93,19 @@ public class PreferenciasActivity extends PreferenceActivity {
 				return false;
 			}
 		});
+		
+		Preference acercaDe = (Preference)findPreference(PREFERENCIA_ACERCA_DE);
+		acercaDe.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+			@Override
+			public boolean onPreferenceClick(Preference preference) {
+				Dialog myDialog = new Dialog(PreferenciasActivity.this);
+				myDialog.setContentView(R.layout.acerca_de);
+				myDialog.setTitle(R.string.title_acerca_de);
+				myDialog.show();
+				return false;
+			}
+		});
+		
 
 	}
 	
