@@ -52,6 +52,14 @@ public class UtilPropiedades {
 	 * Nombre de la apicacion para almacenamiento externo
 	 */
 	public static final String PROP_NOMBRE_APLICACION = "NombreAplicacion";
+	/**
+	 * Url de registro de la aplicación
+	 */
+	public static final String PROP_URL_REGISTRO = "UrlRegistro";
+	/**
+	 * Direccion de correo para la aplicacion.
+	 */
+	public static final String PROP_CORREO_APLICACION = "CorreoAplicacion";
 
 	private static UtilPropiedades instancia = null;
 	

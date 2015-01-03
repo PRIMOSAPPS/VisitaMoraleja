@@ -43,4 +43,7 @@
             android:title="@string/pref_cat_expli_config_opciones_ruta" />
     </PreferenceCategory>
 
+	<Preference android:title="@string/acerca_de"
+        android:selectable="true"
+        android:key="acerca_de"/>
 </PreferenceScreen>

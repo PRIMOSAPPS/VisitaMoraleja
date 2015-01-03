@@ -68,5 +68,14 @@
     <string name="title_dialog_buscador">Buscador</string>
     <string name="title_dialog_indicaciones_ruta">Listado de indicaciones</string>
     <string name="actualizar_ahora">Actualizar ahora</string>
+    <string name="acerca_de">Acerca de ...</string>
+    <string name="title_acerca_de">Conoce Moraleja</string>
+    <string name="acerca_de_desarrollada_por">Desarrollada por:</string>
+    <string name="acerca_de_miguel">- Miguel Ángel Sánchez Íñigo.</string>
+    <string name="acerca_de_felix">- Jose Félix Íñigo Rodríguez.</string>
+    <string name="acerca_de_telefono">Teléfono de contacto: 927515231</string>
+    <string name="acerca_de_correo">Correo electrónico: primosapps@roymainformatica.com"</string>
+    <string name="acerca_de_http_appmoraleja">Para aparecer en la aplicación visita http://appmoraleja.roymainformatica.com/eventos/moraleja/inicio/inicio.php"</string>
+    <string name="acerca_de_http_royma">http://www.roymainformatica.com "</string>
     
 </resources>
