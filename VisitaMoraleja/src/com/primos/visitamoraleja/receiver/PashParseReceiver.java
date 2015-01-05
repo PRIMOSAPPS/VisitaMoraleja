@@ -65,7 +65,7 @@ public class PashParseReceiver extends BroadcastReceiver {
             Spanned spanTexto = Html.fromHtml("<i>" + notificacion.getTexto() + "</i>");
             inboxStyle.addLine(spanTexto);
             
-            inboxStyle.setSummaryText("setSummaryText");
+//            inboxStyle.setSummaryText("setSummaryText");
             mBuilder.setStyle(inboxStyle);
             
             mBuilder.setSmallIcon(R.drawable.ic_action_notificacion)
