@@ -107,6 +107,8 @@ public class ManejadorSitiosXML extends DefaultHandler {
 				sitio.setTelefonosMoviles(cadena.toString());
 			} else if(localName.equals("web")) {
 				sitio.setWeb(cadena.toString());
+			} else if(localName.equals("email")) {
+				sitio.setEmail(cadena.toString());
 			} else if(localName.equals("facebook")) {
 				sitio.setFacebook(cadena.toString());
 			} else if(localName.equals("twitter")) {

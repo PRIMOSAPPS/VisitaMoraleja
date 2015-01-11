@@ -32,6 +32,7 @@ public class SitiosSQLite extends SQLiteOpenHelper {
 	public final static String COLUMNA_TELEFONOS_FIJOS = "telefonos_fijos";
 	public final static String COLUMNA_TELEFONOS_MOVILES = "telefonos_moviles";
 	public final static String COLUMNA_WEB = "web";
+	public final static String COLUMNA_EMAIL = "email";
 	public final static String COLUMNA_FACEBOOK = "facebook";
 	public final static String COLUMNA_TWITTER = "twitter";
 	public final static String COLUMNA_RANKING = "ranking";
@@ -46,7 +47,7 @@ public class SitiosSQLite extends SQLiteOpenHelper {
 			" (id INTEGER PRIMARY KEY, id_categoria INTEGER, nombre TEXT, poblacion TEXT, texto_corto1 TEXT" +
 			", texto_corto2 TEXT, texto_corto3 TEXT, texto_largo1 TEXT, texto_largo2 TEXT, nombre_logotipo TEXT" +
 			", nombre_imagen1 TEXT, nombre_imagen2 TEXT, nombre_imagen3 TEXT, nombre_imagen4 TEXT, latitud NUMERIC" +
-			", longitud NUMERIC, direccion TEXT, telefonos_fijos TEXT, telefonos_moviles TEXT, web TEXT, facebook TEXT" +
+			", longitud NUMERIC, direccion TEXT, telefonos_fijos TEXT, telefonos_moviles TEXT, web TEXT, email TEXT, facebook TEXT" +
 			", twitter TEXT, ranking INTEGER, favorito INTEGER, activo INTEGER, ultima_actualizacion NUMERIC )";
 
 	public SitiosSQLite(Context context) {

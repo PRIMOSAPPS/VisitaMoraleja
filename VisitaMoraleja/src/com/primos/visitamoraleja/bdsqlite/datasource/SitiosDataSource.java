@@ -44,6 +44,7 @@ public class SitiosDataSource extends AbstractDataSource {
 			SitiosSQLite.COLUMNA_TELEFONOS_FIJOS,
 			SitiosSQLite.COLUMNA_TELEFONOS_MOVILES,
 			SitiosSQLite.COLUMNA_WEB,
+			SitiosSQLite.COLUMNA_EMAIL,
 			SitiosSQLite.COLUMNA_FACEBOOK,
 			SitiosSQLite.COLUMNA_TWITTER,
 			SitiosSQLite.COLUMNA_RANKING,
@@ -94,6 +95,7 @@ public class SitiosDataSource extends AbstractDataSource {
 		valores.put(SitiosSQLite.COLUMNA_TELEFONOS_FIJOS, sitio.getTelefonosFijos());
 		valores.put(SitiosSQLite.COLUMNA_TELEFONOS_MOVILES, sitio.getTelefonosMoviles());
 		valores.put(SitiosSQLite.COLUMNA_WEB, sitio.getWeb());
+		valores.put(SitiosSQLite.COLUMNA_EMAIL, sitio.getEmail());
 		valores.put(SitiosSQLite.COLUMNA_FACEBOOK, sitio.getFacebook());
 		valores.put(SitiosSQLite.COLUMNA_TWITTER, sitio.getTwitter());
 		valores.put(SitiosSQLite.COLUMNA_RANKING, sitio.getRanking());
@@ -278,6 +280,7 @@ public class SitiosDataSource extends AbstractDataSource {
 		resul.setTelefonosFijos(cursor.getString(cursor.getColumnIndex(SitiosSQLite.COLUMNA_TELEFONOS_FIJOS)));
 		resul.setTelefonosMoviles(cursor.getString(cursor.getColumnIndex(SitiosSQLite.COLUMNA_TELEFONOS_MOVILES)));
 		resul.setWeb(cursor.getString(cursor.getColumnIndex(SitiosSQLite.COLUMNA_WEB)));
+		resul.setEmail(cursor.getString(cursor.getColumnIndex(SitiosSQLite.COLUMNA_EMAIL)));
 		resul.setFacebook(cursor.getString(cursor.getColumnIndex(SitiosSQLite.COLUMNA_FACEBOOK)));
 		resul.setTwitter(cursor.getString(cursor.getColumnIndex(SitiosSQLite.COLUMNA_TWITTER)));
 		resul.setRanking(cursor.getInt(cursor.getColumnIndex(SitiosSQLite.COLUMNA_RANKING)));
