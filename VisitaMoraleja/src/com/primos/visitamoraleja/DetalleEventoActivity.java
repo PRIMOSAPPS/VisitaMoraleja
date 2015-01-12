@@ -69,6 +69,8 @@ public class DetalleEventoActivity extends ActionBarListActivity implements
 		Button botonTwiter = (Button) findViewById(R.id.botonTwiter);
 		Button botonWeb = (Button) findViewById(R.id.botonWeb);
 
+        Button botonCorreo = (Button) findViewById(R.id.botonCorreo);
+
 		
 		//miBotonB.setVisibility(View.GONE);
 		//ocultarBoton(sitio);
@@ -118,25 +120,37 @@ public class DetalleEventoActivity extends ActionBarListActivity implements
 		}else {
 			botonLocalizar.setVisibility(View.INVISIBLE);
 		}
-		//Oculta botón Facebook si no tiene Facebook.
-		if (sitio.getFacebook().length()>0) {
-			botonFacebook.setOnClickListener(this);
-		}else {
-			botonFacebook.setVisibility(View.INVISIBLE);
-		}
-		//Oculta botón Twiter si no tiene Twiter.
-		if (sitio.getTwitter().length()>0) {
-			botonTwiter.setOnClickListener(this);
-		}else {
-			botonTwiter.setVisibility(View.INVISIBLE);
-		}
+        //Oculta botón Compartir si no tiene Coordenadas.
+        if (sitio.getLatitud()>0) {
+            botonCompartir.setOnClickListener(this);
+        }else {
+            botonCompartir.setVisibility(View.INVISIBLE);
+        }
+
+        //Oculta botón enviarCorreo si no tiene correo.
+        if (sitio.getEmail().length()>0) {
+            botonCorreo.setOnClickListener(this);
+        }else {
+            botonCorreo.setVisibility(View.INVISIBLE);
+        }
 		//Oculta botón web si no tiene web.
 		if (sitio.getWeb().length()>0) {
 			botonWeb.setOnClickListener(this);
 		}else {
 			botonWeb.setVisibility(View.INVISIBLE);
 		}
-		
+        //Oculta botón Facebook si no tiene Facebook.
+        if (sitio.getFacebook().length()>0) {
+            botonFacebook.setOnClickListener(this);
+        }else {
+            botonFacebook.setVisibility(View.INVISIBLE);
+        }
+        //Oculta botón Twiter si no tiene Twiter.
+        if (sitio.getTwitter().length()>0) {
+            botonTwiter.setOnClickListener(this);
+        }else {
+            botonTwiter.setVisibility(View.INVISIBLE);
+        }
 		
 //		textViewTextoLargo1.setText(sitio.getTextoLargo1());
 		String txtTextoLargo1 = sitio.getTextoLargo1();
@@ -174,6 +188,10 @@ public class DetalleEventoActivity extends ActionBarListActivity implements
 		
 			compartirLugar(lugar, sitio.getLatitud(), sitio.getLongitud());
 			break;
+
+        case R.id.botonCorreo:
+            enviarCorreo(sitio.getEmail());
+            break;
 
 		case R.id.botonFacebook:
 			mostrarFacebook(sitio.getFacebook());
@@ -317,6 +335,25 @@ public class DetalleEventoActivity extends ActionBarListActivity implements
 				this.getString(R.string.titulo_compartir)));
 
 	}
+
+    // Seleccionar de una lista de aplicaciones instaladas en el movil, una para
+    // enviar un correo al sitio
+    //private void enviarCorreo(String lugar, Double lat, Double lon) {
+        private void enviarCorreo(String correo) {
+
+
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setType("text/plain");
+
+        intent.putExtra(Intent.EXTRA_EMAIL, correo);
+        intent.putExtra(Intent.EXTRA_SUBJECT, "Aplicacion Conoce Moraleja");// Asunto del mensaje
+        //intent.putExtra(Intent.EXTRA_TEXT, "cuerpo del mensaje");// Cuerpo del Mensaje
+        startActivity(Intent.createChooser(intent,"Seleccionar Aplicación de Correo"));
+          //      this.getString(R.string.titulo_compartir)));
+
+    }
+
+
 
 	// Lanza el DIAL para que solo sonlo con pulsar un boton se realice una
 	// llamada, lo hice con llamda directa, pero
