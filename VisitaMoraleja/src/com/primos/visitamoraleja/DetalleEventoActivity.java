@@ -345,7 +345,8 @@ public class DetalleEventoActivity extends ActionBarListActivity implements
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType("text/plain");
 
-        intent.putExtra(Intent.EXTRA_EMAIL, correo);
+        String[] destinatarios = {correo};
+        intent.putExtra(Intent.EXTRA_EMAIL, destinatarios);
         intent.putExtra(Intent.EXTRA_SUBJECT, "Aplicacion Conoce Moraleja");// Asunto del mensaje
         //intent.putExtra(Intent.EXTRA_TEXT, "cuerpo del mensaje");// Cuerpo del Mensaje
         startActivity(Intent.createChooser(intent,"Seleccionar Aplicación de Correo"));
