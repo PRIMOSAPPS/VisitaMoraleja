@@ -108,49 +108,24 @@ public class DetalleEventoActivity extends ActionBarListActivity implements
 				botonTelefono.setOnClickListener(this);
 			}else {
 				textTelefono.setText(sitio.getTelefonosFijos());
-				botonTelefono.setVisibility(View.INVISIBLE);
+				botonTelefono.setVisibility(View.GONE);
 				botonTelefono.setOnClickListener(this);
 				
 			}
 		}	
 		
 		//Oculta botón Localizar si no tiene Coordenadas.
-		if (sitio.getLatitud()>0) {
-			botonLocalizar.setOnClickListener(this);
-		}else {
-			botonLocalizar.setVisibility(View.INVISIBLE);
-		}
+		mostrarOcultarIcono(botonLocalizar, sitio.getLatitud());
         //Oculta botón Compartir si no tiene Coordenadas.
-        if (sitio.getLatitud()>0) {
-            botonCompartir.setOnClickListener(this);
-        }else {
-            botonCompartir.setVisibility(View.INVISIBLE);
-        }
-
+		mostrarOcultarIcono(botonCompartir, sitio.getLatitud());
         //Oculta botón enviarCorreo si no tiene correo.
-        if (sitio.getEmail().length()>0) {
-            botonCorreo.setOnClickListener(this);
-        }else {
-            botonCorreo.setVisibility(View.INVISIBLE);
-        }
+		mostrarOcultarIcono(botonCorreo, sitio.getEmail());
 		//Oculta botón web si no tiene web.
-		if (sitio.getWeb().length()>0) {
-			botonWeb.setOnClickListener(this);
-		}else {
-			botonWeb.setVisibility(View.INVISIBLE);
-		}
+		mostrarOcultarIcono(botonWeb, sitio.getWeb());
         //Oculta botón Facebook si no tiene Facebook.
-        if (sitio.getFacebook().length()>0) {
-            botonFacebook.setOnClickListener(this);
-        }else {
-            botonFacebook.setVisibility(View.INVISIBLE);
-        }
+		mostrarOcultarIcono(botonFacebook, sitio.getFacebook());
         //Oculta botón Twiter si no tiene Twiter.
-        if (sitio.getTwitter().length()>0) {
-            botonTwiter.setOnClickListener(this);
-        }else {
-            botonTwiter.setVisibility(View.INVISIBLE);
-        }
+		mostrarOcultarIcono(botonTwiter, sitio.getTwitter());
 		
 //		textViewTextoLargo1.setText(sitio.getTextoLargo1());
 		String txtTextoLargo1 = sitio.getTextoLargo1();
@@ -167,7 +142,21 @@ public class DetalleEventoActivity extends ActionBarListActivity implements
 
 	}
 
+	private void mostrarOcultarIcono(Button boton, String texto) {
+		mostrarOcultarIcono(boton, texto.trim().length()>0);
+	}
+
+	private void mostrarOcultarIcono(Button boton, double valor) {
+		mostrarOcultarIcono(boton, valor>0);
+	}
 	
+	private void mostrarOcultarIcono(Button boton, boolean mostrar) {
+        if (mostrar) {
+        	boton.setOnClickListener(this);
+        }else {
+        	boton.setVisibility(View.GONE);
+        }		
+	}
 	
 	// Recogemos la pulsaciÃ³n en los 5 botones de la minificha
 	public void onClick(View boton_pulsado) {
