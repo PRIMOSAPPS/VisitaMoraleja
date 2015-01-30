@@ -9,7 +9,6 @@ import android.view.View;
 import com.primos.visitamoraleja.adaptadores.EventoAdaptador;
 import com.primos.visitamoraleja.bdsqlite.datasource.EventosDataSource;
 import com.primos.visitamoraleja.contenidos.Evento;
-import com.primos.visitamoraleja.contenidos.Sitio;
 
 public class ListaEventosActivity extends ActionBarListActivity {
 	public final static String ID_SITIO = "id_sitio";

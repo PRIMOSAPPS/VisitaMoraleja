@@ -12,11 +12,7 @@ import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceManager;
-import android.text.Html;
-import android.text.Spanned;
 import android.util.Log;
-import android.widget.TextView;
-
 import com.primos.visitamoraleja.actualizador.ThreadActualizador;
 import com.primos.visitamoraleja.bdsqlite.datasource.CategoriasDataSource;
 import com.primos.visitamoraleja.contenidos.Categoria;
@@ -99,7 +95,7 @@ public class PreferenciasActivity extends PreferenceActivity {
 			@Override
 			public boolean onPreferenceClick(Preference preference) {
 				Dialog myDialog = new Dialog(PreferenciasActivity.this);
-				myDialog.setContentView(R.layout.acerca_de);
+				myDialog.setContentView(R.layout.acerca_de_dialog);
 				myDialog.setTitle(R.string.title_acerca_de);
 				myDialog.show();
 				return false;

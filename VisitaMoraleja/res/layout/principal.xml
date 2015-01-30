@@ -76,8 +76,8 @@
             android:layout_weight="1"
             android:gravity="center"
             android:paddingBottom="20dp"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
             android:paddingTop="20dp" >
 
              <LinearLayout
@@ -85,12 +85,11 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:orientation="vertical"
-                 >
+                android:orientation="vertical" >
 
                 <Button
                     android:id="@+id/botonComer"
-                    android:layout_width="80dp"
+                    android:layout_width="85dp"
                     android:layout_height="80dp"
                     android:layout_weight="1"
                     android:background="@drawable/ic_comer"
@@ -140,8 +139,8 @@
             android:layout_weight="1"
             android:gravity="center"
             android:paddingBottom="20dp"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
             android:paddingTop="20dp" >
 
             <LinearLayout
@@ -196,22 +195,17 @@
         </TableRow>
     </TableLayout>
 
-    <TextView
-        android:id="@+id/txBienvenidax"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:textColor="#000000"
-        android:textStyle="bold" />
-
-    <TextView
+    <Button
         android:id="@+id/txBienvenida"
+        style="@style/AppTheme"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:background="@color/blanco"
         android:gravity="center"
+        android:onClick="mostrarAcercade"
         android:text="@string/copiright"
         android:textColor="#000000"
-        android:textStyle="bold" />
-  
+        android:textColorHint="@color/blanco"
+        android:textSize="15sp" />
 
 </LinearLayout>

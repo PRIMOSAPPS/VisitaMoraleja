@@ -10,7 +10,6 @@ import android.view.View;
 import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.primos.visitamoraleja.almacenamiento.AlmacenamientoFactory;
 import com.primos.visitamoraleja.almacenamiento.ItfAlmacenamiento;
 import com.primos.visitamoraleja.bdsqlite.datasource.EventosDataSource;

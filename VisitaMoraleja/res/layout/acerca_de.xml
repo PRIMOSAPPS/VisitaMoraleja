@@ -1,67 +1,132 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="10dp" >
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content" >
+    
+<TableLayout
+     android:layout_width="match_parent"
+     android:layout_height="0sp"
+     android:layout_weight="1" >
 
-    <TextView
-        android:id="@+id/desarrollada_por"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:lineSpacingExtra="12sp"
-        android:text="@string/acerca_de_desarrollada_por"
-        android:textSize="12sp" />
+     <TableRow
+         android:paddingLeft="10sp"
+         android:paddingRight="10sp" >
 
-    <TextView
-        android:id="@+id/acerca_de_miguel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="12sp"
-        android:lineSpacingExtra="12sp"
-        android:text="@string/acerca_de_miguel" />
-    <TextView
-        android:id="@+id/acerca_de_felix"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="12sp"
-        android:lineSpacingExtra="12sp"
-        android:text="@string/acerca_de_felix" />
-    
-    <TextView
-        android:id="@+id/acerca_de_telefono"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:autoLink="phone"
-        android:textSize="12sp"
-        android:lineSpacingExtra="12sp"
-        android:text="@string/acerca_de_telefono" />
+         <LinearLayout
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:layout_weight="1"
+             android:orientation="vertical" >
 
-    <TextView
-        android:id="@+id/acerca_de_correo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:autoLink="email"
-        android:textSize="12sp"
-        android:lineSpacingExtra="12sp"
-        android:text="@string/acerca_de_correo" />
-    
-    <TextView
-        android:id="@+id/acerca_de_http_appmoraleja"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:autoLink="web"
-        android:textSize="12sp"
-        android:lineSpacingExtra="12sp"
-        android:text="@string/acerca_de_http_appmoraleja" />
-    
-    <TextView
-        android:id="@+id/acerca_de_http_royma"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:autoLink="web"
-        android:textSize="12sp"
-        android:lineSpacingExtra="12sp"
-        android:text="@string/acerca_de_http_royma" />
-    
-</LinearLayout>
+             <TextView
+                 android:id="@+id/desarrollada_por"
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:lineSpacingExtra="12sp"
+                 android:layout_marginTop="20dp"
+                 android:text="@string/acerca_de_desarrollada_por"
+                 android:textSize="16sp" />
+
+             <TextView
+                 android:id="@+id/acerca_de_miguel"
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:lineSpacingExtra="12sp"
+                 android:text="@string/acerca_de_miguel"
+                 android:textSize="16sp" />
+
+             <TextView
+                 android:id="@+id/acerca_de_felix"
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:lineSpacingExtra="12sp"
+                 android:text="@string/acerca_de_felix"
+                 android:textSize="16sp" />
+
+             <TextView
+                 android:id="@+id/acerca_de_telefono"
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:autoLink="phone"
+                 android:lineSpacingExtra="12sp"
+                 android:text="@string/acerca_de_telefono"
+                 android:textSize="16sp" />
+
+             <TextView
+                 android:id="@+id/acerca_de_correo"
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:autoLink="email"
+                 android:lineSpacingExtra="12sp"
+                 android:text="@string/acerca_de_correo"
+                 android:textSize="15sp" />
+         </LinearLayout>
+     </TableRow>
+
+     <TableRow android:gravity="center" >
+
+         <LinearLayout
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:layout_weight="1"
+             android:orientation="horizontal"
+             android:paddingTop="10sp" >
+
+             <TextView
+                 android:id="@+id/acerca_de_http_appmoraleja"
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:layout_weight="0.43"
+                 android:gravity="center_horizontal"
+                 android:lineSpacingExtra="14sp"
+                 android:text="@string/acerca_de_http_appmoraleja_sin_url"
+                 android:textSize="16sp" />
+         </LinearLayout>
+     </TableRow>
+
+     <LinearLayout
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:gravity="center"
+         android:orientation="vertical" >
+
+         <Button
+             android:id="@+id/acerca_de_pulsaAqui"
+             android:layout_width="47dp"
+             android:layout_height="wrap_content"
+             android:background="@drawable/bolamundo"
+             android:onClick="inscripcion"
+             android:text="@string/acerca_de_aqui"
+             android:textColor="@color/blanco"
+             android:textStyle="bold" />
+
+         <TextView
+             android:id="@+id/copiright"
+             android:layout_width="wrap_content"
+             android:layout_height="34dp"
+             android:layout_marginTop="30dp"
+             android:lineSpacingExtra="30sp"
+             android:text="@string/copiright"
+             android:textSize="16sp" />
+
+         <Button
+             android:id="@+id/acerca_de_botonRoyma"
+             android:layout_width="130dp"
+             android:layout_height="25dp"
+             android:layout_marginTop="20dp"
+             android:background="@drawable/roymalogod"
+             android:onClick="iraRoyma"
+             android:tag="SITIO" />
+
+         <TextView
+             android:id="@+id/acerca_de_royma"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:autoLink="web"
+             android:lineSpacingExtra="12sp"
+             android:text="@string/acerca_de_http_royma"
+             android:textSize="15sp" />
+     </LinearLayout>
+
+ </TableLayout>
+</ScrollView>

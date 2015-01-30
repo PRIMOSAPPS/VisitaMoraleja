@@ -11,7 +11,6 @@ import android.view.View;
 import android.view.WindowManager.LayoutParams;
 import android.widget.Toast;
 
-import com.primos.visitamoraleja.actualizador.AsyncTaskActualizador;
 import com.primos.visitamoraleja.actualizador.ThreadActualizador;
 import com.primos.visitamoraleja.util.UtilPreferencias;
 import com.primos.visitamoraleja.views.DialogoAutocompletar;
@@ -20,7 +19,6 @@ import com.primos.visitamoraleja.views.DialogoAutocompletar;
 
 public class MainActivity extends ActionBarActivity{
 	public final static String ACTUALIZAR = "actualizar";
-	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -63,7 +61,14 @@ public class MainActivity extends ActionBarActivity{
     	intent.putExtra("favoritos", "true");
     	startActivity(intent);
 	}
-
+	
+	public void mostrarAcercade(View view) {
+		Intent i = new Intent(this,AcercaDeActivity.class);
+		startActivity(i);
+	}
+	
+	
+	
 	private void buscar() {
 		DialogoAutocompletar myDialog = new DialogoAutocompletar(this);
 		LayoutParams wmlp = myDialog.getWindow().getAttributes();
@@ -97,6 +102,7 @@ public class MainActivity extends ActionBarActivity{
     	Intent i = new Intent(this, PreferenciasActivity.class);
         startActivity(i);
 	}
+	
 	
 	private void actualizar() {
 //		AsyncTaskActualizador actualizador = new AsyncTaskActualizador(this, false);

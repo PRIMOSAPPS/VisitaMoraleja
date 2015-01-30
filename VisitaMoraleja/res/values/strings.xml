@@ -22,7 +22,7 @@
     <string name="dondeComprar">De Compras</string>
     <string name="serviciosReparaciones">Servicios y Reparaciones</string>
     <string name="favoritos">Favoritos</string>
-    <string name="copiright">Diseño de Apps &#169;  2014- ProjectsApps</string>
+    <string name="copiright">Diseño de Apps © 2015 - Acerda de</string>
     <string name="eventosNormal">Eventos normal</string>
     <string name="eventosActualizar">Actualizar</string>
     <string name="title_activity_eventos">EventosActivity</string>
@@ -74,8 +74,10 @@
     <string name="acerca_de_miguel">- Miguel Ángel Sánchez Íñigo.</string>
     <string name="acerca_de_felix">- Jose Félix Íñigo Rodríguez.</string>
     <string name="acerca_de_telefono">Teléfono de contacto: 927515231</string>
-    <string name="acerca_de_correo">Correo electrónico: primosapps@roymainformatica.com"</string>
-    <string name="acerca_de_http_appmoraleja">Para aparecer en la aplicación visita http://appmoraleja.roymainformatica.com/eventos/moraleja/inicio/inicio.php"</string>
-    <string name="acerca_de_http_royma">http://www.roymainformatica.com "</string>
+    <string name="acerca_de_correo">Correo Electrónico: primosapps@roymainformatica.com"</string>
+    <string name="acerca_de_http_appmoraleja">Para aparecer en la App pulse en: http://appmoraleja.roymainformatica.com/eventos/moraleja/inicio/inicio.php</string>
+    <string name="acerca_de_http_appmoraleja_sin_url">Para aparecer en la App pulse </string>
+    <string name="acerca_de_http_royma">www.roymainformatica.com </string>
+    <string name="acerca_de_aqui">AQUI</string>
     
 </resources>

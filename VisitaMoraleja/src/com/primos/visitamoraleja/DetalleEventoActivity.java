@@ -158,7 +158,7 @@ public class DetalleEventoActivity extends ActionBarListActivity implements
         }		
 	}
 	
-	// Recogemos la pulsaciÃ³n en los 5 botones de la minificha
+	// Recogemos la pulsación en los 5 botones de la minificha
 	public void onClick(View boton_pulsado) {
 		
 		String lugar = sitio.getNombre();
@@ -254,7 +254,7 @@ public class DetalleEventoActivity extends ActionBarListActivity implements
 		}
 	}
 
-	// Muy pronto estarÃ¡ terminado
+	// Muy pronto estará terminado
 	private void localizarSitio(String lugar, Double latitud, Double longitud) {
 		Intent lanzarmapa = new Intent(this, MapaLugaresActivity.class);
 
@@ -301,7 +301,7 @@ public class DetalleEventoActivity extends ActionBarListActivity implements
 	}
 
 	// Seleccionar de una lista de aplicaciones instaladas en el movil, una para
-	// enviar una notificaciÃ³n a quien quiera
+	// enviar una notificación a quien quiera
 	// para indicar donde se encuentra ese lugar en concreto, sigue con el
 	// problema de los decimales en lat y long.
 	private void compartirLugar(String lugar, Double lat, Double lon) {
@@ -338,7 +338,7 @@ public class DetalleEventoActivity extends ActionBarListActivity implements
         intent.putExtra(Intent.EXTRA_EMAIL, destinatarios);
         intent.putExtra(Intent.EXTRA_SUBJECT, "Aplicacion Conoce Moraleja");// Asunto del mensaje
         //intent.putExtra(Intent.EXTRA_TEXT, "cuerpo del mensaje");// Cuerpo del Mensaje
-        startActivity(Intent.createChooser(intent,"Seleccionar Aplicación de Correo"));
+        startActivity(Intent.createChooser(intent,"Seleccionar Aplicaci�n de Correo"));
           //      this.getString(R.string.titulo_compartir)));
 
     }
@@ -347,8 +347,8 @@ public class DetalleEventoActivity extends ActionBarListActivity implements
 
 	// Lanza el DIAL para que solo sonlo con pulsar un boton se realice una
 	// llamada, lo hice con llamda directa, pero
-	// aparte que habÃ­a que modificar permisos en el manifest qu eno me gustan
-	// ni a la gente tampoco, me parecÃ­a
+	// aparte que había que modificar permisos en el manifest qu eno me gustan
+	// ni a la gente tampoco, me parecía
 	// demasiado atrevido.
 	private void realizarLlamada(String numero) {
 		// TODO Auto-generated method stub

@@ -12,7 +12,7 @@
         android:title="@string/actionbar_notificacion"
         android:orderInCategory="100"
         app:showAsAction="always"
-        android:icon="@drawable/ic_action_notificacion"/>
+        android:icon="@drawable/ic_action_noti"/>
     
     <item android:id="@+id/actionbar_settings"
         android:title="@string/actionbar_settings"
