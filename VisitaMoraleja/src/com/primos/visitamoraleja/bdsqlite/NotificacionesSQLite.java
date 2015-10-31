@@ -14,6 +14,7 @@ public class NotificacionesSQLite extends SQLiteOpenHelper {
 	public final static String TABLE_NAME = "notificaciones";
 	public final static String COLUMNA_ID = "id";
 	public final static String COLUMNA_ID_SITIO = "id_sitio";
+	public final static String COLUMNA_ID_CATEGORIA = "id_categoria";
 	public final static String COLUMNA_TITULO = "titulo";
 	public final static String COLUMNA_TEXTO = "texto";
 	public final static String COLUMNA_FECHA_INICIO_VALIDEZ = "fecha_inicio_validez";
@@ -22,7 +23,7 @@ public class NotificacionesSQLite extends SQLiteOpenHelper {
 	private static final int DATABASE_VERSION = 1;
 	
 	private final static String CREATE_TABLA = "CREATE TABLE " + TABLE_NAME + 
-			" (id INTEGER PRIMARY KEY, id_sitio INTEGER, titulo TEXT, texto TEXT, " +
+			" (id INTEGER PRIMARY KEY, id_sitio INTEGER, id_categoria INTEGER, titulo TEXT, texto TEXT, " +
 			"fecha_inicio_validez NUMERIC, fecha_fin_validez NUMERIC )";
 
 	public NotificacionesSQLite(Context context) {

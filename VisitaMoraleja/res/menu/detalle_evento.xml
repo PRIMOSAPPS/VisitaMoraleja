@@ -5,7 +5,12 @@
     tools:context="com.primos.visitamoraleja.MainActivity" >
 
     
-    
+    <item
+        android:id="@+id/actionbar_notificaciones"
+        android:icon="@drawable/ic_action_noti"
+        android:orderInCategory="100"
+        android:title="@string/actionbar_notificacion"
+        app:showAsAction="always"/>
     
     <item android:id="@+id/actionbar_eventos"
         android:title="@string/actionbar_eventos"

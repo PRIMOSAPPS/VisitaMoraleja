@@ -10,7 +10,9 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import com.primos.visitamoraleja.bdsqlite.NotificacionesSQLite;
+import com.primos.visitamoraleja.bdsqlite.SitiosSQLite;
 import com.primos.visitamoraleja.contenidos.Notificacion;
+import com.primos.visitamoraleja.contenidos.Sitio;
 
 /**
  * Controla el acceso a la tabla de las categorias
@@ -20,6 +22,7 @@ import com.primos.visitamoraleja.contenidos.Notificacion;
 public class NotificacionesDataSource extends AbstractDataSource {
 	private static String[] allColumns = { NotificacionesSQLite.COLUMNA_ID,
 			NotificacionesSQLite.COLUMNA_ID_SITIO,
+			NotificacionesSQLite.COLUMNA_ID_CATEGORIA,
 			NotificacionesSQLite.COLUMNA_TITULO,
 			NotificacionesSQLite.COLUMNA_TEXTO,
 			NotificacionesSQLite.COLUMNA_FECHA_INICIO_VALIDEZ,
@@ -90,6 +93,29 @@ public class NotificacionesDataSource extends AbstractDataSource {
 		return resul;
 	}
 	
+
+	/**
+	 * Devuelve la lista de notificaciones que pertenecen a la categoria indicada.
+	 * @param nombreCat
+	 * @return
+	 */
+	public List<Notificacion> getByCategoria(long idCategoria) {
+		List<Notificacion> resul = new ArrayList<Notificacion>();
+		String where = NotificacionesSQLite.COLUMNA_ID_CATEGORIA + " = " + idCategoria;
+		Cursor cursor = database.query(NotificacionesSQLite.TABLE_NAME,
+				allColumns, where, null, null, null, null);
+		cursor.moveToFirst();
+		while (!cursor.isAfterLast()) {
+			Notificacion notificacion = cursorToObject(cursor);
+
+			resul.add(notificacion);
+			cursor.moveToNext();
+		}
+		cursor.close();
+		
+		return resul;
+	}
+	
 	/**
 	 * Actualiza la notificacion recibida en la base de datos.
 	 * @param notificacion
@@ -120,6 +146,7 @@ public class NotificacionesDataSource extends AbstractDataSource {
 		Notificacion resul = new Notificacion();
 		resul.setId(cursor.getLong(cursor.getColumnIndex(NotificacionesSQLite.COLUMNA_ID)));
 		resul.setIdSitio(cursor.getLong(cursor.getColumnIndex(NotificacionesSQLite.COLUMNA_ID_SITIO)));
+		resul.setIdCategoria(cursor.getLong(cursor.getColumnIndex(NotificacionesSQLite.COLUMNA_ID_CATEGORIA)));
 		resul.setTitulo(cursor.getString(cursor.getColumnIndex(NotificacionesSQLite.COLUMNA_TITULO)));
 		resul.setTexto(cursor.getString(cursor.getColumnIndex(NotificacionesSQLite.COLUMNA_TEXTO)));
 		long fechaInicioValidez = cursor.getLong(cursor.getColumnIndex(NotificacionesSQLite.COLUMNA_FECHA_INICIO_VALIDEZ));
@@ -140,6 +167,7 @@ public class NotificacionesDataSource extends AbstractDataSource {
 		ContentValues valores = new ContentValues();
 		valores.put(NotificacionesSQLite.COLUMNA_ID, notificacion.getId());
 		valores.put(NotificacionesSQLite.COLUMNA_ID_SITIO, notificacion.getIdSitio());
+		valores.put(NotificacionesSQLite.COLUMNA_ID_CATEGORIA, notificacion.getIdCategoria());
 		valores.put(NotificacionesSQLite.COLUMNA_TITULO, notificacion.getTitulo());
 		valores.put(NotificacionesSQLite.COLUMNA_TEXTO,
 				notificacion.getTexto());

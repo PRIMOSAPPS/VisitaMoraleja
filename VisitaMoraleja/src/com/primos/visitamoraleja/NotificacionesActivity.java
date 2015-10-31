@@ -18,6 +18,7 @@ import com.primos.visitamoraleja.contenidos.Notificacion;
 
 public class NotificacionesActivity extends ActionBarListActivity {
 	public final static String NOTIFICACION = "notificacion";
+	public final static String CATEGORIA_NOTIFICACIONES = "categoriaNotificaciones";
 	
 	private NotificacionesDataSource dataSource = null;
 	private SitiosDataSource dataSourceSitios = null;
@@ -36,10 +37,15 @@ public class NotificacionesActivity extends ActionBarListActivity {
 		Bundle extras = getIntent().getExtras();
 		// Si se recibe una notificacion solo se muestra esta
 		List<Notificacion> lstNotificaciones = null;
-		if(extras != null && extras.containsKey(NOTIFICACION)) {
-			Notificacion notificacion = (Notificacion)extras.get(NOTIFICACION);
-			lstNotificaciones = new ArrayList<>();
-			lstNotificaciones.add(notificacion);
+		if(extras != null) {
+			if(extras.containsKey(NOTIFICACION)) {
+				Notificacion notificacion = (Notificacion)extras.get(NOTIFICACION);
+				lstNotificaciones = new ArrayList<>();
+				lstNotificaciones.add(notificacion);
+			} else if(extras.containsKey(CATEGORIA_NOTIFICACIONES)) {
+				long idCategoria = extras.getLong(CATEGORIA_NOTIFICACIONES);
+				lstNotificaciones = dataSource.getByCategoria(idCategoria);
+			}
 		} else {
 			dataSource.eliminarPasadas();
 			lstNotificaciones = dataSource.getAll();

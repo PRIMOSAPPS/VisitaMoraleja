@@ -3,13 +3,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.primos.visitamoraleja.MainActivity" >
 
-    
-       <item android:id="@+id/actionbar_inicio"
-        android:title="@string/actionbar_inicio"
+    <item
+        android:id="@+id/actionbar_notificaciones"
+        android:icon="@drawable/ic_action_noti"
         android:orderInCategory="100"
-        app:showAsAction="ifRoom"
-        android:icon="@drawable/ic_actionbar_inicio"/>
-    
-    
+        android:title="@string/actionbar_notificacion"
+        app:showAsAction="always"/>
+    <item
+        android:id="@+id/actionbar_inicio"
+        android:icon="@drawable/ic_actionbar_inicio"
+        android:orderInCategory="200"
+        android:title="@string/actionbar_inicio"
+        app:showAsAction="ifRoom"/>
 
 </menu>

@@ -12,12 +12,14 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.primos.visitamoraleja.adaptadores.SitioAdaptador;
+import com.primos.visitamoraleja.bdsqlite.datasource.CategoriasDataSource;
 import com.primos.visitamoraleja.bdsqlite.datasource.SitiosDataSource;
+import com.primos.visitamoraleja.contenidos.Categoria;
 import com.primos.visitamoraleja.contenidos.Sitio;
 
 public class EventoListaNormalActivity extends  ActionBarListActivity {
 	private SitiosDataSource dataSource;
-	private String categoriaSeleccionada = null;
+	private Categoria categoriaSeleccionada = null;
 	private boolean mostrarFavoritos = false;
 
 	@Override
@@ -29,11 +31,17 @@ public class EventoListaNormalActivity extends  ActionBarListActivity {
 		dataSource = new SitiosDataSource(this);
 		dataSource.open();
 		
-		categoriaSeleccionada = (String) getIntent().getExtras().get("categoria");
+		String nombreCategoria = (String) getIntent().getExtras().get("categoria");
 		String favoritos = (String) getIntent().getExtras().get("favoritos");
 		mostrarFavoritos = Boolean.parseBoolean(favoritos);
+
+		// Cargamos la categoria seleccionada
+		CategoriasDataSource categoriasDataSource = new CategoriasDataSource(this);
+		categoriasDataSource.open();
+		categoriaSeleccionada = categoriasDataSource.getByNombre(nombreCategoria);
+		categoriasDataSource.close();
 		
-		String strParaTitulo = categoriaSeleccionada;
+		String strParaTitulo = categoriaSeleccionada.getNombre();
 		if(mostrarFavoritos) {
 			strParaTitulo = "FAVORITOS";
 		}
@@ -64,14 +72,20 @@ public class EventoListaNormalActivity extends  ActionBarListActivity {
 		// Handle action bar item clicks here. The action bar will
 		// automatically handle clicks on the Home/Up button, so long
 		// as you specify a parent activity in AndroidManifest.xml.
-		int id = item.getItemId();
-		if (id == R.id.actionbar_inicio ) {
+		switch (item.getItemId()) {
+		case R.id.actionbar_inicio:
         	Intent i = new Intent(this, MainActivity.class);
         	i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         	i.putExtra(MainActivity.ACTUALIZAR, false);
             startActivity(i);
 			return true;
+		case R.id.actionbar_notificaciones:
+			Intent iNotificaciones = new Intent(this, NotificacionesActivity.class);
+			iNotificaciones.putExtra(NotificacionesActivity.CATEGORIA_NOTIFICACIONES, categoriaSeleccionada.getId());
+			startActivity(iNotificaciones);
+			return true;
 		}
+
 		return super.onOptionsItemSelected(item);
 	}
 	
@@ -80,7 +94,7 @@ public class EventoListaNormalActivity extends  ActionBarListActivity {
 		if(mostrarFavoritos) {
 			listaSitios = dataSource.getByFavorito(1);
 		} else if (categoriaSeleccionada != null){
-			listaSitios = dataSource.getByCategoria(categoriaSeleccionada);
+			listaSitios = dataSource.getByCategoria(categoriaSeleccionada.getNombre());
 		}
 		setListAdapter(new SitioAdaptador(this, listaSitios));
 	}
