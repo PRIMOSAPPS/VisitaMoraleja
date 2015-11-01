@@ -25,6 +25,7 @@
         android:layout_marginLeft="8dp"
         android:layout_marginRight="22dp"
         android:layout_marginTop="8dp"
+        android:autoLink="web"
         android:text="TextView" />
 
     <ImageButton
