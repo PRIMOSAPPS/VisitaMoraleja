@@ -5,22 +5,35 @@ import java.util.List;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.DrawerLayout;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.FrameLayout;
+import android.widget.FrameLayout.LayoutParams;
+import android.widget.ListView;
 
 import com.primos.visitamoraleja.adaptadores.SitioAdaptador;
 import com.primos.visitamoraleja.bdsqlite.datasource.CategoriasDataSource;
 import com.primos.visitamoraleja.bdsqlite.datasource.SitiosDataSource;
 import com.primos.visitamoraleja.contenidos.Categoria;
 import com.primos.visitamoraleja.contenidos.Sitio;
+import com.primos.visitamoraleja.menulateral.ConfigMenuLateral;
 
 public class EventoListaNormalActivity extends  ActionBarListActivity {
+	public final static String FAVORITOS = "favoritos";
+	public final static String CATEGORIA = "categoria";
+	
 	private SitiosDataSource dataSource;
 	private Categoria categoriaSeleccionada = null;
 	private boolean mostrarFavoritos = false;
+	
+	private DrawerLayout mDrawer;
+	private ListView mDrawerOptions;
+//	private static String[] valoresMenuLateral;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -31,25 +44,48 @@ public class EventoListaNormalActivity extends  ActionBarListActivity {
 		dataSource = new SitiosDataSource(this);
 		dataSource.open();
 		
-		String nombreCategoria = (String) getIntent().getExtras().get("categoria");
-		String favoritos = (String) getIntent().getExtras().get("favoritos");
+		String nombreCategoria = (String) getIntent().getExtras().get(CATEGORIA);
+		String favoritos = (String) getIntent().getExtras().get(FAVORITOS);
 		mostrarFavoritos = Boolean.parseBoolean(favoritos);
 
 		// Cargamos la categoria seleccionada
-		CategoriasDataSource categoriasDataSource = new CategoriasDataSource(this);
-		categoriasDataSource.open();
-		categoriaSeleccionada = categoriasDataSource.getByNombre(nombreCategoria);
-		categoriasDataSource.close();
-		
-		String strParaTitulo = categoriaSeleccionada.getNombre();
-		if(mostrarFavoritos) {
-			strParaTitulo = "FAVORITOS";
+		Button btn = (Button)findViewById(R.id.btnMostrarNotificaciones);
+		if(nombreCategoria != null) {
+			CategoriasDataSource categoriasDataSource = new CategoriasDataSource(this);
+			categoriasDataSource.open();
+			categoriaSeleccionada = categoriasDataSource.getByNombre(nombreCategoria);
+			categoriasDataSource.close();
+		} else {
+			btn.setVisibility(View.GONE);
+			ListView listView =  getListView();
+			LayoutParams layoutParams = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT,
+					FrameLayout.LayoutParams.MATCH_PARENT);
+			listView.setLayoutParams(layoutParams);
 		}
+
+		mDrawerOptions = (ListView) findViewById(R.id.menuLateralListaSitios);
+		mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout_lateral);
+		ConfigMenuLateral cml = new ConfigMenuLateral(this, categoriaSeleccionada, mostrarFavoritos);
+		cml.iniciarMenuLateral();
+		
+		String strParaTitulo = getTextoTitulo();
+		
 		// Se asigna el titulo del action bar
 		setTitulo(strParaTitulo);
 		
-		cargarSitios();
+		cargarSitios(categoriaSeleccionada, mostrarFavoritos);
 
+	}
+	
+	private String getTextoTitulo() {
+		String resul = null;
+		if(categoriaSeleccionada != null) {
+			resul = categoriaSeleccionada.getNombre();
+		}
+		if(mostrarFavoritos) {
+			resul = "FAVORITOS";
+		}
+		return resul;
 	}
 	
 	public void mostrarDetalle(View view) {
@@ -80,22 +116,40 @@ public class EventoListaNormalActivity extends  ActionBarListActivity {
             startActivity(i);
 			return true;
 		case R.id.actionbar_notificaciones:
-			Intent iNotificaciones = new Intent(this, NotificacionesActivity.class);
-			iNotificaciones.putExtra(NotificacionesActivity.CATEGORIA_NOTIFICACIONES, categoriaSeleccionada.getId());
-			startActivity(iNotificaciones);
+//			mostrarNotificaciones();
+			if (mDrawer.isDrawerOpen(mDrawerOptions)){
+				mDrawer.closeDrawers();
+			}else{
+				mDrawer.openDrawer(mDrawerOptions);
+			}
 			return true;
 		}
 
 		return super.onOptionsItemSelected(item);
 	}
 	
-	private void cargarSitios() {
+	private void mostrarNotificaciones() {
+		if(categoriaSeleccionada != null) {
+			Intent iNotificaciones = new Intent(this, NotificacionesActivity.class);
+			iNotificaciones.putExtra(NotificacionesActivity.CATEGORIA_NOTIFICACIONES, categoriaSeleccionada.getId());
+			startActivity(iNotificaciones);
+		}
+	}
+	
+	public void mostrarNotificaciones(View view) {
+		mostrarNotificaciones();
+	}
+	
+	public void cargarSitios(Categoria categoriaSeleccionada, boolean mostrarFavoritos) {
+		this.categoriaSeleccionada = categoriaSeleccionada;
+		this.mostrarFavoritos = mostrarFavoritos;
 		List<Sitio> listaSitios = null;
 		if(mostrarFavoritos) {
 			listaSitios = dataSource.getByFavorito(1);
 		} else if (categoriaSeleccionada != null){
 			listaSitios = dataSource.getByCategoria(categoriaSeleccionada.getNombre());
 		}
+		setTitulo(getTextoTitulo());
 		setListAdapter(new SitioAdaptador(this, listaSitios));
 	}
 
@@ -104,7 +158,7 @@ public class EventoListaNormalActivity extends  ActionBarListActivity {
 		dataSource.open();
 		// Se recargan los sitios solamente si estamos mostrando los favoritos, que pueden haber cambiado
 		if(mostrarFavoritos) {
-			cargarSitios();
+			cargarSitios(categoriaSeleccionada, mostrarFavoritos);
 		}
 		super.onResume();
 	}

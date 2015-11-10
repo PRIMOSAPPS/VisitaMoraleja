@@ -7,11 +7,13 @@ import android.graphics.drawable.GradientDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
 import android.widget.BaseAdapter;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.primos.visitamoraleja.R;
+import com.primos.visitamoraleja.constantes.Constantes;
 import com.primos.visitamoraleja.contenidos.Notificacion;
 
 public class NotificacionAdapter extends BaseAdapter {
@@ -66,11 +68,12 @@ public class NotificacionAdapter extends BaseAdapter {
 		
 		TextView textTitulo = (TextView)view.findViewById(R.id.notificacionTitulo);
 		textTitulo.setText(notificacion.getTitulo());
-		TextView textTexto = (TextView)view.findViewById(R.id.notificacionTexto);
+		WebView webViewTexto = (WebView)view.findViewById(R.id.notificacionTexto);
 		String textoTmp = notificacion.getTexto();
 //		textoTmp += "\n" + notificacion.getFechaInicioValidez();
 //		textoTmp += "\n" + notificacion.getFechaFinValidez();
-		textTexto.setText(textoTmp);
+		webViewTexto.loadDataWithBaseURL(null, textoTmp, Constantes.mimeType, Constantes.encoding, null);
+		
 		ImageButton imageButtonDelete = (ImageButton)view.findViewById(R.id.notificacionDelete);
 		imageButtonDelete.setTag(notificacion);
 		

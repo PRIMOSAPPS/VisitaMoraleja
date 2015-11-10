@@ -52,13 +52,13 @@ public class MainActivity extends ActionBarActivity{
 
 	public void mostrar(View view) {
     	Intent intent = new Intent(this, EventoListaNormalActivity.class);
-    	intent.putExtra("categoria", (String)view.getTag());
+    	intent.putExtra(EventoListaNormalActivity.CATEGORIA, (String)view.getTag());
     	startActivity(intent);
 	}
 
 	public void mostrarFavoritos(View view) {
     	Intent intent = new Intent(this, EventoListaNormalActivity.class);
-    	intent.putExtra("favoritos", "true");
+    	intent.putExtra(EventoListaNormalActivity.FAVORITOS, "true");
     	startActivity(intent);
 	}
 	

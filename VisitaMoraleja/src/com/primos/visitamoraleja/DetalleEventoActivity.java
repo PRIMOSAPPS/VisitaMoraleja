@@ -6,6 +6,7 @@ import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -17,6 +18,7 @@ import android.widget.Button;
 import android.widget.Gallery;
 import android.widget.ImageSwitcher;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -30,6 +32,7 @@ import com.primos.visitamoraleja.constantes.Constantes;
 import com.primos.visitamoraleja.contenidos.Categoria;
 import com.primos.visitamoraleja.contenidos.Evento;
 import com.primos.visitamoraleja.contenidos.Sitio;
+import com.primos.visitamoraleja.menulateral.ConfigMenuLateral;
 
 public class DetalleEventoActivity extends ActionBarListActivity implements
 		AdapterView.OnItemSelectedListener, ViewSwitcher.ViewFactory,
@@ -44,6 +47,10 @@ public class DetalleEventoActivity extends ActionBarListActivity implements
 	Button mButton; // Reference to button available in the layout to start and
 					// stop the flipper
 	private List<Evento> lstEventosSitio;
+	
+	private DrawerLayout mDrawer;
+	private ListView mDrawerOptions;
+
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -139,6 +146,11 @@ public class DetalleEventoActivity extends ActionBarListActivity implements
 		Categoria categoria = categoriaDataSource.getById(sitio.getIdCategoria());
 		setTitulo(categoria.getNombre());
 		categoriaDataSource.close();
+		
+		mDrawerOptions = (ListView) findViewById(R.id.menuLateralListaSitios);
+		mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout_lateral);
+		ConfigMenuLateral cml = new ConfigMenuLateral(this, categoria, false);
+		cml.iniciarMenuLateral();
 
 	}
 
