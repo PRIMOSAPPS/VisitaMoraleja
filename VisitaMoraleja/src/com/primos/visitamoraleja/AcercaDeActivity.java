@@ -16,12 +16,12 @@ public class AcercaDeActivity extends   ActionBarListActivity {
 	}
 	
 	
-//Función que abre la pagina de inscripcion.
+//Funciï¿½n que abre la pagina de inscripcion.
     public void inscripcion(View view){  
         
     	try {
 			
-			Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://appmoraleja.roymainformatica.com/eventos/moraleja/inicio/inicio.php"));
+			Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://appmoraleja.roymainformatica.com/eventos"));
 			startActivity(intent);
 	
 		} catch (ActivityNotFoundException activityException) {
@@ -32,7 +32,7 @@ public class AcercaDeActivity extends   ActionBarListActivity {
 		}
     }
     
-    //Función que abre la pagina de royma.
+    //Funciï¿½n que abre la pagina de royma.
     public void iraRoyma(View view){  
         
        	try {

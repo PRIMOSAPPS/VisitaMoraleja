@@ -16,17 +16,16 @@
         android:text="Large Text"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
-    <WebView
+	<com.primos.visitamoraleja.views.PrimosWebView
         android:id="@+id/notificacionTexto"
-        android:layout_width="wrap_content"
+        android:layout_below="@id/notificacionTitulo"
+        android:layout_width="match_parent"
         android:layout_height="100dp"
+        android:layout_margin="8dp"
         android:layout_alignParentLeft="true"
-        android:layout_below="@+id/notificacionTitulo"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="22dp"
-        android:layout_marginTop="8dp"
-        android:autoLink="web"
         android:scrollbars="vertical"
+        android:scrollbarSize="10dp"
+        android:scrollbarAlwaysDrawVerticalTrack="true"
         android:text="" />
 
     <ImageButton
@@ -35,8 +34,13 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
-        android:contentDescription="Borrara la notificacion"
+        android:contentDescription="@string/descrip_borrar_notificacion"
         android:onClick="borrarNotificacion"
-        android:src="@android:drawable/ic_delete" />
-
+        android:src="@android:drawable/ic_menu_delete" />
+    <!--
+        ic_notification_clear_all
+        ic_menu_delete
+        ic_delete
+    -->
+    
 </RelativeLayout>

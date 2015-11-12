@@ -3,6 +3,8 @@ package com.primos.visitamoraleja;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -87,9 +89,26 @@ public class NotificacionesActivity extends ActionBarListActivity {
 		return super.onOptionsItemSelected(item);
 	}
 
-	public void borrarNotificacion(View view) {
-		Notificacion notificacion = (Notificacion)view.getTag();
+	public void borrarNotificacion(final View view) {
 		
+		AlertDialog.Builder dialogo1 = new AlertDialog.Builder(this);
+		dialogo1.setTitle(R.string.txt_aviso);
+        dialogo1.setMessage(R.string.dlg_notif_txt_aviso);
+        dialogo1.setCancelable(false);
+        dialogo1.setPositiveButton(R.string.txt_aceptar, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialogo1, int id) {
+            	Notificacion notificacion = (Notificacion)view.getTag();
+            	borrarNotificacion(notificacion);
+            }
+        });
+        dialogo1.setNegativeButton(R.string.txt_cancelar, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialogo1, int id) {
+            }
+        });
+        dialogo1.show();
+	}
+	
+	private void borrarNotificacion(Notificacion notificacion) {
 		dataSource.delete(notificacion);
 		setListAdapter(new NotificacionAdapter(this, dataSource.getAll()));
 		findViewById(R.id.lvNotificaciones).invalidate();
