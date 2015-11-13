@@ -68,18 +68,8 @@ public class ConfigMenuLateral {
 		
 		Resources resources = actividadRecibida.getResources();
 		int i=0;
-//		valoresMenuLateral[i++] = (String)resources.getText(R.string.conoceMoraleja);
-//		valoresMenuLateral[i++] = (String)resources.getText(R.string.deTapas);
-//		valoresMenuLateral[i++] = (String)resources.getText(R.string.dondeComer);
-//		valoresMenuLateral[i++] = (String)resources.getText(R.string.dondeComprar);
-//		valoresMenuLateral[i++] = (String)resources.getText(R.string.serviciosReparaciones);
 		for(Categoria categoria : listaCategorias) {
 			valoresMenuLateral[i++] = categoria.getDescripcion();
-//			if(categoriaSeleccionada == null) {
-//				valoresMenuLateral[i++] = categoria.getDescripcion();
-//			} else if(categoriaSeleccionada.getId() != categoria.getId()) {
-//				valoresMenuLateral[i++] = categoria.getDescripcion();
-//			}
 		}
 		IND_FAVORITOS=i;
 		valoresMenuLateral[i++] = (String)resources.getText(R.string.favoritos);
@@ -131,6 +121,14 @@ public class ConfigMenuLateral {
 			}
 		});
 	}
+//	
+//	protected void categoriaSeleccionada() {
+//		
+//	}
+//	
+//	protected void favoritosSeleccionados() {
+//		
+//	}
 	
 	private List<Categoria> getListaCategorias(Activity actividadRecibida) {
 		CategoriasDataSource categoriasDataSource = new CategoriasDataSource(actividadRecibida);
