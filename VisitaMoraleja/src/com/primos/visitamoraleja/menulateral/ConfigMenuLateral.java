@@ -1,5 +1,6 @@
 package com.primos.visitamoraleja.menulateral;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
@@ -16,6 +17,7 @@ import com.primos.visitamoraleja.EventoListaNormalActivity;
 import com.primos.visitamoraleja.NotificacionesActivity;
 import com.primos.visitamoraleja.PreferenciasActivity;
 import com.primos.visitamoraleja.R;
+import com.primos.visitamoraleja.adaptadores.MenuLateralAdaptador;
 import com.primos.visitamoraleja.bdsqlite.datasource.CategoriasDataSource;
 import com.primos.visitamoraleja.contenidos.Categoria;
 
@@ -55,36 +57,53 @@ public class ConfigMenuLateral {
 		}
 		final Activity actividadRecibida = actividadTmp;
 		
+		List<DatosItemMenuLateral> listaItemsMenu = new ArrayList<>();
 		final List<Categoria> listaCategorias = getListaCategorias(actividadRecibida);
 		
-		String[] valoresMenuLateral;
+//		String[] valoresMenuLateral;
 
 		int numOpciones = listaCategorias.size();
 		numOpciones += 2;
 		if(categoriaSeleccionada != null) {
 			numOpciones += 1;
 		}
-		valoresMenuLateral = new String[numOpciones];
+//		valoresMenuLateral = new String[numOpciones];
 		
 		Resources resources = actividadRecibida.getResources();
 		int i=0;
 		for(Categoria categoria : listaCategorias) {
-			valoresMenuLateral[i++] = categoria.getDescripcion();
+			String textoMenu = categoria.getDescripcion();
+			String nombreIcono = categoria.getNombreIcono();
+			nombreIcono = nombreIcono.substring(0, nombreIcono.lastIndexOf("."));
+			int identificadorImagen = resources.getIdentifier(nombreIcono, "mipmap", actividadTmp.getPackageName());
+			DatosItemMenuLateral datosItem = new DatosItemMenuLateral(textoMenu, identificadorImagen);
+			listaItemsMenu.add(datosItem);
+//			valoresMenuLateral[i++] = categoria.getDescripcion();
 		}
-		IND_FAVORITOS=i;
-		valoresMenuLateral[i++] = (String)resources.getText(R.string.favoritos);
+		IND_FAVORITOS=listaItemsMenu.size();
+		DatosItemMenuLateral datosItemFavoritos = new DatosItemMenuLateral((String)resources.getText(R.string.favoritos),
+				R.mipmap.ic_favoritosml);
+		listaItemsMenu.add(datosItemFavoritos);
+//		valoresMenuLateral[i++] = (String)resources.getText(R.string.favoritos);
 		if(categoriaSeleccionada != null) {
-			IND_VER_NOTIFICACIONES = i;
-			valoresMenuLateral[i++] = (String)resources.getText(R.string.ver_notificaciones);
+			IND_VER_NOTIFICACIONES = listaItemsMenu.size();
+			DatosItemMenuLateral datosItemNotificaciones = new DatosItemMenuLateral(
+					(String)resources.getText(R.string.ver_notificaciones), R.mipmap.ic_notificacionesml);
+			listaItemsMenu.add(datosItemNotificaciones);
+//			valoresMenuLateral[i++] = (String)resources.getText(R.string.ver_notificaciones);
 		}
-		IND_PREFERENCIAS = i;
-		valoresMenuLateral[i++] = (String)resources.getText(R.string.actionbar_settings);
+		IND_PREFERENCIAS = listaItemsMenu.size();
+		DatosItemMenuLateral datosItemPreferencias = new DatosItemMenuLateral(
+				(String)resources.getText(R.string.actionbar_settings), R.drawable.ic_action_action_settings);
+		listaItemsMenu.add(datosItemPreferencias);
+//		valoresMenuLateral[i++] = (String)resources.getText(R.string.actionbar_settings);
 		
 		ListView mDrawerOptions = (ListView) actividadRecibida.findViewById(R.id.menuLateralListaSitios);
 		final DrawerLayout mDrawer = (DrawerLayout) actividadRecibida.findViewById(R.id.drawer_layout_lateral);
 		
-		mDrawerOptions.setAdapter(new ArrayAdapter(actividadRecibida, android.R.layout.simple_list_item_1, android.R.id.text1,
-				valoresMenuLateral));
+//		mDrawerOptions.setAdapter(new ArrayAdapter(actividadRecibida, android.R.layout.simple_list_item_1, android.R.id.text1,
+//				valoresMenuLateral));
+		mDrawerOptions.setAdapter(new MenuLateralAdaptador(actividadTmp, listaItemsMenu));
 		mDrawerOptions.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
