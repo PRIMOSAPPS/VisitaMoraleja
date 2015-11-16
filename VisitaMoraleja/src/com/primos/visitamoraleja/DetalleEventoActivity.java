@@ -1,6 +1,8 @@
 package com.primos.visitamoraleja;
 
+import java.text.MessageFormat;
 import java.util.List;
+import java.util.Locale;
 
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
@@ -268,14 +270,25 @@ public class DetalleEventoActivity extends ActionBarListActivity implements
 
 	// Muy pronto estará terminado
 	private void localizarSitio(String lugar, Double latitud, Double longitud) {
-		Intent lanzarmapa = new Intent(this, MapaLugaresActivity.class);
+//		Intent lanzarmapa = new Intent(this, MapaLugaresActivity.class);
+		String paqueteGoogle = "com.google.android.apps.maps";
+		String claseMaps = "com.google.android.maps.MapsActivity";
+		String urlParte2 = "geo:{0},{1}?q={0},{1}&z={2}";
 
-		// Vamos a pasar los valores que necesita MapaLugarActivity
-		lanzarmapa.putExtra("nombre", sitio.getNombre());
-		lanzarmapa.putExtra("latitud", latitud);
-		lanzarmapa.putExtra("longitud", longitud);
-		lanzarmapa.putExtra(MapaLugaresActivity.ORIGEN, SITIO);
-		lanzarmapa.putExtra(MapaLugaresActivity.ID_RECIBIDO, sitio.getId());
+		String uri = MessageFormat.format(urlParte2, latitud.toString(), longitud.toString(),
+				latitud.toString(), longitud.toString(), 15);
+		Intent lanzarmapa = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
+		lanzarmapa.setClassName(paqueteGoogle, claseMaps);
+		
+//		String uri = String.format(Locale.ENGLISH, "http://maps.google.com/maps?saddr=%f,%f&daddr=%f,%f", sourceLatitude, sourceLongitude, destinationLatitude, destinationLongitude);
+//		Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
+//
+//		// Vamos a pasar los valores que necesita MapaLugarActivity
+//		lanzarmapa.putExtra("nombre", sitio.getNombre());
+//		lanzarmapa.putExtra("latitud", latitud);
+//		lanzarmapa.putExtra("longitud", longitud);
+//		lanzarmapa.putExtra(MapaLugaresActivity.ORIGEN, SITIO);
+//		lanzarmapa.putExtra(MapaLugaresActivity.ID_RECIBIDO, sitio.getId());
 		
 		 
 		 startActivity(lanzarmapa);
