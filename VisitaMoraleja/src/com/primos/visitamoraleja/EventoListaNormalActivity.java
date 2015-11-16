@@ -115,7 +115,7 @@ public class EventoListaNormalActivity extends  ActionBarListActivity {
         	i.putExtra(MainActivity.ACTUALIZAR, false);
             startActivity(i);
 			return true;
-		case R.id.actionbar_notificaciones:
+		case R.id.actionbar_menu_lateral:
 //			mostrarNotificaciones();
 			if (mDrawer.isDrawerOpen(mDrawerOptions)){
 				mDrawer.closeDrawers();

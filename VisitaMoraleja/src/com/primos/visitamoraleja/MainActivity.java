@@ -2,6 +2,7 @@ package com.primos.visitamoraleja;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Gravity;
@@ -9,9 +10,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager.LayoutParams;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import com.primos.visitamoraleja.actualizador.ThreadActualizador;
+import com.primos.visitamoraleja.menulateral.ConfigMenuLateral;
 import com.primos.visitamoraleja.util.UtilPreferencias;
 import com.primos.visitamoraleja.views.DialogoAutocompletar;
 
@@ -19,6 +22,10 @@ import com.primos.visitamoraleja.views.DialogoAutocompletar;
 
 public class MainActivity extends ActionBarActivity{
 	public final static String ACTUALIZAR = "actualizar";
+	
+	private DrawerLayout mDrawer;
+	private ListView mDrawerOptions;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -39,7 +46,11 @@ public class MainActivity extends ActionBarActivity{
 			Log.i("MainActivity", "Se realiza la actualizacion por estar activada");
 			actualizar();
 		}
-		Log.d("Prueba", "En main activity 2");
+
+		mDrawerOptions = (ListView) findViewById(R.id.menuLateralListaSitios);
+		mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout_lateral);
+		ConfigMenuLateral cml = new ConfigMenuLateral(this, null, true);
+		cml.iniciarMenuLateral();
 
 	}
 
@@ -86,14 +97,17 @@ public class MainActivity extends ActionBarActivity{
 	            return true;
 	        case R.id.actionbar_share:
 	        	Toast.makeText(this, "Se ha seleccionado COMPARTIR.", Toast.LENGTH_LONG).show();
-	            return true;
-	        case R.id.actionbar_notificaciones:
-	        	Intent i = new Intent(this, NotificacionesActivity.class);
-	            startActivity(i);
-	            return true;
 	        case R.id.actionbar_settings:
 	        	mostrarPreferencias();
 	            return true;
+			case R.id.actionbar_menu_lateral:
+//				mostrarNotificaciones();
+				if (mDrawer.isDrawerOpen(mDrawerOptions)){
+					mDrawer.closeDrawers();
+				}else{
+					mDrawer.openDrawer(mDrawerOptions);
+				}
+				return true;
 	    }
 	    return false;
 	}

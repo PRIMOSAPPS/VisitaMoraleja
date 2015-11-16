@@ -10,7 +10,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.primos.visitamoraleja.EventoListaNormalActivity;
@@ -30,6 +29,7 @@ public class ConfigMenuLateral {
 	private Activity actividad;
 	private Categoria categoriaSeleccionada;
 	private boolean mostrarFavoritos = true;
+	private boolean mostrarNotificaciones = true;
 
 	public ConfigMenuLateral(EventoListaNormalActivity actividadSitios,
 			Categoria categoriaSeleccionada, boolean mostrarFavoritos) {
@@ -63,10 +63,7 @@ public class ConfigMenuLateral {
 //		String[] valoresMenuLateral;
 
 		int numOpciones = listaCategorias.size();
-		numOpciones += 2;
-		if(categoriaSeleccionada != null) {
-			numOpciones += 1;
-		}
+		numOpciones += 3;
 //		valoresMenuLateral = new String[numOpciones];
 		
 		Resources resources = actividadRecibida.getResources();
@@ -85,13 +82,11 @@ public class ConfigMenuLateral {
 				R.mipmap.ic_favoritosml);
 		listaItemsMenu.add(datosItemFavoritos);
 //		valoresMenuLateral[i++] = (String)resources.getText(R.string.favoritos);
-		if(categoriaSeleccionada != null) {
-			IND_VER_NOTIFICACIONES = listaItemsMenu.size();
-			DatosItemMenuLateral datosItemNotificaciones = new DatosItemMenuLateral(
-					(String)resources.getText(R.string.ver_notificaciones), R.mipmap.ic_notificacionesml);
-			listaItemsMenu.add(datosItemNotificaciones);
+		IND_VER_NOTIFICACIONES = listaItemsMenu.size();
+		DatosItemMenuLateral datosItemNotificaciones = new DatosItemMenuLateral(
+				(String)resources.getText(R.string.ver_notificaciones), R.mipmap.ic_notificacionesml);
+		listaItemsMenu.add(datosItemNotificaciones);
 //			valoresMenuLateral[i++] = (String)resources.getText(R.string.ver_notificaciones);
-		}
 		IND_PREFERENCIAS = listaItemsMenu.size();
 		DatosItemMenuLateral datosItemPreferencias = new DatosItemMenuLateral(
 				(String)resources.getText(R.string.actionbar_settings), R.drawable.ic_action_action_settings);
@@ -134,6 +129,9 @@ public class ConfigMenuLateral {
 					actividadRecibida.startActivity(intent);
 				} else if(indice == IND_VER_NOTIFICACIONES) {
 					Intent intent = new Intent(actividadRecibida, NotificacionesActivity.class);
+					if(categoriaSeleccionada != null) {
+						intent.putExtra(NotificacionesActivity.CATEGORIA_NOTIFICACIONES, categoriaSeleccionada.getId());
+					}
 					actividadRecibida.startActivity(intent);
 				}
 				mDrawer.closeDrawers();

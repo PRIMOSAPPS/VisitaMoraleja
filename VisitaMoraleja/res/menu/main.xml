@@ -8,15 +8,15 @@
         app:showAsAction="always"
         android:icon="@drawable/abc_ic_search"/>
     
-    <item android:id="@+id/actionbar_notificaciones"
+    <item android:id="@+id/actionbar_menu_lateral"
         android:title="@string/actionbar_notificacion"
         android:orderInCategory="100"
         app:showAsAction="always"
-        android:icon="@drawable/ic_action_noti"/>
+        android:icon="@mipmap/ic_menu_lateral"/>
     
     <item android:id="@+id/actionbar_settings"
         android:title="@string/actionbar_settings"
-        android:orderInCategory="100"
+        android:orderInCategory="200"
         app:showAsAction="always"
         android:icon="@drawable/ic_action_action_settings"/>
     

@@ -7,6 +7,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.widget.DrawerLayout;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,6 +18,7 @@ import com.primos.visitamoraleja.adaptadores.NotificacionAdapter;
 import com.primos.visitamoraleja.bdsqlite.datasource.NotificacionesDataSource;
 import com.primos.visitamoraleja.bdsqlite.datasource.SitiosDataSource;
 import com.primos.visitamoraleja.contenidos.Notificacion;
+import com.primos.visitamoraleja.menulateral.ConfigMenuLateral;
 
 public class NotificacionesActivity extends ActionBarListActivity {
 	public final static String NOTIFICACION = "notificacion";
@@ -25,6 +27,10 @@ public class NotificacionesActivity extends ActionBarListActivity {
 	private NotificacionesDataSource dataSource = null;
 	private SitiosDataSource dataSourceSitios = null;
 	private ListView mListView = null;
+	
+	private DrawerLayout mDrawer;
+	private ListView mDrawerOptions;
+
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +60,12 @@ public class NotificacionesActivity extends ActionBarListActivity {
 		}
 		
 		setListAdapter(new NotificacionAdapter(this, lstNotificaciones));
+		
+		mDrawerOptions = (ListView) findViewById(R.id.menuLateralListaSitios);
+		mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout_lateral);
+		ConfigMenuLateral cml = new ConfigMenuLateral(this, null, true);
+		cml.iniciarMenuLateral();
+
 	}
 	
 	public void mostrarDetalleSitio(View view) {
@@ -80,12 +92,22 @@ public class NotificacionesActivity extends ActionBarListActivity {
 		// automatically handle clicks on the Home/Up button, so long
 		// as you specify a parent activity in AndroidManifest.xml.
 		int id = item.getItemId();
-		if (id == R.id.actionbar_inicio ) {
-        	Intent i = new Intent(this, MainActivity.class);
-        	i.putExtra(MainActivity.ACTUALIZAR, false);
-            startActivity(i);
-			return true;
+		switch (item.getItemId()) {
+			case R.id.actionbar_inicio:
+	        	Intent i = new Intent(this, MainActivity.class);
+	        	i.putExtra(MainActivity.ACTUALIZAR, false);
+	            startActivity(i);
+				return true;
+			case R.id.actionbar_menu_lateral:
+	//			mostrarNotificaciones();
+				if (mDrawer.isDrawerOpen(mDrawerOptions)){
+					mDrawer.closeDrawers();
+				}else{
+					mDrawer.openDrawer(mDrawerOptions);
+				}
+				return true;
 		}
+
 		return super.onOptionsItemSelected(item);
 	}
 

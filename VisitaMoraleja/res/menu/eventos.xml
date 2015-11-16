@@ -3,6 +3,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.primos.visitamoraleja.MainActivity" >
 
+    <item android:id="@+id/actionbar_menu_lateral"
+        android:title="@string/actionbar_notificacion"
+        android:orderInCategory="100"
+        app:showAsAction="always"
+        android:icon="@mipmap/ic_menu_lateral"/>
     
     <item android:id="@+id/actionbar_share"
         android:title="@string/actionbar_share"

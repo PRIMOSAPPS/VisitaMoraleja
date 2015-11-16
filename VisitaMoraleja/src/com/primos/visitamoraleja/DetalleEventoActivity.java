@@ -401,10 +401,12 @@ public class DetalleEventoActivity extends ActionBarListActivity implements
 		case R.id.actionbar_favorito:
 			cambiarEstadoFavorito(item);
 			return true;
-		case R.id.actionbar_notificaciones:
-			Intent iNotificaciones = new Intent(this, NotificacionesActivity.class);
-			iNotificaciones.putExtra(NotificacionesActivity.CATEGORIA_NOTIFICACIONES, sitio.getIdCategoria());
-			startActivity(iNotificaciones);
+		case R.id.actionbar_menu_lateral:
+			if (mDrawer.isDrawerOpen(mDrawerOptions)){
+				mDrawer.closeDrawers();
+			}else{
+				mDrawer.openDrawer(mDrawerOptions);
+			}
 			return true;
 		case R.id.actionbar_eventos:
 			Intent iEventos = new Intent(this, ListaEventosActivity.class);
