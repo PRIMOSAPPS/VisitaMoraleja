@@ -18,6 +18,8 @@ import com.primos.visitamoraleja.adaptadores.NotificacionAdapter;
 import com.primos.visitamoraleja.bdsqlite.datasource.NotificacionesDataSource;
 import com.primos.visitamoraleja.bdsqlite.datasource.SitiosDataSource;
 import com.primos.visitamoraleja.contenidos.Notificacion;
+import com.primos.visitamoraleja.contenidos.NotificacionSitio;
+import com.primos.visitamoraleja.contenidos.Sitio;
 import com.primos.visitamoraleja.menulateral.ConfigMenuLateral;
 
 public class NotificacionesActivity extends ActionBarListActivity {
@@ -44,28 +46,47 @@ public class NotificacionesActivity extends ActionBarListActivity {
 		
 		Bundle extras = getIntent().getExtras();
 		// Si se recibe una notificacion solo se muestra esta
-		List<Notificacion> lstNotificaciones = null;
+		List<NotificacionSitio> lstNotificacionesSitios = null;
 		if(extras != null) {
 			if(extras.containsKey(NOTIFICACION)) {
 				Notificacion notificacion = (Notificacion)extras.get(NOTIFICACION);
-				lstNotificaciones = new ArrayList<>();
-				lstNotificaciones.add(notificacion);
+				lstNotificacionesSitios = getlistaNotificacionesSitio(notificacion);
 			} else if(extras.containsKey(CATEGORIA_NOTIFICACIONES)) {
 				long idCategoria = extras.getLong(CATEGORIA_NOTIFICACIONES);
-				lstNotificaciones = dataSource.getByCategoria(idCategoria);
+				List<Notificacion> lstNotificaciones = dataSource.getByCategoria(idCategoria);
+				lstNotificacionesSitios = getlistaNotificacionesSitio(lstNotificaciones);
 			}
 		} else {
 			dataSource.eliminarPasadas();
-			lstNotificaciones = dataSource.getAll();
+			List<Notificacion> lstNotificaciones = dataSource.getAll();
+			lstNotificacionesSitios = getlistaNotificacionesSitio(lstNotificaciones);
 		}
 		
-		setListAdapter(new NotificacionAdapter(this, lstNotificaciones));
+		setListAdapter(new NotificacionAdapter(this, lstNotificacionesSitios));
 		
 		mDrawerOptions = (ListView) findViewById(R.id.menuLateralListaSitios);
 		mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout_lateral);
 		ConfigMenuLateral cml = new ConfigMenuLateral(this, null, true);
 		cml.iniciarMenuLateral();
 
+	}
+	
+	private List<NotificacionSitio> getlistaNotificacionesSitio(Notificacion notificacion) {
+		List<NotificacionSitio> lstNotificacionesSitios = new ArrayList<>();
+		Sitio sitio = dataSourceSitios.getById(notificacion.getIdSitio());
+		NotificacionSitio notifSitio = new NotificacionSitio(notificacion, sitio);
+		lstNotificacionesSitios.add(notifSitio);
+		return lstNotificacionesSitios;
+	}
+	
+	private List<NotificacionSitio> getlistaNotificacionesSitio(List<Notificacion> lstNotificaciones) {
+		List<NotificacionSitio> lstNotificacionesSitios = new ArrayList<>();
+		for(Notificacion notificacion : lstNotificaciones) {
+			Sitio sitio = dataSourceSitios.getById(notificacion.getIdSitio());
+			NotificacionSitio notifSitio = new NotificacionSitio(notificacion, sitio);
+			lstNotificacionesSitios.add(notifSitio);
+		}
+		return lstNotificacionesSitios;
 	}
 	
 	public void mostrarDetalleSitio(View view) {
@@ -132,7 +153,9 @@ public class NotificacionesActivity extends ActionBarListActivity {
 	
 	private void borrarNotificacion(Notificacion notificacion) {
 		dataSource.delete(notificacion);
-		setListAdapter(new NotificacionAdapter(this, dataSource.getAll()));
+		List<Notificacion> lstNotificaciones = dataSource.getAll();
+		List<NotificacionSitio> lstNotifSitios = getlistaNotificacionesSitio(lstNotificaciones);
+		setListAdapter(new NotificacionAdapter(this, lstNotifSitios));
 		findViewById(R.id.lvNotificaciones).invalidate();
 	}
 	

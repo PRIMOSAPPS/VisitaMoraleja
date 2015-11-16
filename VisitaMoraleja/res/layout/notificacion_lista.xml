@@ -6,13 +6,30 @@
     android:paddingBottom="2dp"
     android:onClick="mostrarDetalleSitio">
 
+    <ImageButton
+        android:id="@+id/notificacionIconoSitio"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="2dp"
+        android:layout_marginRight="2dp"
+        android:src="@drawable/abc_ab_stacked_solid_light_holo" />
+        
+    <TextView
+        android:id="@+id/notificacionNombreSitio"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/notificacionIconoSitio"
+        android:layout_alignTop="@+id/notificacionIconoSitio"
+        android:text="Large Text"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+    
     <TextView
         android:id="@+id/notificacionTitulo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="22dp"
-        android:layout_marginTop="8dp"
+        android:layout_below="@id/notificacionIconoSitio"
         android:text="Large Text"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
