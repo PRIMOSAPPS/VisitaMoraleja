@@ -82,7 +82,7 @@ public class PashParseReceiver extends BroadcastReceiver {
             	mBuilder.setVibrate(patronVibracion);
             }
             if(UtilPreferencias.ledRecibirNotificacion(context)) {
-            	mBuilder.setLights(Color.RED, 1, 0);
+            	mBuilder.setLights(Color.YELLOW, 1, 0);
             }
 
 
