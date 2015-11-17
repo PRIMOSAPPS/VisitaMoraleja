@@ -211,7 +211,7 @@
 		            android:background="@color/fondo_acerca_de_inicio"
 		            android:gravity="center"
 		            android:onClick="mostrarAcercade"
-		            android:text="@string/copiright"
+		            android:text="@string/quieres_aparecer_app"
 		            android:textColor="@color/blanco"
 		            android:textColorHint="@color/blanco"
 		            android:textSize="15sp" />

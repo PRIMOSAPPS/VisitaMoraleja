@@ -23,6 +23,7 @@
     <string name="serviciosReparaciones">Servicios y Reparaciones</string>
     <string name="favoritos">Favoritos</string>
     <string name="copiright">Diseño de Apps © 2015 - Acerda de</string>
+    <string name="quieres_aparecer_app">¿Quieres aparecer en esta App?</string>
     <string name="eventosNormal">Eventos normal</string>
     <string name="eventosActualizar">Actualizar</string>
     <string name="title_activity_eventos">EventosActivity</string>
