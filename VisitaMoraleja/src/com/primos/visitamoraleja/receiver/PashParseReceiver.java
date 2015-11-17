@@ -52,7 +52,7 @@ public class PashParseReceiver extends BroadcastReceiver {
 			
             Log.d(TAG, "Recibida una notificacion: " + notificacion.getTexto());
             
-            long[] patronVibracion = {500};
+            long[] patronVibracion = {2000, 1000};
             //Esto hace posible crear la notificación
             NotificationCompat.Builder mBuilder =
                     new NotificationCompat.Builder(context);
@@ -82,7 +82,7 @@ public class PashParseReceiver extends BroadcastReceiver {
             	mBuilder.setVibrate(patronVibracion);
             }
             if(UtilPreferencias.ledRecibirNotificacion(context)) {
-            	mBuilder.setLights(Color.YELLOW, 500, 500);
+            	mBuilder.setLights(Color.YELLOW, 2000, 1500);
             }
 
 
