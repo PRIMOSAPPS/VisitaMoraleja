@@ -100,7 +100,7 @@ public class MapaLugaresActivity extends FragmentActivity implements LocationLis
             Dialog dialog = GooglePlayServicesUtil.getErrorDialog(status, this, requestCode);
             dialog.show();
         } else {
-    		medioTransporte = UtilPreferencias.getMedioTransporteDefectoRuta(this);
+    		medioTransporte = null;//UtilPreferencias.getMedioTransporteDefectoRuta(this);
         	map = ((SupportMapFragment) getSupportFragmentManager()
         			.findFragmentById(R.id.map)).getMap();
 
@@ -145,7 +145,7 @@ public class MapaLugaresActivity extends FragmentActivity implements LocationLis
         		}
         	});
         	
-        	calcularAutomaticamente = UtilPreferencias.isCalcularRutaAutomaticamente(this);
+        	calcularAutomaticamente = false;//UtilPreferencias.isCalcularRutaAutomaticamente(this);
         	if(calcularAutomaticamente) {
         		// Marcamos la opcion de transporte, que puede no ser la configurada
         		// si ha cambiado la configuracion

@@ -71,6 +71,27 @@ public class UtilPreferencias {
 		return ratePrefs.getBoolean(PreferenciasActivity.PREFERENCIA_ACTUALIZAR_AUTOMATICAMENTE, true);
 	}
 	
+	public static boolean sonarRecibirNotificacion(Context contexto) {
+		Log.w("[UtilPreferencias]", "Se comprueba si hay que sonar al recibir una notificacion.");
+		return getValorCheck(contexto, PreferenciasActivity.PREFERENCIA_OPC_NOTIF_SONIDO, true);
+	}
+	
+	public static boolean vibrarRecibirNotificacion(Context contexto) {
+		Log.w("[UtilPreferencias]", "Se comprueba si hay que vibrar al recibir una notificacion.");
+		return getValorCheck(contexto, PreferenciasActivity.PREFERENCIA_OPC_NOTIF_VIBRACION, true);
+	}
+	
+	public static boolean ledRecibirNotificacion(Context contexto) {
+		Log.w("[UtilPreferencias]", "Se comprueba si hay que iluminar el led al recibir una notificacion.");
+		return getValorCheck(contexto, PreferenciasActivity.PREFERENCIA_OPC_NOTIF_LED, true);
+	}
+	
+	private static boolean getValorCheck(Context contexto, String preferencia, boolean valorDefecto) {
+		SharedPreferences ratePrefs = PreferenceManager
+                .getDefaultSharedPreferences(contexto);
+		return ratePrefs.getBoolean(preferencia, valorDefecto);
+	}
+	
 	/**
 	 * Devuelve el String que contiene los identificadores de las categorias para actualizar solo por estas categorias.
 	 * Los identificadores estan separados por comas
@@ -104,35 +125,6 @@ public class UtilPreferencias {
 		} finally {
 			dataSource.close();
 		}
-		return resul;
-	}
-	
-	/**
-	 * Devuelve true si esta activada la opcion de calcular la ruta por defecto
-	 * @param contexto
-	 * @return
-	 */
-	public static boolean isCalcularRutaAutomaticamente(Context contexto) {
-		Log.w("[UtilPreferencias]", "Se comprueba si las rutas deben calcularse automaticamente.");
-		
-		SharedPreferences ratePrefs = PreferenceManager
-                .getDefaultSharedPreferences(contexto);
-		return ratePrefs.getBoolean(PreferenciasActivity.PREFERENCIA_CALCULAR_RUTAS_DEFECTO, true);
-	}
-
-	/**
-	 * Devuelve el medio de transporte por defecto para calcular la ruta.
-	 * @param contexto
-	 * @return
-	 */
-	public static String getMedioTransporteDefectoRuta(Context contexto) {
-		Log.w("[UtilPreferencias]", "Devuelve el valor por defecto para el calculo de la ruta.");
-		
-		SharedPreferences ratePrefs = PreferenceManager
-                .getDefaultSharedPreferences(contexto);
-		
-		String resul = ratePrefs.getString(PreferenciasActivity.PREFERENCIA_TRANSPORTE_RUTA_DEFECTO, MapaLugaresActivity.COCHE);
-		Log.w("[UtilPreferencias]", "El medio de transporte por defecto es: " + resul);
 		return resul;
 	}
 }

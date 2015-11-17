@@ -24,23 +24,22 @@
     </PreferenceCategory>
 
     <PreferenceCategory
-        android:key="pref_cate_check_opciones_ruta"
-        android:title="@string/pref_cat_config_opciones_ruta" >
+        android:title="@string/pref_opc_notificaciones" >
         <CheckBoxPreference
             android:defaultValue="true"
-            android:key="pref_calcular_rutas_defecto"
-            android:summary="@string/pref_calcular_ruta_defecto_sum"
-            android:title="@string/pref_calcular_ruta_defecto" />
-    </PreferenceCategory>
-    
-    <PreferenceCategory
-        android:key="pref_cate_opciones_ruta" >
-        <ListPreference
-            android:defaultValue="driving"
-            android:entries="@array/textOpcionesTransporte"
-            android:entryValues="@array/valoresOpcionesTransporte"
-            android:key="pref_transporte_ruta_defecto"
-            android:title="@string/pref_cat_expli_config_opciones_ruta" />
+            android:key="pref_opc_notificaciones_sonido"
+            android:summary="@string/pref_opc_notificaciones_sonido_sum"
+            android:title="@string/pref_opc_notificaciones_sonido" />
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="pref_opc_notificaciones_vibracion"
+            android:summary="@string/pref_opc_notificaciones_vibracion_sum"
+            android:title="@string/pref_opc_notificaciones_vibracion" />
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="pref_opc_notificaciones_led"
+            android:summary="@string/pref_opc_notificaciones_led_sum"
+            android:title="@string/pref_opc_notificaciones_led" />
     </PreferenceCategory>
 
 	<Preference android:title="@string/acerca_de"

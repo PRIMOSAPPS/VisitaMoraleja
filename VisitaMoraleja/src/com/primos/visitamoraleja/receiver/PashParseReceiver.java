@@ -12,6 +12,7 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.media.RingtoneManager;
 import android.support.v4.app.NotificationCompat;
 import android.text.Html;
@@ -24,6 +25,7 @@ import com.primos.visitamoraleja.bdsqlite.datasource.NotificacionesDataSource;
 import com.primos.visitamoraleja.bdsqlite.datasource.SitiosDataSource;
 import com.primos.visitamoraleja.contenidos.Notificacion;
 import com.primos.visitamoraleja.contenidos.Sitio;
+import com.primos.visitamoraleja.util.UtilPreferencias;
 
 public class PashParseReceiver extends BroadcastReceiver {
 	private static final String TAG = "PushSenseiReceiver";
@@ -72,9 +74,16 @@ public class PashParseReceiver extends BroadcastReceiver {
                 .setContentTitle(notificacion.getTitulo())
                 .setContentText(notificacion.getTexto())
                 .setContentIntent(resultPendingIntent)
-                .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
-                .setVibrate(patronVibracion)
                 .setAutoCancel(true);
+            if(UtilPreferencias.sonarRecibirNotificacion(context)) {
+            	mBuilder.setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION));
+            }
+            if(UtilPreferencias.vibrarRecibirNotificacion(context)) {
+            	mBuilder.setVibrate(patronVibracion);
+            }
+            if(UtilPreferencias.ledRecibirNotificacion(context)) {
+            	mBuilder.setLights(Color.RED, 1, 0);
+            }
 
 
             NotificationManager mNotificationManager =

@@ -21,9 +21,9 @@ public class PreferenciasActivity extends PreferenceActivity {
 	public final static String PREFIJO_PREFERENCIA_CATEGORIAS = "categoria_";
 	public final static String PREFERENCIA_ACTUALIZAR_POR_CATEGORIAS = "pref_actualizar_categorias";
 	public final static String PREFERENCIA_ACTUALIZAR_AUTOMATICAMENTE = "pref_actualizar_automaticamente";
-	public final static String PREFERENCIA_CALCULAR_RUTAS_DEFECTO = "pref_calcular_rutas_defecto";
-	public final static String PREFERENCIA_CATE_OPCIONES_RUTA = "pref_cate_opciones_ruta";
-	public final static String PREFERENCIA_TRANSPORTE_RUTA_DEFECTO = "pref_transporte_ruta_defecto";
+	public final static String PREFERENCIA_OPC_NOTIF_SONIDO = "pref_opc_notificaciones_sonido";
+	public final static String PREFERENCIA_OPC_NOTIF_VIBRACION = "pref_opc_notificaciones_vibracion";
+	public final static String PREFERENCIA_OPC_NOTIF_LED = "pref_opc_notificaciones_led";
 	public final static String PREFERENCIA_ACTUALIZAR_AHORA = "actualizar_ahora";
 	public final static String PREFERENCIA_ACERCA_DE = "acerca_de";
 	
@@ -69,12 +69,27 @@ public class PreferenciasActivity extends PreferenceActivity {
 			}
 		});
 		
-		final CheckBoxPreference checkBoxCacularRutas = (CheckBoxPreference)findPreference(PREFERENCIA_CALCULAR_RUTAS_DEFECTO);
-		final PreferenceCategory categoriaOpcionesRuta = (PreferenceCategory)findPreference(PREFERENCIA_CATE_OPCIONES_RUTA);
-		checkBoxCacularRutas.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+		final CheckBoxPreference checkBoxNotifSonido = (CheckBoxPreference)findPreference(PREFERENCIA_OPC_NOTIF_SONIDO);
+		checkBoxNotifSonido.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
 			@Override
 			public boolean onPreferenceChange(Preference preference, Object newValue) {
-				categoriaOpcionesRuta.setEnabled(!checkBoxCacularRutas.isChecked());
+				targetCategory.setEnabled(!checkBoxNotifSonido.isChecked());
+				return true;
+			}
+		});
+		final CheckBoxPreference checkBoxNotifVibracion = (CheckBoxPreference)findPreference(PREFERENCIA_OPC_NOTIF_VIBRACION);
+		checkBoxNotifVibracion.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+			@Override
+			public boolean onPreferenceChange(Preference preference, Object newValue) {
+				targetCategory.setEnabled(!checkBoxNotifVibracion.isChecked());
+				return true;
+			}
+		});
+		final CheckBoxPreference checkBoxNotifLed = (CheckBoxPreference)findPreference(PREFERENCIA_OPC_NOTIF_LED);
+		checkBoxNotifLed.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+			@Override
+			public boolean onPreferenceChange(Preference preference, Object newValue) {
+				targetCategory.setEnabled(!checkBoxNotifLed.isChecked());
 				return true;
 			}
 		});
