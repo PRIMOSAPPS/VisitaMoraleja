@@ -8,4 +8,6 @@
    <color name="btnVerNotificaciones">#F4FA53</color>
    <color name="menu_lateral_color_texto">#929AF5</color>
    <color name="menu_lateral_color_fondo">#CDFA81</color>
+   <color name="fondo_acerca_de_inicio">#030E86</color>
+   
 </resources>
