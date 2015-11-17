@@ -69,31 +69,6 @@ public class PreferenciasActivity extends PreferenceActivity {
 			}
 		});
 		
-		final CheckBoxPreference checkBoxNotifSonido = (CheckBoxPreference)findPreference(PREFERENCIA_OPC_NOTIF_SONIDO);
-		checkBoxNotifSonido.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
-			@Override
-			public boolean onPreferenceChange(Preference preference, Object newValue) {
-				targetCategory.setEnabled(!checkBoxNotifSonido.isChecked());
-				return true;
-			}
-		});
-		final CheckBoxPreference checkBoxNotifVibracion = (CheckBoxPreference)findPreference(PREFERENCIA_OPC_NOTIF_VIBRACION);
-		checkBoxNotifVibracion.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
-			@Override
-			public boolean onPreferenceChange(Preference preference, Object newValue) {
-				targetCategory.setEnabled(!checkBoxNotifVibracion.isChecked());
-				return true;
-			}
-		});
-		final CheckBoxPreference checkBoxNotifLed = (CheckBoxPreference)findPreference(PREFERENCIA_OPC_NOTIF_LED);
-		checkBoxNotifLed.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
-			@Override
-			public boolean onPreferenceChange(Preference preference, Object newValue) {
-				targetCategory.setEnabled(!checkBoxNotifLed.isChecked());
-				return true;
-			}
-		});
-		
 		targetCategory.setEnabled(checkBoxPreference.isChecked());
 		Preference actualizarAhora = (Preference)findPreference(PREFERENCIA_ACTUALIZAR_AHORA);
 		actualizarAhora.setOnPreferenceClickListener(new OnPreferenceClickListener() {
