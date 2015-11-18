@@ -12,9 +12,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.FrameLayout;
-import android.widget.FrameLayout.LayoutParams;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
+import android.widget.RelativeLayout.LayoutParams;
 
 import com.primos.visitamoraleja.adaptadores.SitioAdaptador;
 import com.primos.visitamoraleja.bdsqlite.datasource.CategoriasDataSource;
@@ -57,10 +57,6 @@ public class EventoListaNormalActivity extends  ActionBarListActivity {
 			categoriasDataSource.close();
 		} else {
 			btn.setVisibility(View.GONE);
-			ListView listView =  getListView();
-			LayoutParams layoutParams = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT,
-					FrameLayout.LayoutParams.MATCH_PARENT);
-			listView.setLayoutParams(layoutParams);
 		}
 
 		mDrawerOptions = (ListView) findViewById(R.id.menuLateralListaSitios);
