@@ -12,8 +12,10 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:layout_marginLeft="2dp"
+        android:layout_marginLeft="5dp"
         android:layout_marginRight="2dp"
+        android:layout_marginTop="4dp"
+        android:background="@null"
         android:src="@drawable/abc_ab_stacked_solid_light_holo" />
         
     <TextView
@@ -53,6 +55,7 @@
         android:layout_alignParentTop="true"
         android:contentDescription="@string/descrip_borrar_notificacion"
         android:onClick="borrarNotificacion"
+        android:background="@null"
         android:src="@android:drawable/ic_menu_delete" />
     <!--
         ic_notification_clear_all
