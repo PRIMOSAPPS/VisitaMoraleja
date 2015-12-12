@@ -5,13 +5,13 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-import com.primos.visitamoraleja.util.UtilPropiedades;
-
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Bitmap.CompressFormat;
+import android.graphics.BitmapFactory;
 import android.os.Environment;
 import android.util.Log;
+
+import com.primos.visitamoraleja.util.UtilPropiedades;
 
 /**
  * Clase que se encarga de guardar y recuperar las imagenes en almacenamiento externo.
@@ -127,14 +127,8 @@ public class AlmacenamientoExterno implements ItfAlmacenamiento {
 	 */
 	private void addImagen(Bitmap imagen, String directorio, String nombreImagen, long idContenido) throws IOException {
 		if(imagen != null) {
-			validaDir(directorio, idContenido);
-//			validaDirEvento(idPoblacion, idEvento);
-
-			String dirImagenes = getDirApp() + directorio;
-			validarDirectorio(dirImagenes);
-			dirImagenes = dirImagenes + File.separator + idContenido;
-			validarDirectorio(dirImagenes);
-			String pathFichero = dirImagenes + File.separator + nombreImagen;
+			String pathFichero = getDirImagen(directorio, nombreImagen, idContenido);
+			
 			ByteArrayOutputStream bos = new ByteArrayOutputStream();
 			FileOutputStream fos = new FileOutputStream(pathFichero);
 			
@@ -149,6 +143,41 @@ public class AlmacenamientoExterno implements ItfAlmacenamiento {
 			fos.write(bos.toByteArray());
 			fos.close();
 		}
+	}
+	
+	/**
+	 * Devuelve el directorio donde debe estar la imagen indicada.
+	 * @param directorio
+	 * @param nombreImagen
+	 * @param idContenido
+	 * @return
+	 * @throws IOException
+	 */
+	private String getDirImagen(String directorio, String nombreImagen, long idContenido) throws IOException{
+		validaDir(directorio, idContenido);
+
+		String dirImagenes = getDirApp() + directorio;
+		validarDirectorio(dirImagenes);
+		dirImagenes = dirImagenes + File.separator + idContenido;
+		validarDirectorio(dirImagenes);
+		String pathFichero = dirImagenes + File.separator + nombreImagen;
+		
+		return pathFichero;
+	}
+	
+	/**
+	 * Borra la imagen indicada
+	 * @param directorio
+	 * @param nombreImagen
+	 * @param idContenido
+	 * @throws IOException
+	 */
+	private void borrarImagen(String directorio, String nombreImagen, long idContenido) throws IOException {
+
+		String pathFichero = getDirImagen(directorio, nombreImagen, idContenido);
+
+		File fichero = new File(pathFichero);
+		fichero.delete();
 	}
 
 	/* (non-Javadoc)
@@ -217,4 +246,16 @@ public class AlmacenamientoExterno implements ItfAlmacenamiento {
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see com.primos.visitamoraleja.almacenamiento.ItfAlmacenamiento2#addImagenSitio(android.graphics.Bitmap, java.lang.String, long)
+	 */
+	@Override
+	public void borrarImagenSitio(String nombreImagen, long idSitio) {
+		try {
+			Log.d("[AlmacenamientoExterno]", "addIconoEventos(" + nombreImagen + ", " + idSitio + ")");
+			borrarImagen(DIR_SITIOS, nombreImagen, idSitio);
+		} catch (IOException e) {
+			Log.e(TAG, "Error al trabajar con el almacenamiento externo al borrar una imagen para los sitios: ", e);
+		}
+	}
 }

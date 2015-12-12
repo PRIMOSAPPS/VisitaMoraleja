@@ -31,7 +31,7 @@ public interface ItfAlmacenamiento {
 	public abstract Bitmap getImagenSitio(long idSitio, String nombre);
 
 	/**
-	 * Aniade una imagen que pertenece a una categoria al almacenamiento externo cuyo nombre es nombreImagen y pertenece
+	 * Aniade una imagen que pertenece a una categoria al almacenamiento cuyo nombre es nombreImagen y pertenece
 	 * a una categoria con identificador idCategoria
 	 * @param imagen
 	 * @param nombreImagen
@@ -41,7 +41,7 @@ public interface ItfAlmacenamiento {
 			long idCategoria);
 
 	/**
-	 * Aniade una imagen que pertenece a un evento al almacenamiento externo cuyo nombre es nombreImagen y pertenece
+	 * Aniade una imagen que pertenece a un evento al almacenamiento cuyo nombre es nombreImagen y pertenece
 	 * a un evento con identificador idEvento
 	 * 
 	 * @param imagen
@@ -52,7 +52,7 @@ public interface ItfAlmacenamiento {
 			long idEvento);
 
 	/**
-	 * Aniade una imagen que pertenece a un sitio al almacenamiento externo cuyo nombre es nombreImagen y pertenece
+	 * Aniade una imagen que pertenece a un sitio al almacenamiento cuyo nombre es nombreImagen y pertenece
 	 * a un sitio con identificador idSitio
 	 * 
 	 * @param imagen
@@ -61,5 +61,15 @@ public interface ItfAlmacenamiento {
 	 */
 	public abstract void addImagenSitio(Bitmap imagen, String nombreImagen,
 			long idSitio);
+
+	/**
+	 * Borra una imagen que pertenece a un sitio al almacenamiento cuyo nombre es nombreImagen y pertenece
+	 * a un sitio con identificador idSitio
+	 * 
+	 * @param imagen
+	 * @param nombreImagen
+	 * @param idSitio
+	 */
+	public abstract void borrarImagenSitio(String nombreImagen, long idSitio);
 
 }

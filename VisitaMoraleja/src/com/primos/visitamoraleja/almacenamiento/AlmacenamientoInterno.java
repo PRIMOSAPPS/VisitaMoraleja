@@ -3,6 +3,7 @@ package com.primos.visitamoraleja.almacenamiento;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -84,7 +85,11 @@ public class AlmacenamientoInterno implements ItfAlmacenamiento {
 //			fos.close();
 		}
 	}
-
+	
+	private void borrarImagen(String nombreImg) throws FileNotFoundException {
+		contexto.deleteFile(nombreImg);
+	}
+	
 	@Override
 	public void addIconoCategoria(Bitmap imagen, String nombreImagen,
 			long idCategoria) {
@@ -119,5 +124,18 @@ public class AlmacenamientoInterno implements ItfAlmacenamiento {
 			Log.e(TAG, "Error guardando la imagen del sitio: " + idSitio + " nombre " + nombreImagen, e);
 		}
 	}
-
+	
+	/* (non-Javadoc)
+	 * @see com.primos.visitamoraleja.almacenamiento.ItfAlmacenamiento2#addImagenSitio(android.graphics.Bitmap, java.lang.String, long)
+	 */
+	@Override
+	public void borrarImagenSitio(String nombreImagen, long idSitio) {
+		try {
+			String nombreImg = PREFIJO_SITIOS + nombreImagen;
+			Log.d("[AlmacenamientoInterno]", "borrarImagenSitio(" + nombreImg + ", " + idSitio + ")");
+			borrarImagen(nombreImg);
+		} catch (IOException e) {
+			Log.e(TAG, "Error borrando la imagen del sitio: " + idSitio + " nombre " + nombreImagen, e);
+		}
+	}
 }

@@ -66,7 +66,6 @@ public class Actualizador {
 	 * @throws EventosException
 	 */
 	public void actualizarSitios(List<Sitio> lstSitios) throws EventosException {
-		ItfAlmacenamiento almacenamiento = AlmacenamientoFactory.getAlmacenamiento(contexto);
 
 		SitiosDataSource dataSource = new SitiosDataSource(contexto);
 		try {
@@ -76,21 +75,86 @@ public class Actualizador {
 			for(Sitio sitio : lstSitios) {
 				long id = sitio.getId();
 				Sitio existente = dataSource.getById(id);
+				
 				if(existente == null) {
-					dataSource.insertar(sitio);
+					if(sitio.isActivo()) {
+						dataSource.insertar(sitio);
+						addImagenesSitio(sitio);
+					}
 				} else {
-					dataSource.actualizar(sitio);
+					if(sitio.isActivo()) {
+						// Se borran las imagenes que existiendo anteriormente, ya no forman parte del sitio
+						borrarImagenesBorradas(sitio, existente);
+						
+						dataSource.actualizar(sitio);
+						addImagenesSitio(sitio);
+					} else {
+						dataSource.delete(existente);
+						borrarImagenesSitio(existente);
+					}
 				}
-				long idSitio = sitio.getId();
-				almacenamiento.addImagenSitio(sitio.getLogotipo(), sitio.getNombreLogotipo(), idSitio);
-				almacenamiento.addImagenSitio(sitio.getImagen1(), sitio.getNombreImagen1(), idSitio);
-				almacenamiento.addImagenSitio(sitio.getImagen2(), sitio.getNombreImagen2(), idSitio);
-				almacenamiento.addImagenSitio(sitio.getImagen3(), sitio.getNombreImagen3(), idSitio);
-				almacenamiento.addImagenSitio(sitio.getImagen4(), sitio.getNombreImagen4(), idSitio);
+
 			}
 		} finally {
 			dataSource.close();
 		}
+	}
+	
+	/**
+	 * Aniade las imagenes del sitio al almacenamiento
+	 * @param sitio
+	 */
+	private void addImagenesSitio(Sitio sitio) {
+		ItfAlmacenamiento almacenamiento = AlmacenamientoFactory.getAlmacenamiento(contexto);
+		long idSitio = sitio.getId();
+		almacenamiento.addImagenSitio(sitio.getLogotipo(), sitio.getNombreLogotipo(), idSitio);
+		almacenamiento.addImagenSitio(sitio.getImagen1(), sitio.getNombreImagen1(), idSitio);
+		almacenamiento.addImagenSitio(sitio.getImagen2(), sitio.getNombreImagen2(), idSitio);
+		almacenamiento.addImagenSitio(sitio.getImagen3(), sitio.getNombreImagen3(), idSitio);
+		almacenamiento.addImagenSitio(sitio.getImagen4(), sitio.getNombreImagen4(), idSitio);
+	}
+	
+	/**
+	 * Borra las imagenes que ya no forman parte del sitio
+	 * @param sitioActualizado
+	 * @param sitioExistente
+	 */
+	private void borrarImagenesBorradas(Sitio sitioActualizado, Sitio sitioExistente) {
+		borrarImagenSiBorrada(sitioExistente, sitioActualizado.getNombreLogotipo(), sitioExistente.getNombreLogotipo());
+		borrarImagenSiBorrada(sitioExistente, sitioActualizado.getNombreImagen1(), sitioExistente.getNombreImagen1());
+		borrarImagenSiBorrada(sitioExistente, sitioActualizado.getNombreImagen2(), sitioExistente.getNombreImagen2());
+		borrarImagenSiBorrada(sitioExistente, sitioActualizado.getNombreImagen3(), sitioExistente.getNombreImagen3());
+		borrarImagenSiBorrada(sitioExistente, sitioActualizado.getNombreImagen4(), sitioExistente.getNombreImagen4());
+	}
+	
+	/**
+	 * Borra una imagen si el nombre ya no coincide con la nueva o ha sido borrada
+	 * @param sitio
+	 * @param nombreImagenActualizada
+	 * @param nombreImagenExistente
+	 */
+	private void borrarImagenSiBorrada(Sitio sitio, String nombreImagenActualizada, String nombreImagenExistente) {
+		if(nombreImagenExistente != null) {
+			ItfAlmacenamiento almacenamiento = AlmacenamientoFactory.getAlmacenamiento(contexto);
+			long idSitio = sitio.getId();
+			if(nombreImagenActualizada == null || !nombreImagenActualizada.equals(nombreImagenExistente)) {
+				almacenamiento.borrarImagenSitio(nombreImagenExistente, idSitio);
+			}
+		}
+	}
+	
+	/**
+	 * Borra las imagenes del sitio al almacenamiento
+	 * @param sitio
+	 */
+	private void borrarImagenesSitio(Sitio sitio) {
+		ItfAlmacenamiento almacenamiento = AlmacenamientoFactory.getAlmacenamiento(contexto);
+		long idSitio = sitio.getId();
+		almacenamiento.borrarImagenSitio(sitio.getNombreLogotipo(), idSitio);
+		almacenamiento.borrarImagenSitio(sitio.getNombreImagen1(), idSitio);
+		almacenamiento.borrarImagenSitio(sitio.getNombreImagen2(), idSitio);
+		almacenamiento.borrarImagenSitio(sitio.getNombreImagen3(), idSitio);
+		almacenamiento.borrarImagenSitio(sitio.getNombreImagen4(), idSitio);
 	}
 
 	/**
