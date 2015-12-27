@@ -146,7 +146,11 @@ public class DetalleEventoActivity extends ActionBarListActivity implements
 		CategoriasDataSource categoriaDataSource = new CategoriasDataSource(this);
 		categoriaDataSource.open();
 		Categoria categoria = categoriaDataSource.getById(sitio.getIdCategoria());
-		setTitulo(categoria.getNombre());
+		if(categoria == null) {
+			setTitulo("");
+		} else {
+			setTitulo(categoria.getNombre());
+		}
 		categoriaDataSource.close();
 		
 		mDrawerOptions = (ListView) findViewById(R.id.menuLateralListaSitios);
