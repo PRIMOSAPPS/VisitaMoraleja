@@ -62,7 +62,6 @@
     <string name="title_activity_notificaciones">Notificaciones</string>
     <string name="title_activity_lista_eventos">Eventos</string>
     <string name="title_activity_detalle_evento_temporal">DetalleEventoTemporalActivity</string>
-
     <string name="texto_autocompletar">Escriba al menos 2 caracteres para comenzar a autocompletar.</string>
     <string name="title_dialog_buscador">Buscador</string>
     <string name="title_dialog_indicaciones_ruta">Listado de indicaciones</string>
@@ -88,5 +87,11 @@
     <string name="txt_aviso">Aviso</string>
     <string name="txt_aceptar">Aceptar</string>
     <string name="txt_cancelar">Cancelar</string>
+    <string name="txt_titulo_actualizacion">Título actualización</string>
+    <string name="txt_texto_msj_actualizacion">Se van a descargar {0} KB aproximadamente. ¿Deseas continuar?</string>
+    <string name="txt_texto__actualizar_ahora">Actualizar ahora</string>
+    <string name="txt_texto_ahora_no">Ahora no</string>
+    <string name="no_datos_actualizar">No hay datos para actualizar.</string>
+    <string name="error_durante_actualizacion">Se ha producido un error durante la actualización de los datos.</string>
     
 </resources>
