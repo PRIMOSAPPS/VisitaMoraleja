@@ -17,6 +17,7 @@ import com.primos.visitamoraleja.contenidos.Evento;
 import com.primos.visitamoraleja.contenidos.Sitio;
 import com.primos.visitamoraleja.xml.ManejadorCategoriasXML;
 import com.primos.visitamoraleja.xml.ManejadorEventosXML;
+import com.primos.visitamoraleja.xml.ManejadorSitiosActualizablesXML;
 import com.primos.visitamoraleja.xml.ManejadorSitiosXML;
 
 /**
@@ -56,6 +57,19 @@ public class EventosXML_SAX {
 		return manejador.getLstElements();
 	}
 
+	public List<Sitio> leerSitiosActualizablesXML(InputStream is) throws ParserConfigurationException, SAXException, IOException {
+		
+		SAXParserFactory factory = SAXParserFactory.newInstance();
+		SAXParser parser = factory.newSAXParser();
+		XMLReader reader = parser.getXMLReader();
+		
+		ManejadorSitiosActualizablesXML manejador = new ManejadorSitiosActualizablesXML();
+		reader.setContentHandler(manejador);
+		reader.parse(new InputSource(is));
+		
+		return manejador.getLstElements();
+	}
+	
 	public List<Evento> leerEventosXML(InputStream is) throws ParserConfigurationException, SAXException, IOException {
 		
 		SAXParserFactory factory = SAXParserFactory.newInstance();

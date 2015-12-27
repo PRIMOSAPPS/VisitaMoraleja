@@ -37,6 +37,10 @@ public class UtilPropiedades {
 	 */
 	public final static String PROP_RUTA_SITIOS_XML = "RutaSitiosXML";
 	/**
+	 * Ruta en el servidor para pedir los identificadores de los sitios actualizables.
+	 */
+	public final static String PROP_RUTA_SITIOS_ACTUALIZBLES_XML = "RutaSitiosActualizablesXML";
+	/**
 	 * Ruta en el servidor para pedir los datos de actualizacion de los eventos
 	 */
 	public final static String PROP_RUTA_EVENTOS_XML = "RutaEventosXML";

@@ -13,6 +13,7 @@ import android.preference.PreferenceActivity;
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceManager;
 import android.util.Log;
+
 import com.primos.visitamoraleja.actualizador.ThreadActualizador;
 import com.primos.visitamoraleja.bdsqlite.datasource.CategoriasDataSource;
 import com.primos.visitamoraleja.contenidos.Categoria;
@@ -100,6 +101,7 @@ public class PreferenciasActivity extends PreferenceActivity {
 //		actualizador.execute((Void)null);
 		
 		ThreadActualizador actualizador = new ThreadActualizador(this);
+		actualizador.setMostrarNoDatos(true);
 		actualizador.start();
 	}
 	
