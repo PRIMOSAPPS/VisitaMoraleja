@@ -19,7 +19,7 @@ public class UtilConsultaActualizar {
 
 		final AlertDialog.Builder adb = new AlertDialog.Builder(contexto);
 
-		int tamanio = numeroSitios * 100;
+		int tamanio = numeroSitios / 10;
 		String txtMsjActualizacion = contexto.getResources().getString(R.string.txt_texto_msj_actualizacion);
 		adb.setMessage(MessageFormat.format(txtMsjActualizacion, tamanio));
 		adb.setTitle(R.string.txt_titulo_actualizacion);
