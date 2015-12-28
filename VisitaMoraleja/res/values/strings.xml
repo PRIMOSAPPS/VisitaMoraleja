@@ -88,7 +88,7 @@
     <string name="txt_aceptar">Aceptar</string>
     <string name="txt_cancelar">Cancelar</string>
     <string name="txt_titulo_actualizacion">Título actualización</string>
-    <string name="txt_texto_msj_actualizacion">Se van a descargar {0} KB aproximadamente. ¿Deseas continuar?</string>
+    <string name="txt_texto_msj_actualizacion">Se van a descargar {0} Mb aproximadamente. ¿Deseas continuar?</string>
     <string name="txt_texto__actualizar_ahora">Actualizar ahora</string>
     <string name="txt_texto_ahora_no">Ahora no</string>
     <string name="no_datos_actualizar">No hay datos para actualizar.</string>
