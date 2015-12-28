@@ -31,7 +31,7 @@
         android:id="@+id/notificacionTitulo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/notificacionIconoSitio"
+        android:layout_below="@id/notificacionNombreSitio"
         android:text="Large Text"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
