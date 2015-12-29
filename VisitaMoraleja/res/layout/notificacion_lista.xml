@@ -22,8 +22,9 @@
         android:id="@+id/notificacionNombreSitio"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@+id/notificacionIconoSitio"
+        android:layout_toLeftOf="@+id/notificacionDelete"
         android:layout_alignTop="@+id/notificacionIconoSitio"
+        android:layout_toRightOf="@+id/notificacionIconoSitio"
         android:text="Large Text"
         android:textAppearance="?android:attr/textAppearanceLarge" />
     
