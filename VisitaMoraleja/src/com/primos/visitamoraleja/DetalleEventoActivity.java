@@ -110,6 +110,7 @@ public class DetalleEventoActivity extends ActionBarListActivity implements
 				botonTelefono.setOnClickListener(this);
 			}else {
 				textTelefono.setText(sitio.getTelefonosFijos());
+				botonTelefono.setOnClickListener(this);
 			}
 		}else {
 			if (sitio.getTelefonosMoviles().length()>0) {
@@ -186,7 +187,7 @@ public class DetalleEventoActivity extends ActionBarListActivity implements
 
 		switch (boton_pulsado.getId()) {
 		case R.id.botonTelefono:
-			realizarLlamada(sitio.getTelefonosFijos());
+			realizarLlamada(sitio);
 			break;
 		case R.id.botonLocalizar:
 			localizarSitio(lugar, latitud, longitud);
@@ -379,21 +380,27 @@ public class DetalleEventoActivity extends ActionBarListActivity implements
 	// aparte que había que modificar permisos en el manifest qu eno me gustan
 	// ni a la gente tampoco, me parecía
 	// demasiado atrevido.
-	private void realizarLlamada(String numero) {
-		// TODO Auto-generated method stub
-		numero = numero.trim();
+	private void realizarLlamada(Sitio sitio) {
+		String numeroFijo = sitio.getTelefonosFijos();
+		String numeroMoviles = sitio.getTelefonosMoviles();
+		numeroFijo = numeroFijo.trim();
+		numeroMoviles = numeroMoviles.trim();
 		// Toast.makeText(getBaseContext(),numero,Toast.LENGTH_SHORT).show();
 		try {
-			if (numero.length() > 0) {
-				// realiza la llamada
-				Uri marcarnumero = Uri.parse("tel:" + numero.toString());
-				Intent intent = new Intent(Intent.ACTION_DIAL, marcarnumero);
-				startActivity(intent);
-			} else {
+			if (numeroFijo.length() == 0 && numeroMoviles.length() == 0) {
 				// si el sitio no tiene numero
 				Toast.makeText(getBaseContext(),
 						"Sin Numero de Telefono Asociado", Toast.LENGTH_SHORT)
 						.show();
+			} else {
+				String numero = numeroFijo;
+				if (numeroMoviles.length() > 0) {
+					numero = numeroMoviles;
+				}
+				// realiza la llamada
+				Uri marcarnumero = Uri.parse("tel:" + numero.toString());
+				Intent intent = new Intent(Intent.ACTION_DIAL, marcarnumero);
+				startActivity(intent);
 			}
 
 		} catch (ActivityNotFoundException activityException) {
