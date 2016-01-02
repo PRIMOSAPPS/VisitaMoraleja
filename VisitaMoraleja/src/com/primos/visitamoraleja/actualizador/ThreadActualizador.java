@@ -2,13 +2,17 @@ package com.primos.visitamoraleja.actualizador;
 
 import java.util.List;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.primos.visitamoraleja.IPrimosActividyLifeCycleEmisor;
+import com.primos.visitamoraleja.IPrimosActivityLifecycleCallbacks;
 import com.primos.visitamoraleja.R;
 import com.primos.visitamoraleja.bdsqlite.datasource.CategoriasDataSource;
 import com.primos.visitamoraleja.bdsqlite.datasource.EventosDataSource;
@@ -32,7 +36,20 @@ import com.primos.visitamoraleja.util.UtilPreferencias;
  * @author h
  * 
  */
-public class ThreadActualizador extends Thread {
+public class ThreadActualizador extends Thread implements IPrimosActivityLifecycleCallbacks{
+	private enum ESTADO_ACTUALIZACION {
+		PARADO(0), PREGUNTANDO_SI_ACTUALIZAR(1), ACTUALIZANDO(2), SIN_DATOS(3), EXCEPCION(4), FINALIZADO(5);
+		
+		private int idEstado;
+		
+		ESTADO_ACTUALIZACION(int idEstado) {
+			this.idEstado = idEstado;
+		}
+
+		public int getIdEstado() {
+			return idEstado;
+		}
+	};
 	private final static int MOSTRAR_CONSULTA_ACTUALIZAR = 1;
 	private final static int INICIO_ACTUALIZAR = 2;
 	private final static int FIN_ACTUALIZAR = 3;
@@ -43,9 +60,13 @@ public class ThreadActualizador extends Thread {
 	private Context contexto;
 
 	private Handler handlerBarraProgresoActualizacion;
+	private Handler handlerBarraProgresoActualizacion2;
 	private Object semaforo = new Object();
 	private UtilConsultaActualizar consultaActualizar = new UtilConsultaActualizar();
+	private ProgressDialog dialogoProgreso;
 	private boolean mostrarNoDatos = false;
+	private ESTADO_ACTUALIZACION estadoActualizacion = ESTADO_ACTUALIZACION.PARADO;
+	private int numSitiosActualizados;
 
 	/**
 	 * 
@@ -55,57 +76,60 @@ public class ThreadActualizador extends Thread {
 		super("ThreadActualizador");
 		Log.i("AsyncTaskActualizador", "INICIO");
 		this.contexto = contexto;
-		this.handlerBarraProgresoActualizacion = new Handler(
-				new Handler.Callback() {
-					private ProgressDialog dialogoProgreso;
-					private int numSitiosActualizar;
-					private int numSitiosActualizados = 0;
+		registrarActivityListener();
+//		this.handlerBarraProgresoActualizacion2 = new Handler();
+		this.handlerBarraProgresoActualizacion = new Handler(contexto.getMainLooper(),
+			new Handler.Callback() {
+				private ProgressDialog dialogoProgreso;
+				private int numSitiosActualizar;
+				private int numSitiosActualizados = 0;
 
-					@Override
-					public boolean handleMessage(Message msg) {
-						switch (msg.arg1) {
-						case MOSTRAR_CONSULTA_ACTUALIZAR:
-							numSitiosActualizar = msg.arg2;
-							consultaActualizar.consultaActualizar(contexto,
-									semaforo, numSitiosActualizar);
-							break;
-						case INICIO_ACTUALIZAR:
-							dialogoProgreso = new ProgressDialog(contexto);
-							dialogoProgreso
-									.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-							dialogoProgreso.setMessage("Procesando...");
-							dialogoProgreso.setCancelable(false);
-							dialogoProgreso.setCanceledOnTouchOutside(false);
-							dialogoProgreso.setMax(numSitiosActualizar);
-							dialogoProgreso.setProgress(numSitiosActualizados);
-							dialogoProgreso.show();
-							break;
-						case FIN_ACTUALIZAR:
-							dialogoProgreso.cancel();
-							break;
-						case EXCEPCION:
-							Toast toastError = Toast.makeText(contexto,
-									R.string.error_durante_actualizacion, Toast.LENGTH_SHORT);
-							toastError.show();
-							dialogoProgreso.cancel();
-							break;
-						case SITIO_ACTUALIZANDO:
-							Sitio sitio = (Sitio) msg.obj;
-							dialogoProgreso.setMessage("Actualizando "
-									+ sitio.getNombre());
-							dialogoProgreso.setProgress(numSitiosActualizados);
-							numSitiosActualizados++;
-							break;
-						case NO_DATOS_ACTUALIZAR:
-							Toast toastNoDatos = Toast.makeText(contexto,
-									R.string.no_datos_actualizar, Toast.LENGTH_SHORT);
-							toastNoDatos.show();
-							break;
-						}
-
-						return false;
+				@Override
+				public boolean handleMessage(Message msg) {
+					switch (msg.arg1) {
+					case MOSTRAR_CONSULTA_ACTUALIZAR:
+						numSitiosActualizar = msg.arg2;
+						consultaActualizar.consultaActualizar(contexto,
+								semaforo, numSitiosActualizar);
+						break;
+					case INICIO_ACTUALIZAR:
+						dialogoProgreso = new ProgressDialog(contexto);
+						dialogoProgreso
+								.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+						dialogoProgreso.setMessage("Procesando...");
+						dialogoProgreso.setCancelable(false);
+						dialogoProgreso.setCanceledOnTouchOutside(false);
+						dialogoProgreso.setMax(numSitiosActualizar);
+						dialogoProgreso.setProgress(numSitiosActualizados);
+						dialogoProgreso.show();
+						break;
+					case FIN_ACTUALIZAR:
+						dialogoProgreso.cancel();
+						break;
+					case EXCEPCION:
+						Toast toastError = Toast.makeText(contexto,
+								R.string.error_durante_actualizacion, Toast.LENGTH_SHORT);
+						toastError.show();
+						dialogoProgreso.cancel();
+						break;
+					case SITIO_ACTUALIZANDO:
+						Sitio sitio = (Sitio) msg.obj;
+						dialogoProgreso.setMessage("Actualizando "
+								+ sitio.getNombre());
+						dialogoProgreso.setProgress(numSitiosActualizados);
+						numSitiosActualizados++;
+						break;
+					case NO_DATOS_ACTUALIZAR:
+						Toast toastNoDatos = Toast.makeText(contexto,
+								R.string.no_datos_actualizar, Toast.LENGTH_SHORT);
+						toastNoDatos.show();
+						break;
 					}
-				});
+
+					return false;
+				}
+			});
+		
 	}
 
 	/**
@@ -155,16 +179,24 @@ public class ThreadActualizador extends Thread {
 
 			long ultimaActualizacion = dataSource.getUltimaActualizacion();
 
-			List<Sitio> lstSitiosActualizables = cs
+			final List<Sitio> lstSitiosActualizables = cs
 					.getListaSitiosActualizables(ultimaActualizacion,
 							idsCategoriasActualizacion);
-
+			
 			if (!lstSitiosActualizables.isEmpty()) {
 				synchronized (semaforo) {
 					try {
 						Message msjConsulta = new Message();
 						msjConsulta.arg1 = MOSTRAR_CONSULTA_ACTUALIZAR;
 						msjConsulta.arg2 = lstSitiosActualizables.size();
+						estadoActualizacion = ESTADO_ACTUALIZACION.PREGUNTANDO_SI_ACTUALIZAR;
+//						handlerBarraProgresoActualizacion2.post(new Runnable() {
+//							@Override
+//							public void run() {
+//								consultaActualizar.consultaActualizar(contexto,
+//										semaforo, lstSitiosActualizables.size());
+//							}
+//						});
 						handlerBarraProgresoActualizacion
 								.sendMessage(msjConsulta);
 
@@ -173,15 +205,41 @@ public class ThreadActualizador extends Thread {
 						if (consultaActualizar.isConsultaActualizar()) {
 							Message msjInicio = new Message();
 							msjInicio.arg1 = INICIO_ACTUALIZAR;
+							
+							numSitiosActualizados = 0;
+							estadoActualizacion = ESTADO_ACTUALIZACION.ACTUALIZANDO;
+//							handlerBarraProgresoActualizacion2.post(new Runnable() {
+//								@Override
+//								public void run() {
+//									dialogoProgreso = new ProgressDialog(contexto);
+//									dialogoProgreso
+//											.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+//									dialogoProgreso.setMessage("Procesando...");
+//									dialogoProgreso.setCancelable(false);
+//									dialogoProgreso.setCanceledOnTouchOutside(false);
+//									dialogoProgreso.setMax(lstSitiosActualizables.size());
+//									dialogoProgreso.setProgress(numSitiosActualizados);
+//									dialogoProgreso.show();
+//								}
+//							});
 							handlerBarraProgresoActualizacion
 									.sendMessage(msjInicio);
 
-							for (Sitio sitio : lstSitiosActualizables) {
+							for (final Sitio sitio : lstSitiosActualizables) {
 								Message msj = new Message();
 								msj.arg1 = SITIO_ACTUALIZANDO;
 								msj.obj = sitio;
 								handlerBarraProgresoActualizacion
 										.sendMessage(msj);
+//								handlerBarraProgresoActualizacion2.post(new Runnable() {
+//									@Override
+//									public void run() {
+//										dialogoProgreso.setMessage("Actualizando "
+//												+ sitio.getNombre());
+//										dialogoProgreso.setProgress(numSitiosActualizados);
+//										numSitiosActualizados++;
+//									}
+//								});
 								List<Sitio> lstSitios = cs.getSitio(sitio);
 								Actualizador actualizador = new Actualizador(
 										contexto);
@@ -192,12 +250,32 @@ public class ThreadActualizador extends Thread {
 							msjFin.arg1 = FIN_ACTUALIZAR;
 							handlerBarraProgresoActualizacion
 									.sendMessage(msjFin);
+							deregistrarActivityListener();
+							estadoActualizacion = ESTADO_ACTUALIZACION.FINALIZADO;
+//							handlerBarraProgresoActualizacion2.post(new Runnable() {
+//								@Override
+//								public void run() {
+//									dialogoProgreso.dismiss();
+//								}
+//							});
+						} else {
+							estadoActualizacion = ESTADO_ACTUALIZACION.PARADO;
 						}
 					} catch (Exception e) {
 						Message msjExcepcion = new Message();
 						msjExcepcion.arg1 = EXCEPCION;
 						handlerBarraProgresoActualizacion
 								.sendMessage(msjExcepcion);
+						estadoActualizacion = ESTADO_ACTUALIZACION.EXCEPCION;
+						deregistrarActivityListener();
+//						handlerBarraProgresoActualizacion2.post(new Runnable() {
+//							@Override
+//							public void run() {
+//								Toast toastError = Toast.makeText(contexto,
+//										R.string.error_durante_actualizacion, Toast.LENGTH_SHORT);
+//								toastError.show();
+//							}
+//						});
 						throw new EventosException(
 								"Error en la sincronizacion al consultar si actualizar.",
 								e);
@@ -209,6 +287,16 @@ public class ThreadActualizador extends Thread {
 					msjNoDatosActualizar.arg1 = NO_DATOS_ACTUALIZAR;
 					handlerBarraProgresoActualizacion
 							.sendMessage(msjNoDatosActualizar);
+					
+					estadoActualizacion = ESTADO_ACTUALIZACION.SIN_DATOS;
+//					handlerBarraProgresoActualizacion2.post(new Runnable() {
+//						@Override
+//						public void run() {
+//							Toast toastNoDatos = Toast.makeText(contexto,
+//									R.string.no_datos_actualizar, Toast.LENGTH_SHORT);
+//							toastNoDatos.show();
+//						}
+//					});
 					mostrarNoDatos = false;
 				}
 			}
@@ -265,6 +353,64 @@ public class ThreadActualizador extends Thread {
 
 	public void setMostrarNoDatos(boolean mostrarNoDatos) {
 		this.mostrarNoDatos = mostrarNoDatos;
+	}
+	
+	private void registrarActivityListener() {
+		if(contexto instanceof IPrimosActividyLifeCycleEmisor) {
+			((IPrimosActividyLifeCycleEmisor)contexto).registrar(this);
+		}
+	}
+	
+	private void deregistrarActivityListener() {
+		if(contexto instanceof IPrimosActividyLifeCycleEmisor) {
+			((IPrimosActividyLifeCycleEmisor)contexto).deregistrar(this);
+		}
+	}
+
+	@Override
+	public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
+	}
+
+	@Override
+	public void onActivityDestroyed(Activity activity) {
+		Log.e("ThreadActualizador", "onActivityDestroyed");
+		if(estadoActualizacion == ESTADO_ACTUALIZACION.PREGUNTANDO_SI_ACTUALIZAR) {
+			consultaActualizar.dismissDialogo();
+		} else if(estadoActualizacion == ESTADO_ACTUALIZACION.ACTUALIZANDO) {
+			dialogoProgreso.dismiss();
+		}
+	}
+
+	@Override
+	public void onActivityPaused(Activity activity) {
+		Log.e("ThreadActualizador", "onActivityPaused");
+		if(estadoActualizacion == ESTADO_ACTUALIZACION.PREGUNTANDO_SI_ACTUALIZAR) {
+			consultaActualizar.dismissDialogo();
+		} else if(estadoActualizacion == ESTADO_ACTUALIZACION.ACTUALIZANDO) {
+			dialogoProgreso.cancel();
+		}
+	}
+
+	@Override
+	public void onActivityResumed(Activity activity) {
+		Log.e("ThreadActualizador", "onActivityResumed");
+		if(estadoActualizacion == ESTADO_ACTUALIZACION.PREGUNTANDO_SI_ACTUALIZAR) {
+			consultaActualizar.showDialogo();
+		} else if(estadoActualizacion == ESTADO_ACTUALIZACION.ACTUALIZANDO) {
+			dialogoProgreso.show();
+		}
+	}
+
+	@Override
+	public void onActivitySaveInstanceState(Activity activity, Bundle outState) {
+	}
+
+	@Override
+	public void onActivityStarted(Activity activity) {
+	}
+
+	@Override
+	public void onActivityStopped(Activity activity) {
 	}
 
 }

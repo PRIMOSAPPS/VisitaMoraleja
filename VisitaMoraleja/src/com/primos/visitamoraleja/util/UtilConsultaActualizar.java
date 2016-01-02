@@ -11,6 +11,8 @@ import com.primos.visitamoraleja.R;
 public class UtilConsultaActualizar {
 	private boolean consultaActualizar;
 	
+	private AlertDialog dialog;
+	
 	public boolean isConsultaActualizar() {
 		return consultaActualizar;
 	}
@@ -28,7 +30,7 @@ public class UtilConsultaActualizar {
 			public void onClick(DialogInterface dialog, int which) {
 				synchronized(semaforo) {
 					consultaActualizar = true;
-					dialog.cancel();
+					dialog.dismiss();
 					semaforo.notify();
 				}
 			}
@@ -38,14 +40,32 @@ public class UtilConsultaActualizar {
 			public void onClick(DialogInterface dialog, int which) {
 				synchronized(semaforo) {
 					consultaActualizar = false;
-					dialog.cancel();
+					dialog.dismiss();
 					semaforo.notify();
 				}
 			}
 		});
-		AlertDialog dialog = adb.create();
+		dialog = adb.create();
 		dialog.setCancelable(false);
 		dialog.setCanceledOnTouchOutside(false);
 		dialog.show();
+	}
+
+	public void cancelDialogo() {
+		if(dialog != null) {
+			dialog.cancel();
+		}
+	}
+
+	public void dismissDialogo() {
+		if(dialog != null) {
+			dialog.dismiss();
+		}
+	}
+
+	public void showDialogo() {
+		if(dialog != null) {
+			dialog.show();
+		}
 	}
 }

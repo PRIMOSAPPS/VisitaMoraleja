@@ -1,5 +1,8 @@
 package com.primos.visitamoraleja;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
@@ -15,16 +18,18 @@ import android.widget.Toast;
 
 import com.primos.visitamoraleja.actualizador.ThreadActualizador;
 import com.primos.visitamoraleja.menulateral.ConfigMenuLateral;
+import com.primos.visitamoraleja.util.UtilConsultaActualizar;
 import com.primos.visitamoraleja.util.UtilPreferencias;
 import com.primos.visitamoraleja.views.DialogoAutocompletar;
 
 
 
-public class MainActivity extends ActionBarActivity{
+public class MainActivity extends ActionBarActivity implements IPrimosActividyLifeCycleEmisor {
 	public final static String ACTUALIZAR = "actualizar";
 	
 	private DrawerLayout mDrawer;
 	private ListView mDrawerOptions;
+	private List<IPrimosActivityLifecycleCallbacks> lstActivityLifeCicleListener = new ArrayList<>();
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -130,6 +135,38 @@ public class MainActivity extends ActionBarActivity{
 		actualizar();
 //		AsyncTaskActualizador actualizador = new AsyncTaskActualizador(this, true);
 //		actualizador.execute((Void)null);
+	}
+	
+	public void registrar(IPrimosActivityLifecycleCallbacks activityLifeCicleListener) {
+		lstActivityLifeCicleListener.add(activityLifeCicleListener);
+	}
+	
+	public void deregistrar(IPrimosActivityLifecycleCallbacks activityLifeCicleListener) {
+		lstActivityLifeCicleListener.remove(activityLifeCicleListener);
+	}
+
+	@Override
+	protected void onPause() {
+		super.onPause();
+		for(IPrimosActivityLifecycleCallbacks listener : lstActivityLifeCicleListener) {
+			listener.onActivityPaused(this);
+		}
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+		for(IPrimosActivityLifecycleCallbacks listener : lstActivityLifeCicleListener) {
+			listener.onActivityResumed(this);
+		}
+	}
+
+	@Override
+	protected void onResumeFragments() {
+		super.onResumeFragments();
+		for(IPrimosActivityLifecycleCallbacks listener : lstActivityLifeCicleListener) {
+			listener.onActivityResumed(this);
+		}
 	}
 
 }

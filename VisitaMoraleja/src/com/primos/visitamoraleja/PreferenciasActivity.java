@@ -1,5 +1,6 @@
 package com.primos.visitamoraleja;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Dialog;
@@ -18,7 +19,7 @@ import com.primos.visitamoraleja.actualizador.ThreadActualizador;
 import com.primos.visitamoraleja.bdsqlite.datasource.CategoriasDataSource;
 import com.primos.visitamoraleja.contenidos.Categoria;
 
-public class PreferenciasActivity extends PreferenceActivity {
+public class PreferenciasActivity extends PreferenceActivity implements IPrimosActividyLifeCycleEmisor {
 	public final static String PREFIJO_PREFERENCIA_CATEGORIAS = "categoria_";
 	public final static String PREFERENCIA_ACTUALIZAR_POR_CATEGORIAS = "pref_actualizar_categorias";
 	public final static String PREFERENCIA_ACTUALIZAR_AUTOMATICAMENTE = "pref_actualizar_automaticamente";
@@ -27,6 +28,8 @@ public class PreferenciasActivity extends PreferenceActivity {
 	public final static String PREFERENCIA_OPC_NOTIF_LED = "pref_opc_notificaciones_led";
 	public final static String PREFERENCIA_ACTUALIZAR_AHORA = "actualizar_ahora";
 	public final static String PREFERENCIA_ACERCA_DE = "acerca_de";
+	
+	private List<IPrimosActivityLifecycleCallbacks> lstActivityLifeCicleListener = new ArrayList<>();
 	
 	private CategoriasDataSource dataSource;
 	
@@ -109,12 +112,27 @@ public class PreferenciasActivity extends PreferenceActivity {
 	protected void onResume() {
 		dataSource.open();
 		super.onResume();
+		for(IPrimosActivityLifecycleCallbacks listener : lstActivityLifeCicleListener) {
+			listener.onActivityResumed(this);
+		}
 	}
 
 	@Override
 	protected void onPause() {
 		dataSource.close();
 		super.onPause();
+		for(IPrimosActivityLifecycleCallbacks listener : lstActivityLifeCicleListener) {
+			listener.onActivityPaused(this);
+		}
+	}
+	
+	
+	public void registrar(IPrimosActivityLifecycleCallbacks activityLifeCicleListener) {
+		lstActivityLifeCicleListener.add(activityLifeCicleListener);
+	}
+	
+	public void deregistrar(IPrimosActivityLifecycleCallbacks activityLifeCicleListener) {
+		lstActivityLifeCicleListener.remove(activityLifeCicleListener);
 	}
 		 
 }
