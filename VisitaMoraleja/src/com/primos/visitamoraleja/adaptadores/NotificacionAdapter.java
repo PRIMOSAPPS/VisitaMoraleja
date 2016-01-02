@@ -79,18 +79,19 @@ public class NotificacionAdapter extends BaseAdapter {
 		background.setStroke(2, colorBorde);
 		background.setColor(colorFondo);
 		
-		TextView textNombreSitio = (TextView)view.findViewById(R.id.notificacionNombreSitio);
-		textNombreSitio.setText(sitio.getNombre());
-		
-		Bitmap bitmap = almacenamiento.getImagenSitio(sitio.getId(), sitio.getNombreLogotipo());
-		if(bitmap != null) {
-			ImageButton imageButton = (ImageButton)view.findViewById(R.id.notificacionIconoSitio);
-			int width = imageButtonDelete.getDrawable().getIntrinsicWidth();
-			int height = imageButtonDelete.getDrawable().getIntrinsicHeight();
-			bitmap = Bitmap.createScaledBitmap(bitmap, width, height, false);
-			imageButton.setImageBitmap(bitmap);
+		if(sitio != null) {
+			TextView textNombreSitio = (TextView)view.findViewById(R.id.notificacionNombreSitio);
+			textNombreSitio.setText(sitio.getNombre());
+			
+			Bitmap bitmap = almacenamiento.getImagenSitio(sitio.getId(), sitio.getNombreLogotipo());
+			if(bitmap != null) {
+				ImageButton imageButton = (ImageButton)view.findViewById(R.id.notificacionIconoSitio);
+				int width = imageButtonDelete.getDrawable().getIntrinsicWidth();
+				int height = imageButtonDelete.getDrawable().getIntrinsicHeight();
+				bitmap = Bitmap.createScaledBitmap(bitmap, width, height, false);
+				imageButton.setImageBitmap(bitmap);
+			}
 		}
-
 		
 		TextView textTitulo = (TextView)view.findViewById(R.id.notificacionTitulo);
 		textTitulo.setText(notificacion.getTitulo());
