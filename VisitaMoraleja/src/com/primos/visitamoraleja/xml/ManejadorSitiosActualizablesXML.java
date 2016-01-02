@@ -63,7 +63,7 @@ public class ManejadorSitiosActualizablesXML extends DefaultHandler {
 		super.startElement(uri, localName, qName, attributes);
 		cadena.setLength(0);
 		if(localName.equals("sitio_actualizable")) {
-			Log.w("SITIOS: ", "Un sitio nuevo");
+			Log.w("SITIOS: ", "Un sitio nuevo actualizable: " + localName);
 			sitio = new Sitio();
 		}
 	}
