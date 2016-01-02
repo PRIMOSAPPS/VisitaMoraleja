@@ -1,17 +1,17 @@
 package com.primos.visitamoraleja;
+import android.app.Application;
+import android.provider.Settings.Secure;
+import android.util.Log;
+
 import com.parse.Parse;
 import com.parse.ParseInstallation;
 import com.parse.PushService;
 import com.primos.visitamoraleja.util.UtilPropiedades;
 
-import android.app.Application;
-import android.provider.Settings.Secure;
-import android.util.Log;
-
 
 public class VisitaMoralejaApplication extends Application {
 	private final static String TAG = "[VisitaMoralejaApplication]";
-
+	
 	public VisitaMoralejaApplication() {
 		super();
 	}
@@ -32,7 +32,7 @@ public class VisitaMoralejaApplication extends Application {
         Log.d(TAG, "clientKey: " + clientKey);
 
 		Parse.initialize(this, applicationId, clientKey);
-		PushService.setDefaultPushCallback(this, MainActivity.class);
+//		PushService.setDefaultPushCallback(this, MainActivity.class);
 		Runnable runableInicioParse = new Runnable() {
 			@Override
 			public void run() {
@@ -54,7 +54,7 @@ public class VisitaMoralejaApplication extends Application {
         Log.d("VisitaMoralejaApplication", "clientKey: " + clientKey);
 
 		Parse.initialize(this, applicationId, clientKey);
-		PushService.setDefaultPushCallback(this, MainActivity.class);
+//		PushService.setDefaultPushCallback(this, MainActivity.class);
 //		ParseInstallation.getCurrentInstallation().saveInBackground();
 		
 		ParseInstallation installation = ParseInstallation.getCurrentInstallation();
