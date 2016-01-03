@@ -1,5 +1,8 @@
 package com.primos.visitamoraleja.actualizador;
 
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 
 import android.app.Activity;
@@ -60,13 +63,11 @@ public class ThreadActualizador extends Thread implements IPrimosActivityLifecyc
 	private Context contexto;
 
 	private Handler handlerBarraProgresoActualizacion;
-	private Handler handlerBarraProgresoActualizacion2;
 	private Object semaforo = new Object();
 	private UtilConsultaActualizar consultaActualizar = new UtilConsultaActualizar();
 	private ProgressDialog dialogoProgreso;
 	private boolean mostrarNoDatos = false;
 	private ESTADO_ACTUALIZACION estadoActualizacion = ESTADO_ACTUALIZACION.PARADO;
-	private int numSitiosActualizados;
 
 	/**
 	 * 
@@ -77,7 +78,6 @@ public class ThreadActualizador extends Thread implements IPrimosActivityLifecyc
 		Log.i("AsyncTaskActualizador", "INICIO");
 		this.contexto = contexto;
 		registrarActivityListener();
-//		this.handlerBarraProgresoActualizacion2 = new Handler();
 		this.handlerBarraProgresoActualizacion = new Handler(contexto.getMainLooper(),
 			new Handler.Callback() {
 				private ProgressDialog dialogoProgreso;
@@ -184,19 +184,17 @@ public class ThreadActualizador extends Thread implements IPrimosActivityLifecyc
 							idsCategoriasActualizacion);
 			
 			if (!lstSitiosActualizables.isEmpty()) {
+
+				// Ordenamos los sitios por la hora de ultima actualizacion, para que si la actualizacion
+				// se interrumpe, pueda continuar
+				ordenarSitioPorFechaActualizacion(lstSitiosActualizables);
+				
 				synchronized (semaforo) {
 					try {
 						Message msjConsulta = new Message();
 						msjConsulta.arg1 = MOSTRAR_CONSULTA_ACTUALIZAR;
 						msjConsulta.arg2 = lstSitiosActualizables.size();
 						estadoActualizacion = ESTADO_ACTUALIZACION.PREGUNTANDO_SI_ACTUALIZAR;
-//						handlerBarraProgresoActualizacion2.post(new Runnable() {
-//							@Override
-//							public void run() {
-//								consultaActualizar.consultaActualizar(contexto,
-//										semaforo, lstSitiosActualizables.size());
-//							}
-//						});
 						handlerBarraProgresoActualizacion
 								.sendMessage(msjConsulta);
 
@@ -206,22 +204,7 @@ public class ThreadActualizador extends Thread implements IPrimosActivityLifecyc
 							Message msjInicio = new Message();
 							msjInicio.arg1 = INICIO_ACTUALIZAR;
 							
-							numSitiosActualizados = 0;
 							estadoActualizacion = ESTADO_ACTUALIZACION.ACTUALIZANDO;
-//							handlerBarraProgresoActualizacion2.post(new Runnable() {
-//								@Override
-//								public void run() {
-//									dialogoProgreso = new ProgressDialog(contexto);
-//									dialogoProgreso
-//											.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-//									dialogoProgreso.setMessage("Procesando...");
-//									dialogoProgreso.setCancelable(false);
-//									dialogoProgreso.setCanceledOnTouchOutside(false);
-//									dialogoProgreso.setMax(lstSitiosActualizables.size());
-//									dialogoProgreso.setProgress(numSitiosActualizados);
-//									dialogoProgreso.show();
-//								}
-//							});
 							handlerBarraProgresoActualizacion
 									.sendMessage(msjInicio);
 
@@ -231,15 +214,6 @@ public class ThreadActualizador extends Thread implements IPrimosActivityLifecyc
 								msj.obj = sitio;
 								handlerBarraProgresoActualizacion
 										.sendMessage(msj);
-//								handlerBarraProgresoActualizacion2.post(new Runnable() {
-//									@Override
-//									public void run() {
-//										dialogoProgreso.setMessage("Actualizando "
-//												+ sitio.getNombre());
-//										dialogoProgreso.setProgress(numSitiosActualizados);
-//										numSitiosActualizados++;
-//									}
-//								});
 								List<Sitio> lstSitios = cs.getSitio(sitio);
 								Actualizador actualizador = new Actualizador(
 										contexto);
@@ -252,12 +226,6 @@ public class ThreadActualizador extends Thread implements IPrimosActivityLifecyc
 									.sendMessage(msjFin);
 							deregistrarActivityListener();
 							estadoActualizacion = ESTADO_ACTUALIZACION.FINALIZADO;
-//							handlerBarraProgresoActualizacion2.post(new Runnable() {
-//								@Override
-//								public void run() {
-//									dialogoProgreso.dismiss();
-//								}
-//							});
 						} else {
 							estadoActualizacion = ESTADO_ACTUALIZACION.PARADO;
 						}
@@ -268,14 +236,6 @@ public class ThreadActualizador extends Thread implements IPrimosActivityLifecyc
 								.sendMessage(msjExcepcion);
 						estadoActualizacion = ESTADO_ACTUALIZACION.EXCEPCION;
 						deregistrarActivityListener();
-//						handlerBarraProgresoActualizacion2.post(new Runnable() {
-//							@Override
-//							public void run() {
-//								Toast toastError = Toast.makeText(contexto,
-//										R.string.error_durante_actualizacion, Toast.LENGTH_SHORT);
-//								toastError.show();
-//							}
-//						});
 						throw new EventosException(
 								"Error en la sincronizacion al consultar si actualizar.",
 								e);
@@ -289,20 +249,23 @@ public class ThreadActualizador extends Thread implements IPrimosActivityLifecyc
 							.sendMessage(msjNoDatosActualizar);
 					
 					estadoActualizacion = ESTADO_ACTUALIZACION.SIN_DATOS;
-//					handlerBarraProgresoActualizacion2.post(new Runnable() {
-//						@Override
-//						public void run() {
-//							Toast toastNoDatos = Toast.makeText(contexto,
-//									R.string.no_datos_actualizar, Toast.LENGTH_SHORT);
-//							toastNoDatos.show();
-//						}
-//					});
 					mostrarNoDatos = false;
 				}
 			}
 		} finally {
 			dataSource.close();
 		}
+	}
+	
+	private void ordenarSitioPorFechaActualizacion(List<Sitio> lstSitios) {
+		Collections.sort(lstSitios, new Comparator<Sitio>() {
+			@Override
+			public int compare(Sitio lhs, Sitio rhs) {
+				Date dateLhs = lhs.getUltimaActualizacion();
+				Date dateRhs = rhs.getUltimaActualizacion();
+				return dateLhs.compareTo(dateRhs);
+			}
+		});
 	}
 
 	/**

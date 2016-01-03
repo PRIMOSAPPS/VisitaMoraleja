@@ -1,6 +1,7 @@
 package com.primos.visitamoraleja.xml;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.xml.sax.Attributes;
@@ -10,6 +11,7 @@ import org.xml.sax.helpers.DefaultHandler;
 import android.util.Log;
 
 import com.primos.visitamoraleja.contenidos.Sitio;
+import com.primos.visitamoraleja.util.UtilFechas;
 
 /**
  * Parsea un XML para convertir su contenido en una lista de sitios.
@@ -49,6 +51,9 @@ public class ManejadorSitiosActualizablesXML extends DefaultHandler {
 				sitio.setId(Long.parseLong(cadena.toString()));
 			} else if(localName.equals("nombre")) {
 				sitio.setNombre(cadena.toString());
+			} else if(localName.equals("ultimaActualizacion")) {
+				Date ultimaActualizacionDefault = UtilFechas.fechaFromUTC(cadena.toString().trim());
+				sitio.setUltimaActualizacion(ultimaActualizacionDefault);
 			} else if(localName.equals("sitio_actualizable")) {
 				lstSitios.add(sitio);
 			}
