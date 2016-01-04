@@ -8,6 +8,7 @@ import android.graphics.drawable.GradientDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.BaseAdapter;
@@ -97,12 +98,13 @@ public class NotificacionAdapter extends BaseAdapter {
 		textTitulo.setText(notificacion.getTitulo());
 		final WebView webViewTexto = (WebView)view.findViewById(R.id.notificacionTexto);
 		webViewTexto.setVerticalScrollBarEnabled(true);
-		webViewTexto.setHorizontalScrollBarEnabled(true);
+		webViewTexto.setHorizontalScrollBarEnabled(false);
 		webViewTexto.requestFocusFromTouch();
 
 		webViewTexto.getSettings().setJavaScriptEnabled(false);
-		webViewTexto.getSettings().setUseWideViewPort(true);                                                         
-        webViewTexto.getSettings().setLoadWithOverviewMode(true);
+		webViewTexto.getSettings().setTextSize(WebSettings.TextSize.LARGEST);
+		//webViewTexto.getSettings().setUseWideViewPort(true);                                                         
+        //webViewTexto.getSettings().setLoadWithOverviewMode(true);
 //        webViewTexto.getSettings().setBuiltInZoomControls(true);
         StringBuilder sBuilder = new StringBuilder("<div stile='height: 100px;'>");
         sBuilder.append(notificacion.getTexto());
