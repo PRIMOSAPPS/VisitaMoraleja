@@ -92,9 +92,9 @@
 
          <Button
              android:id="@+id/acerca_de_pulsaAqui"
-             android:layout_width="47dp"
+             android:layout_width="wrap_content"
              android:layout_height="wrap_content"
-             android:background="@drawable/bolamundo"
+             android:background="@drawable/nube"
              android:onClick="inscripcion"
              android:text="@string/acerca_de_aqui"
              android:textColor="@color/blanco"

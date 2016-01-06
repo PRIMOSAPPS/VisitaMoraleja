@@ -5,9 +5,13 @@
    <color name="notificacion_inactiva">#FF7F7F</color>
    <color name="notificacion_activa">#8FFD8F</color>
    <color name="blanco">#FFFFFF</color>
-   <color name="btnVerNotificaciones">#F4FA53</color>
-   <color name="menu_lateral_color_texto">#929AF5</color>
-   <color name="menu_lateral_color_fondo">#CDFA81</color>
-   <color name="fondo_acerca_de_inicio">#030E86</color>
+   
+   
+   <color name="menu_lateral_color_fondo">#318C34</color>
+   
+   
+   <color name="btnVerNotificaciones">#318C34</color>
+    <color name="menu_lateral_color_texto">#318C34</color>
+    <color name="fondo_acerca_de_inicio">#318C34</color>
    
 </resources>
