@@ -99,27 +99,12 @@ public class NotificacionAdapter extends BaseAdapter {
 		final WebView webViewTexto = (WebView)view.findViewById(R.id.notificacionTexto);
 		webViewTexto.setVerticalScrollBarEnabled(true);
 		webViewTexto.setHorizontalScrollBarEnabled(false);
-		webViewTexto.requestFocusFromTouch();
-
 		webViewTexto.getSettings().setJavaScriptEnabled(false);
-		webViewTexto.getSettings().setTextSize(WebSettings.TextSize.LARGEST);
-		//webViewTexto.getSettings().setUseWideViewPort(true);                                                         
-        //webViewTexto.getSettings().setLoadWithOverviewMode(true);
-//        webViewTexto.getSettings().setBuiltInZoomControls(true);
+		
         StringBuilder sBuilder = new StringBuilder("<div stile='height: 100px;'>");
         sBuilder.append(notificacion.getTexto());
         sBuilder.append("</div>");
-//		textoTmp += "\n" + notificacion.getFechaInicioValidez();
-//		textoTmp += "\n" + notificacion.getFechaFinValidez();
 		webViewTexto.loadDataWithBaseURL(null, sBuilder.toString(), Constantes.mimeType, Constantes.encoding, null);
-		
-		webViewTexto.setWebViewClient(new WebViewClient() {
-            @Override
-            public void onPageFinished(WebView view, String url) {
-            	webViewTexto.scrollTo(0,0);
-            	webViewTexto.setInitialScale(100);
-            }
-        });
 		
 		return view;
 	}
