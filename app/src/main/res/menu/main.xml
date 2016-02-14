@@ -1,0 +1,23 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.primos.visitamoraleja.MainActivity" >
+    
+    <item android:id="@+id/actionbar_buscar"
+        android:title="@string/actionbar_buscar"
+        app:showAsAction="always"
+        android:icon="@android:drawable/ic_menu_search"/>
+    
+    <item android:id="@+id/actionbar_menu_lateral"
+        android:title="@string/actionbar_notificacion"
+        android:orderInCategory="100"
+        app:showAsAction="always"
+        android:icon="@mipmap/ic_menu_lateral"/>
+    
+    <item android:id="@+id/actionbar_settings"
+        android:title="@string/actionbar_settings"
+        android:orderInCategory="200"
+        app:showAsAction="always"
+        android:icon="@drawable/ic_action_action_settings"/>
+    
+</menu>

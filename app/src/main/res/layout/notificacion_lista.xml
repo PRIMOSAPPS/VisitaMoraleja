@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/shape_notificacion"
+    android:paddingBottom="2dp"
+    android:onClick="mostrarDetalleSitio">
+
+    <ImageButton
+        android:id="@+id/notificacionIconoSitio"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="2dp"
+        android:layout_marginTop="4dp"
+        android:background="@null"
+        />
+        
+    <TextView
+        android:id="@+id/notificacionNombreSitio"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toLeftOf="@+id/notificacionDelete"
+        android:layout_alignTop="@+id/notificacionIconoSitio"
+        android:layout_toRightOf="@+id/notificacionIconoSitio"
+        android:text="Large Text"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+    
+    <TextView
+        android:id="@+id/notificacionTitulo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/notificacionNombreSitio"
+        android:text="Large Text"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+	<com.primos.visitamoraleja.views.PrimosWebView
+        android:id="@+id/notificacionTexto"
+        android:layout_below="@id/notificacionTitulo"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_margin="8dp"
+        android:layout_alignParentLeft="true"
+        android:scrollbars="vertical"
+        android:scrollbarSize="10dp"
+        android:scrollbarAlwaysDrawVerticalTrack="true"
+        android:text="" />
+
+    <ImageButton
+        android:id="@+id/notificacionDelete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:contentDescription="@string/descrip_borrar_notificacion"
+        android:onClick="borrarNotificacion"
+        android:background="@null"
+        android:src="@android:drawable/ic_menu_delete" />
+    <!--
+        ic_notification_clear_all
+        ic_menu_delete
+        ic_delete
+    -->
+    
+</RelativeLayout>
