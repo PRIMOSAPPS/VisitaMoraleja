@@ -278,10 +278,13 @@ public class DetalleEventoActivity extends ActionBarListActivity implements
 //		Intent lanzarmapa = new Intent(this, MapaLugaresActivity.class);
 		String paqueteGoogle = "com.google.android.apps.maps";
 		String claseMaps = "com.google.android.maps.MapsActivity";
-		String urlParte2 = "geo:{0},{1}?q={0},{1}&z={2}";
+		String urlParte2 = "geo:0,0?q={0,number,###.#######},{1,number,###.#######}&z={2}";
 
-		String uri = MessageFormat.format(urlParte2, latitud.toString(), longitud.toString(),
-				latitud.toString(), longitud.toString(), 15);
+		MessageFormat msgFormat = new MessageFormat(urlParte2);
+		msgFormat.setLocale(Locale.US);
+		Object[] arrParams = {latitud, longitud, 15};
+		String uri = msgFormat.format(arrParams);
+
 		Intent lanzarmapa = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
 		lanzarmapa.setClassName(paqueteGoogle, claseMaps);
 		
