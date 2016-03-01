@@ -1,13 +1,5 @@
 package com.primos.visitamoraleja;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.List;
-
-import javax.xml.parsers.ParserConfigurationException;
-
-import org.xml.sax.SAXException;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -22,6 +14,14 @@ import com.primos.visitamoraleja.contenidos.Sitio;
 import com.primos.visitamoraleja.eventos.EventosXML_SAX;
 import com.primos.visitamoraleja.excepcion.EventosException;
 import com.primos.visitamoraleja.util.UtilPreferencias;
+
+import org.xml.sax.SAXException;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.List;
+
+import javax.xml.parsers.ParserConfigurationException;
 
 public class InicioActivity extends Activity {
 

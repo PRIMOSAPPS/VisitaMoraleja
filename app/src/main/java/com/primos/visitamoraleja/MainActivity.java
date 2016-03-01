@@ -1,8 +1,5 @@
 package com.primos.visitamoraleja;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
@@ -18,9 +15,11 @@ import android.widget.Toast;
 
 import com.primos.visitamoraleja.actualizador.ThreadActualizador;
 import com.primos.visitamoraleja.menulateral.ConfigMenuLateral;
-import com.primos.visitamoraleja.util.UtilConsultaActualizar;
 import com.primos.visitamoraleja.util.UtilPreferencias;
 import com.primos.visitamoraleja.views.DialogoAutocompletar;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 
@@ -82,9 +81,9 @@ public class MainActivity extends ActionBarActivity implements IPrimosActividyLi
 		Intent i = new Intent(this,AcercaDeActivity.class);
 		startActivity(i);
 	}
+
 	
-	
-	
+
 	private void buscar() {
 		DialogoAutocompletar myDialog = new DialogoAutocompletar(this);
 		LayoutParams wmlp = myDialog.getWindow().getAttributes();
