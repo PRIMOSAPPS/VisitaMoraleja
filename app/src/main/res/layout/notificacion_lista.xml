@@ -3,8 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/shape_notificacion"
-    android:paddingBottom="2dp"
-    android:onClick="mostrarDetalleSitio">
+    android:onClick="mostrarDetalleNotificacion"
+    android:padding="5dp">
 
     <ImageButton
         android:id="@+id/notificacionIconoSitio"
@@ -34,19 +34,8 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/notificacionNombreSitio"
         android:text="Large Text"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
-
-	<com.primos.visitamoraleja.views.PrimosWebView
-        android:id="@+id/notificacionTexto"
-        android:layout_below="@id/notificacionTitulo"
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:layout_margin="8dp"
-        android:layout_alignParentLeft="true"
-        android:scrollbars="vertical"
-        android:scrollbarSize="10dp"
-        android:scrollbarAlwaysDrawVerticalTrack="true"
-        android:text="" />
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:layout_marginTop="10dp" />
 
     <ImageButton
         android:id="@+id/notificacionDelete"

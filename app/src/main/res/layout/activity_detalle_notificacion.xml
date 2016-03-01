@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.primos.visitamoraleja.DetalleNotificacionActivity">
+
+
+    <RelativeLayout
+        android:id="@+id/rltlyDetalleNotificacionSitio"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="visitarSitio">
+
+        <ImageView
+            android:id="@+id/imagenListaEventos"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_centerVertical="true"
+            android:paddingLeft="10dp"
+            android:src="@drawable/ic_action_action_settings"
+            android:layout_alignParentLeft="true" />
+
+        <TextView
+            android:id="@+id/textNombreSitio"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/imagenListaEventos"
+            android:textColor="#000000"
+            android:paddingLeft="10dp"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+    </RelativeLayout>
+
+    <TextView android:text="Esto es el titulo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/detalleNotificacionTitulo"
+        android:layout_below="@+id/rltlyDetalleNotificacionSitio" />
+
+    <WebView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/detalleNotificacionTexto"
+        android:layout_below="@+id/detalleNotificacionTitulo"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        />
+
+</RelativeLayout>
