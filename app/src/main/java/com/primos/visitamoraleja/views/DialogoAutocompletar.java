@@ -86,18 +86,20 @@ public class DialogoAutocompletar extends Dialog {
 			
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before, int count) {
-				SitiosDataSource sitiosDataSource = new SitiosDataSource(getContext());
-				sitiosDataSource.open();
-				List<Sitio> lstResultados = sitiosDataSource.getBusqueda(s.toString());
 				adapter.clear();
-				List<SitioAutocompletar> lstAutocompletar = toSitiosAutoCompletar(lstResultados);
-				for(SitioAutocompletar sitioAutoCompletar : lstAutocompletar) {
-					adapter.add(sitioAutoCompletar);
+				if(s.length() > 1) {
+					SitiosDataSource sitiosDataSource = new SitiosDataSource(getContext());
+					sitiosDataSource.open();
+					List<Sitio> lstResultados = sitiosDataSource.getBusqueda(s.toString());
+					List<SitioAutocompletar> lstAutocompletar = toSitiosAutoCompletar(lstResultados);
+					for (SitioAutocompletar sitioAutoCompletar : lstAutocompletar) {
+						adapter.add(sitioAutoCompletar);
+					}
+					if (lstAutocompletar.size() <= NUM_RESULTADOS_OCULTAR_TECLADO) {
+						textoAutocompletar.dismissDropDown();
+					}
+					sitiosDataSource.close();
 				}
-				if(lstAutocompletar.size() <= NUM_RESULTADOS_OCULTAR_TECLADO) {
-					textoAutocompletar.dismissDropDown();
-				}
-				sitiosDataSource.close();
 			}
 			
 			@Override
