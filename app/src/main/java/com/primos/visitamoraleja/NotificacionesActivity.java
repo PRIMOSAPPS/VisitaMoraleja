@@ -1,8 +1,5 @@
 package com.primos.visitamoraleja;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -22,8 +19,10 @@ import com.primos.visitamoraleja.contenidos.NotificacionSitio;
 import com.primos.visitamoraleja.contenidos.Sitio;
 import com.primos.visitamoraleja.menulateral.ConfigMenuLateral;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class NotificacionesActivity extends ActionBarListActivity {
-	public final static String NOTIFICACION = "notificacion";
 	public final static String CATEGORIA_NOTIFICACIONES = "categoriaNotificaciones";
 	
 	private NotificacionesDataSource dataSource = null;
@@ -48,10 +47,7 @@ public class NotificacionesActivity extends ActionBarListActivity {
 		// Si se recibe una notificacion solo se muestra esta
 		List<NotificacionSitio> lstNotificacionesSitios = null;
 		if(extras != null) {
-			if(extras.containsKey(NOTIFICACION)) {
-				Notificacion notificacion = (Notificacion)extras.get(NOTIFICACION);
-				lstNotificacionesSitios = getlistaNotificacionesSitio(notificacion);
-			} else if(extras.containsKey(CATEGORIA_NOTIFICACIONES)) {
+			if(extras.containsKey(CATEGORIA_NOTIFICACIONES)) {
 				long idCategoria = extras.getLong(CATEGORIA_NOTIFICACIONES);
 				List<Notificacion> lstNotificaciones = dataSource.getByCategoria(idCategoria);
 				lstNotificacionesSitios = getlistaNotificacionesSitio(lstNotificaciones);
@@ -89,15 +85,12 @@ public class NotificacionesActivity extends ActionBarListActivity {
 		return lstNotificacionesSitios;
 	}
 	
-	public void mostrarDetalleSitio(View view) {
+	public void mostrarDetalleNotificacion(View view) {
 		Notificacion notificacion = (Notificacion)view.getTag();
 
-		long idSitio = notificacion.getIdSitio();
-		if(idSitio > -1) {
-			Intent intent = new Intent(this, DetalleEventoActivity.class);
-			intent.putExtra(DetalleEventoActivity.ID_SITIO, idSitio);
-	    	startActivity(intent);
-		}
+		Intent intent = new Intent(this, DetalleNotificacionActivity.class);
+		intent.putExtra(DetalleNotificacionActivity.ID_NOTIFICACION, notificacion.getId());
+		startActivity(intent);
 	}
 
 	@Override

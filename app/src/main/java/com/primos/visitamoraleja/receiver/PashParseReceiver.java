@@ -19,6 +19,7 @@ import android.text.Html;
 import android.text.Spanned;
 import android.util.Log;
 
+import com.primos.visitamoraleja.DetalleNotificacionActivity;
 import com.primos.visitamoraleja.NotificacionesActivity;
 import com.primos.visitamoraleja.R;
 import com.primos.visitamoraleja.bdsqlite.datasource.NotificacionesDataSource;
@@ -28,10 +29,8 @@ import com.primos.visitamoraleja.contenidos.Sitio;
 import com.primos.visitamoraleja.util.UtilPreferencias;
 
 public class PashParseReceiver extends BroadcastReceiver {
-	private final static String GRUPO_NOTIFICACIONES_DIME_MONESTERIO = "GRUPO_NOTIFICACIONES_VISITA_MORALEJA";
 	private static final String TAG = "PushSenseiReceiver";
 	private SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-	private static int idNotificaciones = 0;
 
 	@Override
 	public void onReceive(Context context, Intent intent) {
@@ -41,66 +40,17 @@ public class PashParseReceiver extends BroadcastReceiver {
 			Log.d(TAG, "Recibida una notificacion.");
 			
 			notificacionToBD(context, notificacion);
-			
-			Intent resultIntent = new Intent(context, NotificacionesActivity.class);
-			resultIntent.putExtra(NotificacionesActivity.NOTIFICACION, notificacion);
-            PendingIntent resultPendingIntent =
-                    PendingIntent.getActivity(
-                            context,
-                            0,
-                            resultIntent,
-                            PendingIntent.FLAG_UPDATE_CURRENT
-                    );
-			
-            Log.d(TAG, "Recibida una notificacion: " + notificacion.getTexto());
-            
-            long[] patronVibracion = {2000, 1000};
-            //Esto hace posible crear la notificación
-            NotificationCompat.Builder mBuilder =
-                    new NotificationCompat.Builder(context);
-            
-            Sitio sitio = getSitio(context, notificacion.getIdSitio());
-            mBuilder.setSmallIcon(R.drawable.ic_action_notificacion)
-                .setContentTitle(notificacion.getTitulo())
-                .setContentText(notificacion.getTexto())
-                .setContentIntent(resultPendingIntent)
-				.setGroup(GRUPO_NOTIFICACIONES_DIME_MONESTERIO)
-				.setGroupSummary(true)
-                .setAutoCancel(true);
-            if(UtilPreferencias.sonarRecibirNotificacion(context)) {
-            	mBuilder.setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION));
-            }
-            if(UtilPreferencias.vibrarRecibirNotificacion(context)) {
-            	mBuilder.setVibrate(patronVibracion);
-            }
-            if(UtilPreferencias.ledRecibirNotificacion(context)) {
-            	mBuilder.setLights(Color.YELLOW, 2000, 1500);
-            }
 
-			if(idNotificaciones == Integer.MAX_VALUE) {
-				idNotificaciones = 0;
-			}
-            NotificationManager mNotificationManager =
-                    (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-            Notification notification = mBuilder.build();
-            mNotificationManager.notify(idNotificaciones++, notification);
+			LanzadorNotificaciones lanzador = new LanzadorNotificaciones();
+			lanzador.lanzarNotificacion(context, notificacion);
+
 		} catch (JSONException e) {
 			Log.e(TAG, "JSONException: " + e.getMessage(), e);
 		} catch (ParseException e) {
 			Log.e(TAG, "ParseException: " + e.getMessage(), e);
 		}
 	}
-	
-	private Sitio getSitio(Context context, long idSitio) {
-		Sitio resul = null;
-		SitiosDataSource sitiosDS = new SitiosDataSource(context);
-		sitiosDS.open();
-		resul = sitiosDS.getById(idSitio);
-		sitiosDS.close();
-		
-		return resul;
-	}
-	
+
 	private Notificacion getNotificacion(Intent intent) throws JSONException, ParseException {
 		JSONObject json = new JSONObject(intent.getExtras().getString(
 				"com.parse.Data"));

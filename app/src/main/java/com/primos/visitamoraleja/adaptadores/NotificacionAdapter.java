@@ -59,26 +59,9 @@ public class NotificacionAdapter extends BaseAdapter {
 		Sitio sitio = notificacionSitio.getSitio();
 		view.setTag(notificacion);
 		GradientDrawable background = (GradientDrawable)view.getBackground();
-		
+
 		ImageButton imageButtonDelete = (ImageButton)view.findViewById(R.id.notificacionDelete);
 		imageButtonDelete.setTag(notificacion);
-		
-		int resColorBorde;
-		int resColorFondo;
-		if(notificacion.isActiva()) {
-			resColorFondo = R.color.notificacion_activa;
-			resColorBorde = R.color.verde;
-//			view.setBackgroundResource(R.color.notificacion_activa);
-		} else {
-			resColorFondo = R.color.notificacion_inactiva;
-			resColorBorde = R.color.rojo;
-//			view.setBackgroundResource(R.color.notificacion_inactiva);
-		}
-		
-		int colorBorde = actividad.getResources().getColor(resColorBorde);
-		int colorFondo = actividad.getResources().getColor(resColorFondo);
-		background.setStroke(2, colorBorde);
-		background.setColor(colorFondo);
 		
 		if(sitio != null) {
 			TextView textNombreSitio = (TextView)view.findViewById(R.id.notificacionNombreSitio);
@@ -96,16 +79,7 @@ public class NotificacionAdapter extends BaseAdapter {
 		
 		TextView textTitulo = (TextView)view.findViewById(R.id.notificacionTitulo);
 		textTitulo.setText(notificacion.getTitulo());
-		final WebView webViewTexto = (WebView)view.findViewById(R.id.notificacionTexto);
-		webViewTexto.setVerticalScrollBarEnabled(true);
-		webViewTexto.setHorizontalScrollBarEnabled(false);
-		webViewTexto.getSettings().setJavaScriptEnabled(false);
-		
-        StringBuilder sBuilder = new StringBuilder("<div stile='height: 100px;'>");
-        sBuilder.append(notificacion.getTexto());
-        sBuilder.append("</div>");
-		webViewTexto.loadDataWithBaseURL(null, sBuilder.toString(), Constantes.mimeType, Constantes.encoding, null);
-		
+
 		return view;
 	}
 
