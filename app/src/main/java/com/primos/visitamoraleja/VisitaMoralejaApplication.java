@@ -1,11 +1,11 @@
 package com.primos.visitamoraleja;
+
 import android.app.Application;
 import android.provider.Settings.Secure;
 import android.util.Log;
 
 import com.parse.Parse;
 import com.parse.ParseInstallation;
-import com.parse.PushService;
 import com.primos.visitamoraleja.util.UtilPropiedades;
 
 
@@ -21,7 +21,7 @@ public class VisitaMoralejaApplication extends Application {
 		super.onCreate();
 		
 		UtilPropiedades.getInstance().inicializar(this);
-//		registraParse2();
+		registraParse2();
 	}
 
 	private void registraParse2() {
