@@ -46,7 +46,7 @@
     <string name="pref_opc_notificaciones_vibracion">Vibración</string>
     <string name="pref_opc_notificaciones_led_sum">Emite luz led si está disponible al recibir una notificación</string>
     <string name="pref_opc_notificaciones_led">Luz led</string>
-        
+
     <string name="title_activity_main">ViewFlipper Demo</string>
     <string name="str_img1">Image1</string>
     <string name="str_img2">Image2</string>
@@ -77,13 +77,15 @@
     <string name="acerca_de_http_appmoraleja_sin_url">Para aparecer en la App pulse </string>
     <string name="acerca_de_http_royma">www.roymainformatica.com </string>
     <string name="acerca_de_aqui">Aquí</string>
-    
+
     <string name="descrip_borrar_notificacion">Borrará la notificación</string>
     <string name="ver_notificaciones">Ver notificaciones</string>
     <string name="ver_bandos">Ver los bandos</string>
-    
+
     <string name="dlg_notif_txt_aviso">¿Confirma que desea borrar la notificacion?</string>
-    
+
+    <string name="map_mapa">Mapa</string>
+
     <string name="txt_aviso">Aviso</string>
     <string name="txt_aceptar">Aceptar</string>
     <string name="txt_cancelar">Cancelar</string>
@@ -93,5 +95,6 @@
     <string name="txt_texto_ahora_no">Ahora no</string>
     <string name="no_datos_actualizar">No hay datos para actualizar.</string>
     <string name="error_durante_actualizacion">Se ha producido un error durante la actualización de los datos.</string>
-    
+    <string name="title_activity_maps">Mapa</string>
+
 </resources>
