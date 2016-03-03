@@ -89,7 +89,7 @@
     <string name="txt_aviso">Aviso</string>
     <string name="txt_aceptar">Aceptar</string>
     <string name="txt_cancelar">Cancelar</string>
-    <string name="txt_titulo_actualizacion">Título actualización</string>
+    <string name="txt_titulo_actualizacion">Actualización de datos</string>
     <string name="txt_texto_msj_actualizacion">Se van a descargar {0} Mb aproximadamente. ¿Deseas continuar?</string>
     <string name="txt_texto__actualizar_ahora">Actualizar ahora</string>
     <string name="txt_texto_ahora_no">Ahora no</string>
