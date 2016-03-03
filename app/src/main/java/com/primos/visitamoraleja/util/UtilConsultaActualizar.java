@@ -25,7 +25,7 @@ public class UtilConsultaActualizar {
 		String txtMsjActualizacion = contexto.getResources().getString(R.string.txt_texto_msj_actualizacion);
 		adb.setMessage(MessageFormat.format(txtMsjActualizacion, tamanio));
 		adb.setTitle(R.string.txt_titulo_actualizacion);
-		adb.setIcon(android.R.drawable.ic_dialog_alert);
+		adb.setIcon(android.R.drawable.ic_dialog_info);
 		adb.setPositiveButton(R.string.txt_texto__actualizar_ahora, new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int which) {
 				synchronized(semaforo) {
