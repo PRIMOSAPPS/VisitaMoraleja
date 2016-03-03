@@ -31,6 +31,7 @@ import com.primos.visitamoraleja.menulateral.DatosItemMenuLateral;
 import com.primos.visitamoraleja.util.UtilImage;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -47,6 +48,8 @@ public class ControlMapaGeneral implements ControlMapaItf {
         SitiosDataSource sds = new SitiosDataSource(contexto);
         sds.open();
         List<Sitio> lstSitios = sds.getAll();
+        // Mezclamos los sitios, para que no siempre aparezcan encima en el mapa los mismos
+        Collections.shuffle(lstSitios);
         final Map<LatLng, Sitio> mapSitios = new HashMap<>();
         sds.close();
         for(Sitio sitio : lstSitios) {
