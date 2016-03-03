@@ -1,0 +1,80 @@
+<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawer_layout_lateral"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".MapActivity">
+
+        <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:map="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:id="@+id/map"
+            android:name="com.google.android.gms.maps.SupportMapFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:context="com.primos.visitamoraleja.MapsActivity" />
+
+        <RelativeLayout
+            android:id="@+id/rltlyMostrarOpciones"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right">
+
+            <Button
+                android:id="@+id/btnMostrarOpciones"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginRight="15dp"
+                android:layout_marginTop="15dp"
+                android:background="@mipmap/ic_launcher"
+                android:minWidth="10dp"
+                android:onClick="mostrarOpciones" />
+
+
+            <Button
+                android:id="@+id/btnMostrarMenuLateral"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:background="@mipmap/ic_menu_lateral"
+                android:minWidth="10dp"
+                android:layout_marginRight="15dp"
+                android:onClick="mostrarMenuLateral"
+                android:layout_below="@+id/btnMostrarOpciones"
+                android:layout_alignLeft="@+id/btnMostrarOpciones" />
+
+            <ListView
+                android:id="@+id/listaOpcionesMapa"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@+id/btnMostrarOpciones"
+                android:layout_gravity="right|top"
+                android:layout_toLeftOf="@+id/btnMostrarOpciones"
+                android:visibility="gone"
+                android:drawSelectorOnTop="false"
+                />
+
+        </RelativeLayout>
+
+    </FrameLayout>
+
+    <!-- The navigation drawer -->
+
+    <ListView
+        android:id="@+id/menuLateralListaSitios"
+        android:layout_width="240dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:background="@color/menu_lateral_color_fondo"
+        android:choiceMode="singleChoice"
+        android:divider="@android:color/transparent"
+        android:dividerHeight="0dp" />
+
+</android.support.v4.widget.DrawerLayout>
