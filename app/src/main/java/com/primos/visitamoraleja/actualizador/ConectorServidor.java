@@ -25,6 +25,7 @@ import com.primos.visitamoraleja.contenidos.Sitio;
 import com.primos.visitamoraleja.eventos.EventosXML_SAX;
 import com.primos.visitamoraleja.excepcion.EventosException;
 import com.primos.visitamoraleja.util.UtilPropiedades;
+import com.primos.visitamoraleja.util.VersionApp;
 
 public class ConectorServidor {
 	private final static String TAG = "[ConectorServidor]";
@@ -32,9 +33,11 @@ public class ConectorServidor {
 	private static String URL_GET_LISTA_SITIOS = null;//"http://10.0.2.2/eventos/sitios/SitiosToXML.php";
 	private static String URL_GET_LISTA_SITIOS_ACTUALIZABLES = null;
 	private static String URL_GET_LISTA_EVENTOS = null;//"http://10.0.2.2/eventos/eventos/EventosToXML.php";
+	private Context contexto;
 
 	public ConectorServidor(Context contexto) {
 		cargarPropiedades();
+		this.contexto = contexto;
 	}
 	
 	/**
@@ -83,6 +86,8 @@ public class ConectorServidor {
 			//ANADIR PARAMETROS
 			List<NameValuePair> params = new ArrayList<NameValuePair>();
 			params.add(new BasicNameValuePair("ultima_actualizacion", Long.toString(ultimaActualizacion) ) );
+			params.add(new BasicNameValuePair("version_app", VersionApp.getVersionApp(contexto)) );
+
 			/* Una vez anadidos los parametros actualizamos la entidad de httppost, esto quiere decir
 			 * en pocas palabras anexamos los parametros al objeto para que al enviarse al servidor
 			 * envien los datos que hemos añadido
@@ -130,6 +135,8 @@ public class ConectorServidor {
 			params.add(new BasicNameValuePair("id_sitio", Long.toString(idSitio) ) );
 			String idPoblacion = UtilPropiedades.getInstance().getProperty(UtilPropiedades.PROP_ID_POBLACION);
 			params.add(new BasicNameValuePair("id_poblacion", idPoblacion ) );
+			params.add(new BasicNameValuePair("version_app", VersionApp.getVersionApp(contexto)) );
+
 
 			/* Una vez anadidos los parametros actualizamos la entidad de httppost, esto quiere decir
 			 * en pocas palabras anexamos los parametros al objeto para que al enviarse al servidor
@@ -177,6 +184,7 @@ public class ConectorServidor {
 			params.add(new BasicNameValuePair("ultima_actualizacion", Long.toString(ultimaActualizacion) ) );
 			String idPoblacion = UtilPropiedades.getInstance().getProperty(UtilPropiedades.PROP_ID_POBLACION);
 			params.add(new BasicNameValuePair("id_poblacion", idPoblacion ) );
+			params.add(new BasicNameValuePair("version_app", VersionApp.getVersionApp(contexto)) );
 			if(idsCategoriasActualizacion != null) {
 				params.add(new BasicNameValuePair("ids_categorias", idsCategoriasActualizacion ) );
 			}
@@ -226,6 +234,8 @@ public class ConectorServidor {
 			params.add(new BasicNameValuePair("ultima_actualizacion", Long.toString(ultimaActualizacion) ) );
 			String idPoblacion = UtilPropiedades.getInstance().getProperty(UtilPropiedades.PROP_ID_POBLACION);
 			params.add(new BasicNameValuePair("id_poblacion", idPoblacion ) );
+			params.add(new BasicNameValuePair("version_app", VersionApp.getVersionApp(contexto)) );
+
 			if(idsCategoriasActualizacion != null) {
 				params.add(new BasicNameValuePair("ids_categorias", idsCategoriasActualizacion ) );
 			}
@@ -273,6 +283,8 @@ public class ConectorServidor {
 			//ANADIR PARAMETROS
 			List<NameValuePair> params = new ArrayList<NameValuePair>();
 			params.add(new BasicNameValuePair("ultima_actualizacion", Long.toString(ultimaActualizacion) ) );
+			params.add(new BasicNameValuePair("version_app", VersionApp.getVersionApp(contexto)) );
+
 			if(idsCategoriasActualizacion != null) {
 				params.add(new BasicNameValuePair("ids_categorias", idsCategoriasActualizacion ) );
 			}
