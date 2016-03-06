@@ -8,6 +8,7 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
+import android.util.Base64;
 import android.util.Log;
 
 import com.primos.visitamoraleja.contenidos.Sitio;
@@ -50,7 +51,7 @@ public class ManejadorSitiosActualizablesXML extends DefaultHandler {
 			if(localName.equals("idSitio")) {
 				sitio.setId(Long.parseLong(cadena.toString()));
 			} else if(localName.equals("nombre")) {
-				sitio.setNombre(cadena.toString());
+				sitio.setNombre(stringFromBase64(cadena.toString()));
 			} else if(localName.equals("ultimaActualizacion")) {
 				Date ultimaActualizacionDefault = UtilFechas.fechaFromUTC(cadena.toString().trim());
 				sitio.setUltimaActualizacion(ultimaActualizacionDefault);
@@ -75,6 +76,11 @@ public class ManejadorSitiosActualizablesXML extends DefaultHandler {
 
 	public List<Sitio> getLstElements() {
 		return lstSitios;
+	}
+
+	private String stringFromBase64(String txtBase64) {
+		String textoBase64 = txtBase64.toString();
+		return new String(Base64.decode(textoBase64, Base64.DEFAULT));
 	}
 
 
