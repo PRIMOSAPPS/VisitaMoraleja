@@ -19,7 +19,7 @@
         android:title="@string/actionbar_settings"
         android:orderInCategory="100"
         app:showAsAction="ifRoom"
-        android:icon="@drawable/ic_action_action_settings"/>
+        android:icon="@mipmap/ic_action_action_settings"/>
     
     
 

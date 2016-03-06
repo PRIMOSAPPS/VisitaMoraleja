@@ -91,7 +91,7 @@ public class ConfigMenuLateral {
 		listaItemsMenu.add(datosItemFavoritos);
 		IND_MAPA = listaItemsMenu.size();
 		DatosItemMenuLateral datosItemPreferenciasMapa = new DatosItemMenuLateral(
-				(String)resources.getText(R.string.map_mapa), R.drawable.ic_mapa);
+				(String)resources.getText(R.string.map_mapa), R.mipmap.ic_localizar);
 		listaItemsMenu.add(datosItemPreferenciasMapa);
 
 //		valoresMenuLateral[i++] = (String)resources.getText(R.string.favoritos);
@@ -102,12 +102,12 @@ public class ConfigMenuLateral {
 //			valoresMenuLateral[i++] = (String)resources.getText(R.string.ver_notificaciones);
 		IND_PREFERENCIAS = listaItemsMenu.size();
 		DatosItemMenuLateral datosItemPreferencias = new DatosItemMenuLateral(
-				(String)resources.getText(R.string.actionbar_settings), R.drawable.ic_action_action_settings);
+				(String)resources.getText(R.string.actionbar_settings), R.mipmap.ic_action_action_settings);
 		listaItemsMenu.add(datosItemPreferencias);
 //		valoresMenuLateral[i++] = (String)resources.getText(R.string.actionbar_settings);
 //		IND_CREAR_NOTIFICACION = listaItemsMenu.size();
 //		DatosItemMenuLateral datosItemPreferenciasNotificacion = new DatosItemMenuLateral(
-//				"Crear Notif", R.drawable.ic_action_action_settings);
+//				"Crear Notif", R.mipmap.ic_action_action_settings);
 //		listaItemsMenu.add(datosItemPreferenciasNotificacion);
 
 		ListView mDrawerOptions = (ListView) actividadRecibida.findViewById(R.id.menuLateralListaSitios);

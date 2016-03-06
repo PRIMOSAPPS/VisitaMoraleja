@@ -135,7 +135,7 @@
                             android:layout_width="48dp"
                             android:layout_height="48dp"
                             android:layout_marginRight="10dp"
-                            android:background="@drawable/ic_localizar"
+                            android:background="@mipmap/ic_localizar"
                             android:paddingLeft="20dp"
                             android:tag="SITIO" />
 
