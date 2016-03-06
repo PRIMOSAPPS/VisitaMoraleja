@@ -97,4 +97,7 @@
     <string name="error_durante_actualizacion">Se ha producido un error durante la actualización de los datos.</string>
     <string name="title_activity_maps">Mapa</string>
 
+    <string name="nombre_servicio_actualizador">Servicio de notificación de actualización de datos pendiente</string>
+    <string name="title_notificacion_nuevas_actualizaciones">Existe nueva información en la aplicación. Pulsa si quieres actualiza.</string>
+
 </resources>
