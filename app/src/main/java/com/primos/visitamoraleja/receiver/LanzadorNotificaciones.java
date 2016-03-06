@@ -28,7 +28,7 @@ import java.text.SimpleDateFormat;
  */
 public class LanzadorNotificaciones {
     private static final String TAG = "LanzadorNotificaciones";
-    private final static String GRUPO_NOTIFICACIONES_DIME_MONESTERIO = "GRUPO_NOTIFICACIONES_VISITA_MORALEJA";
+    private final static String GRUPO_NOTIFICACIONES_VISITA_MORALEJA = "GRUPO_NOTIFICACIONES_VISITA_MORALEJA";
     private static int idNotificaciones = 0;
 
     public void lanzarNotificacion(Context context, Notificacion notificacion) {
@@ -54,7 +54,7 @@ public class LanzadorNotificaciones {
                 .setContentTitle(sitio.getNombre())
                 .setContentText(notificacion.getTitulo())
                 .setContentIntent(resultPendingIntent)
-                .setGroup(GRUPO_NOTIFICACIONES_DIME_MONESTERIO)
+                .setGroup(GRUPO_NOTIFICACIONES_VISITA_MORALEJA)
                 .setGroupSummary(true)
                 .setAutoCancel(true);
         if(UtilPreferencias.sonarRecibirNotificacion(context)) {
