@@ -19,6 +19,7 @@ public class UtilPreferencias {
 	private final static String PRIMER_ARRANQUE = "primerArranque";
 	public final static String ALMACENAMIENTO_INTERNO = "almacenamientoInterno";
 	public final static String ALMACENAMIENTO_EXTERNO = "almacenamientoExterno";
+	public final static String FECHA_ULTIMA_COMPROBACION_ACTUALIZACIONES = "fechaUltimaComprobacionActualizaciones";
 
 	public static boolean esPrimerArranque(Context contexto) {
 		Log.d("[UtilPreferencias]", "Se comprueba el primer arranque.");
@@ -35,7 +36,21 @@ public class UtilPreferencias {
         edit.putBoolean(PRIMER_ARRANQUE, false);
         edit.commit();
 	}
-	
+
+	public static void setFechaUltimaComprobacionActualizaciones(Context contexto, long millisUltimaComprobacion) {
+		SharedPreferences ratePrefs = PreferenceManager
+				.getDefaultSharedPreferences(contexto);
+		Editor edit = ratePrefs.edit();
+		edit.putLong(FECHA_ULTIMA_COMPROBACION_ACTUALIZACIONES, millisUltimaComprobacion);
+		edit.commit();
+	}
+
+	public static long getFechaUltimaComprobacionActualizaciones(Context contexto) {
+		SharedPreferences ratePrefs = PreferenceManager
+				.getDefaultSharedPreferences(contexto);
+		return ratePrefs.getLong(FECHA_ULTIMA_COMPROBACION_ACTUALIZACIONES, 0);
+	}
+
 	public static void asignarModoAlmacenamiento(Context contexto) {
 		SharedPreferences ratePrefs = PreferenceManager
                 .getDefaultSharedPreferences(contexto);

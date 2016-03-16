@@ -1,5 +1,6 @@
 package com.primos.visitamoraleja.actualizador;
 
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -182,6 +183,7 @@ public class ThreadActualizador extends Thread implements IPrimosActivityLifecyc
 			final List<Sitio> lstSitiosActualizables = cs
 					.getListaSitiosActualizables(ultimaActualizacion,
 							idsCategoriasActualizacion);
+			UtilPreferencias.setFechaUltimaComprobacionActualizaciones(contexto, Calendar.getInstance().getTimeInMillis());
 			
 			if (!lstSitiosActualizables.isEmpty()) {
 

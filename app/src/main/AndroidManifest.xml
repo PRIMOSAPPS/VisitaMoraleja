@@ -106,13 +106,15 @@
             android:label="Acerca de" />
         <activity
             android:name=".MapsActivity"
-            android:label="@string/title_activity_maps"></activity>
+            android:label="@string/title_activity_maps"/>
 
         <service
             android:name=".service.ServicioComprobadorActualizaciones"
             android:enabled="true"
             android:icon="@drawable/ic_launcher"
-            android:label="@string/nombre_servicio_actualizador"></service>
+            android:label="@string/nombre_servicio_actualizador"/>
+
+
         <service android:name="com.parse.PushService" />
 
         <receiver
@@ -122,6 +124,7 @@
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="android.intent.action.PACKAGE_ADDED" />
                 <action android:name="android.intent.action.PACKAGE_REPLACED" />
+                <action android:name="android.intent.action.PACKAGE_CHANGED" />
 
                 <data android:scheme="package" />
             </intent-filter>

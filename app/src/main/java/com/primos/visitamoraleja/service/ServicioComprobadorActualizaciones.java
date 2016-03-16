@@ -20,6 +20,7 @@ import com.primos.visitamoraleja.actualizador.ConectorServidor;
 import com.primos.visitamoraleja.bdsqlite.datasource.SitiosDataSource;
 import com.primos.visitamoraleja.contenidos.Sitio;
 import com.primos.visitamoraleja.excepcion.EventosException;
+import com.primos.visitamoraleja.util.UtilConexion;
 import com.primos.visitamoraleja.util.UtilPreferencias;
 
 import java.util.Date;
@@ -34,13 +35,13 @@ import java.util.TimerTask;
 public class ServicioComprobadorActualizaciones extends Service {
     private final static String GRUPO_NOTIFICACIONES_ACTUALIZACIONES_VISITA_MORALEJA = "GRUPO_NOTIFICACIONES_ACTUALIZACIONES_VISITA_MORALEJA";
     // constant
-    public static final long INTERVALO_EJECUCION = 24 * 60 * 60 * 1000;
+    public static final long INTERVALO_EJECUCION = 3 * 60 * 60 * 1000;
     private final  static String TAG = "[ServicioComprobadorAc]";
 
     private SitiosDataSource dataSource;
 
     // run on another Thread to avoid crash
-    private Handler mHandler = new Handler();
+    private Handler mHandler = null;
     // timer handling
     private Timer mTimer = null;
 
@@ -50,6 +51,11 @@ public class ServicioComprobadorActualizaciones extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        if(mHandler == null) {
+            mHandler = new Handler();
+            mHandler.postDelayed(new RunnableComprobador(), INTERVALO_EJECUCION);
+        }
+
         return Service.START_NOT_STICKY;
     }
 
@@ -60,75 +66,75 @@ public class ServicioComprobadorActualizaciones extends Service {
 
     @Override
     public void onCreate() {
-        // cancel if already existed
-        if(mTimer != null) {
-            mTimer.cancel();
-        } else {
-            // recreate new
-            mTimer = new Timer();
-        }
-        Calendar calFecha = Calendar.getInstance();
-        // schedule task
-        mTimer.schedule(new ComprobadorActualizacionesTask(), calFecha.getTime(), INTERVALO_EJECUCION);
+
     }
 
-    class ComprobadorActualizacionesTask extends TimerTask {
+    class RunnableComprobador implements Runnable {
+        public void run() {
 
+            ThreadComprobador tc = new ThreadComprobador();
+            tc.start();
+            mHandler.postDelayed(this, INTERVALO_EJECUCION);
+        }
+    }
+
+    class ThreadComprobador extends Thread {
         @Override
         public void run() {
-            // run on another thread
-            mHandler.post(new Runnable() {
 
-                @Override
-                public void run() {
+            if (UtilConexion.estaConectado(ServicioComprobadorActualizaciones.this)) {
+                long ahora = Calendar.getInstance().getTimeInMillis();
+                realizarComprobacion();
+                UtilPreferencias.setFechaUltimaComprobacionActualizaciones(ServicioComprobadorActualizaciones.this, ahora);
+            }
+        }
 
-                    dataSource.open();
-                    long ultimaActualizacion = dataSource.getUltimaActualizacion();
-                    dataSource.close();
+        private void realizarComprobacion() {
+            dataSource.open();
+            long ultimaActualizacion = dataSource.getUltimaActualizacion();
+            dataSource.close();
 
-                    String idsCategoriasActualizacion = UtilPreferencias
-                            .getActualizacionPorCategorias(ServicioComprobadorActualizaciones.this);
+            String idsCategoriasActualizacion = UtilPreferencias
+                    .getActualizacionPorCategorias(ServicioComprobadorActualizaciones.this);
 
-                    ConectorServidor cs = new ConectorServidor(ServicioComprobadorActualizaciones.this);
-                    try {
-                        List<Sitio> lstSitiosActualizables = cs.getListaSitiosActualizables(ultimaActualizacion, idsCategoriasActualizacion);
-                        if(!lstSitiosActualizables.isEmpty()) {
-                            long[] patronVibracion = {2000, 1000};
-                            //Esto hace posible crear la notificación
-                            NotificationCompat.Builder mBuilder =
-                                    new NotificationCompat.Builder(ServicioComprobadorActualizaciones.this);
+            ConectorServidor cs = new ConectorServidor(ServicioComprobadorActualizaciones.this);
+            try {
+                List<Sitio> lstSitiosActualizables = cs.getListaSitiosActualizables(ultimaActualizacion, idsCategoriasActualizacion);
+                if(!lstSitiosActualizables.isEmpty()) {
+                    long[] patronVibracion = {2000, 1000};
+                    //Esto hace posible crear la notificación
+                    NotificationCompat.Builder mBuilder =
+                            new NotificationCompat.Builder(ServicioComprobadorActualizaciones.this);
 
-                            Intent resultIntent = new Intent(ServicioComprobadorActualizaciones.this, MainActivity.class);
-                            PendingIntent resultPendingIntent =
-                                    PendingIntent.getActivity(
-                                            ServicioComprobadorActualizaciones.this,
-                                            0,
-                                            resultIntent,
-                                            PendingIntent.FLAG_UPDATE_CURRENT
-                                    );
+                    Intent resultIntent = new Intent(ServicioComprobadorActualizaciones.this, MainActivity.class);
+                    PendingIntent resultPendingIntent =
+                            PendingIntent.getActivity(
+                                    ServicioComprobadorActualizaciones.this,
+                                    0,
+                                    resultIntent,
+                                    PendingIntent.FLAG_UPDATE_CURRENT
+                            );
 
-                            mBuilder.setSmallIcon(R.drawable.ic_action_notificacion)
-                                    .setContentTitle(getString(R.string.title_notificacion_nuevas_actualizaciones))
-                                    .setContentIntent(resultPendingIntent)
-                                    .setGroup(GRUPO_NOTIFICACIONES_ACTUALIZACIONES_VISITA_MORALEJA)
-                                    .setGroupSummary(true)
-                                    .setAutoCancel(true);
-                            mBuilder.setVibrate(patronVibracion);
-                            mBuilder.setLights(Color.YELLOW, 2000, 1500);
+                    mBuilder.setSmallIcon(R.drawable.ic_action_notificacion)
+                            .setContentTitle(getString(R.string.title_notificacion_nuevas_actualizaciones))
+                            .setContentIntent(resultPendingIntent)
+                            .setGroup(GRUPO_NOTIFICACIONES_ACTUALIZACIONES_VISITA_MORALEJA)
+                            .setGroupSummary(true)
+                            .setAutoCancel(true);
+                    mBuilder.setVibrate(patronVibracion);
+                    mBuilder.setLights(Color.YELLOW, 2000, 1500);
 
-                            NotificationManager mNotificationManager =
-                                    (NotificationManager) ServicioComprobadorActualizaciones.this.getSystemService(Context.NOTIFICATION_SERVICE);
-                            Notification notification = mBuilder.build();
-                            mNotificationManager.notify(1, notification);
-                        }
-                    } catch (EventosException e) {
-                        Log.e(TAG, "Error al consultar la lista de sitios actualizables para comprobar actualizaciones.");
-                    }
+                    NotificationManager mNotificationManager =
+                            (NotificationManager) ServicioComprobadorActualizaciones.this.getSystemService(Context.NOTIFICATION_SERVICE);
+                    Notification notification = mBuilder.build();
+                    mNotificationManager.notify(1, notification);
                 }
-
-            });
+            } catch (EventosException e) {
+                Log.e(TAG, "Error al consultar la lista de sitios actualizables para comprobar actualizaciones.", e);
+            }
         }
 
     }
+
 }
 
