@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.primos.visitamoraleja.IPrimosActividyLifeCycleEmisor;
 import com.primos.visitamoraleja.IPrimosActivityLifecycleCallbacks;
+import com.primos.visitamoraleja.PreferenciasActivity;
 import com.primos.visitamoraleja.R;
 import com.primos.visitamoraleja.bdsqlite.datasource.CategoriasDataSource;
 import com.primos.visitamoraleja.bdsqlite.datasource.EventosDataSource;
@@ -25,6 +26,7 @@ import com.primos.visitamoraleja.contenidos.Categoria;
 import com.primos.visitamoraleja.contenidos.Evento;
 import com.primos.visitamoraleja.contenidos.Sitio;
 import com.primos.visitamoraleja.excepcion.EventosException;
+import com.primos.visitamoraleja.util.UltimaActualizacion;
 import com.primos.visitamoraleja.util.UtilConexion;
 import com.primos.visitamoraleja.util.UtilConsultaActualizar;
 import com.primos.visitamoraleja.util.UtilPreferencias;
@@ -69,6 +71,8 @@ public class ThreadActualizador extends Thread implements IPrimosActivityLifecyc
 	private ProgressDialog dialogoProgreso;
 	private boolean mostrarNoDatos = false;
 	private ESTADO_ACTUALIZACION estadoActualizacion = ESTADO_ACTUALIZACION.PARADO;
+
+	private long ultimaActualizacionActualizada;
 
 	/**
 	 * 
@@ -143,18 +147,17 @@ public class ThreadActualizador extends Thread implements IPrimosActivityLifecyc
 	 * 
 	 * @throws EventosException
 	 */
-	private void actualizarCategorias() throws EventosException {
+	private void actualizarCategorias(long ultimaActualizacion) throws EventosException {
 		ConectorServidor cs = new ConectorServidor(contexto);
 		CategoriasDataSource dataSource = new CategoriasDataSource(contexto);
 		try {
 			dataSource.open();
 
-			long ultimaActualizacion = dataSource.getUltimaActualizacion();
-
 			List<Categoria> lstCategorias = cs
 					.getListaCategorias(ultimaActualizacion);
 			Actualizador actualizador = new Actualizador(contexto);
 			actualizador.actualizarCategorias(lstCategorias);
+			ultimaActualizacionActualizada = Math.max(ultimaActualizacionActualizada, actualizador.getUltimaActualizacion());
 		} finally {
 			dataSource.close();
 		}
@@ -171,14 +174,12 @@ public class ThreadActualizador extends Thread implements IPrimosActivityLifecyc
 	 * @param idsCategoriasActualizacion
 	 * @throws EventosException
 	 */
-	private void actualizarSitios(String idsCategoriasActualizacion)
+	private void actualizarSitios(String idsCategoriasActualizacion, long ultimaActualizacion)
 			throws EventosException {
 		ConectorServidor cs = new ConectorServidor(contexto);
 		SitiosDataSource dataSource = new SitiosDataSource(contexto);
 		try {
 			dataSource.open();
-
-			long ultimaActualizacion = dataSource.getUltimaActualizacion();
 
 			final List<Sitio> lstSitiosActualizables = cs
 					.getListaSitiosActualizables(ultimaActualizacion,
@@ -210,6 +211,8 @@ public class ThreadActualizador extends Thread implements IPrimosActivityLifecyc
 							handlerBarraProgresoActualizacion
 									.sendMessage(msjInicio);
 
+							Actualizador actualizador = new Actualizador(
+									contexto);
 							for (final Sitio sitio : lstSitiosActualizables) {
 								Message msj = new Message();
 								msj.arg1 = SITIO_ACTUALIZANDO;
@@ -217,10 +220,9 @@ public class ThreadActualizador extends Thread implements IPrimosActivityLifecyc
 								handlerBarraProgresoActualizacion
 										.sendMessage(msj);
 								List<Sitio> lstSitios = cs.getSitio(sitio);
-								Actualizador actualizador = new Actualizador(
-										contexto);
 								actualizador.actualizarSitios(lstSitios);
 							}
+							ultimaActualizacionActualizada = Math.max(ultimaActualizacionActualizada, actualizador.getUltimaActualizacion());
 
 							Message msjFin = new Message();
 							msjFin.arg1 = FIN_ACTUALIZAR;
@@ -281,19 +283,18 @@ public class ThreadActualizador extends Thread implements IPrimosActivityLifecyc
 	 * @param idsCategoriasActualizacion
 	 * @throws EventosException
 	 */
-	private void actualizarEventos(String idsCategoriasActualizacion)
+	private void actualizarEventos(String idsCategoriasActualizacion, long ultimaActualizacion)
 			throws EventosException {
 		ConectorServidor cs = new ConectorServidor(contexto);
 		EventosDataSource dataSource = new EventosDataSource(contexto);
 		try {
 			dataSource.open();
 
-			long ultimaActualizacion = dataSource.getUltimaActualizacion();
-
 			List<Evento> lstEventos = cs.getListaEventos(ultimaActualizacion,
 					idsCategoriasActualizacion);
 			Actualizador actualizador = new Actualizador(contexto);
 			actualizador.actualizarEventos(lstEventos);
+			ultimaActualizacionActualizada = Math.max(ultimaActualizacionActualizada, actualizador.getUltimaActualizacion());
 		} finally {
 			dataSource.close();
 		}
@@ -306,9 +307,13 @@ public class ThreadActualizador extends Thread implements IPrimosActivityLifecyc
 			if (UtilConexion.estaConectado(contexto)) {
 				String idsCategoriasActualizacion = UtilPreferencias
 						.getActualizacionPorCategorias(contexto);
-				actualizarCategorias();
-				actualizarSitios(idsCategoriasActualizacion);
-				actualizarEventos(idsCategoriasActualizacion);
+				UltimaActualizacion ultimaActUtil = new UltimaActualizacion();
+				long ultimaActualizacion = ultimaActUtil.getUltimaActualizacion(contexto);
+				ultimaActualizacionActualizada = ultimaActualizacion;
+				actualizarCategorias(ultimaActualizacion);
+				actualizarSitios(idsCategoriasActualizacion, ultimaActualizacion);
+				actualizarEventos(idsCategoriasActualizacion, ultimaActualizacion);
+				PreferenciasActivity.setFechaUltimaComprobacionActualizacion(contexto, ultimaActualizacionActualizada);
 			}
 		} catch (EventosException e) {
 			Log.e("AsyncTaskActualizador",

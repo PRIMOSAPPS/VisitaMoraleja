@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
@@ -25,9 +26,10 @@ public class PreferenciasActivity extends PreferenceActivity implements IPrimosA
 	public final static String PREFERENCIA_ACTUALIZAR_AUTOMATICAMENTE = "pref_actualizar_automaticamente";
 	public final static String PREFERENCIA_OPC_NOTIF_SONIDO = "pref_opc_notificaciones_sonido";
 	public final static String PREFERENCIA_OPC_NOTIF_VIBRACION = "pref_opc_notificaciones_vibracion";
-		public final static String PREFERENCIA_OPC_NOTIF_LED = "pref_opc_notificaciones_led";
+	public final static String PREFERENCIA_OPC_NOTIF_LED = "pref_opc_notificaciones_led";
 	public final static String PREFERENCIA_ACTUALIZAR_AHORA = "actualizar_ahora";
 	public final static String PREFERENCIA_ACERCA_DE = "acerca_de";
+	public final static String FECHA_ULTIMA_ACTUALIZACION = "fechaUltimaActualizacion";
 	
 	private List<IPrimosActivityLifecycleCallbacks> lstActivityLifeCicleListener = new ArrayList<>();
 	
@@ -134,5 +136,19 @@ public class PreferenciasActivity extends PreferenceActivity implements IPrimosA
 	public void deregistrar(IPrimosActivityLifecycleCallbacks activityLifeCicleListener) {
 		lstActivityLifeCicleListener.remove(activityLifeCicleListener);
 	}
-		 
+
+
+	public static void setFechaUltimaComprobacionActualizacion(Context contexto, long millisUltimaComprobacion) {
+		SharedPreferences ratePrefs = PreferenceManager
+				.getDefaultSharedPreferences(contexto);
+		SharedPreferences.Editor edit = ratePrefs.edit();
+		edit.putLong(FECHA_ULTIMA_ACTUALIZACION, millisUltimaComprobacion);
+		edit.commit();
+	}
+
+	public static long getFechaUltimaActualizacion(Context contexto) {
+		SharedPreferences ratePrefs = PreferenceManager
+				.getDefaultSharedPreferences(contexto);
+		return ratePrefs.getLong(FECHA_ULTIMA_ACTUALIZACION, 0);
+	}
 }

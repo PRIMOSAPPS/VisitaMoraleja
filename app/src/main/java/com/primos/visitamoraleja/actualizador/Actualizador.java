@@ -1,5 +1,6 @@
 package com.primos.visitamoraleja.actualizador;
 
+import java.util.Date;
 import java.util.List;
 
 import android.content.Context;
@@ -24,6 +25,7 @@ import com.primos.visitamoraleja.excepcion.EventosException;
  */
 public class Actualizador {
 	private Context contexto;
+	private long ultimaActualizacion = 0;
 
 	public Actualizador(Context contexto) {
 		this.contexto = contexto;
@@ -44,6 +46,7 @@ public class Actualizador {
 			Log.d("CATEGORIAS", lstCategorias.toString());
 			for(Categoria categ : lstCategorias) {
 				long id = categ.getId();
+				comprobarUltimaActualizacion(categ.getUltimaActualizacion());
 				Categoria existente = dataSource.getById(id);
 				if(existente == null) {
 					dataSource.insertar(categ);
@@ -54,6 +57,12 @@ public class Actualizador {
 			}
 		} finally {
 			dataSource.close();
+		}
+	}
+
+	private void comprobarUltimaActualizacion(Date dateUltimaActualizacion) {
+		if(dateUltimaActualizacion != null && ultimaActualizacion < dateUltimaActualizacion.getTime()) {
+			ultimaActualizacion = dateUltimaActualizacion.getTime();
 		}
 	}
 
@@ -75,7 +84,7 @@ public class Actualizador {
 			for(Sitio sitio : lstSitios) {
 				long id = sitio.getId();
 				Sitio existente = dataSource.getById(id);
-				
+				comprobarUltimaActualizacion(sitio.getUltimaActualizacion());
 				if(existente == null) {
 					if(sitio.isActivo()) {
 						dataSource.insertar(sitio);
@@ -174,6 +183,7 @@ public class Actualizador {
 			Log.d("Eventos", lstEventos.toString());
 			for(Evento evento : lstEventos) {
 				long id = evento.getId();
+				comprobarUltimaActualizacion(evento.getUltimaActualizacion());
 				Evento existente = dataSource.getById(id);
 				if(existente == null) {
 					dataSource.insertar(evento);
@@ -185,6 +195,10 @@ public class Actualizador {
 		} finally {
 			dataSource.close();
 		}
+	}
+
+	public long getUltimaActualizacion() {
+		return ultimaActualizacion;
 	}
 
 }
