@@ -34,10 +34,11 @@ public class LanzadorNotificaciones {
     public void lanzarNotificacion(Context context, Notificacion notificacion) {
             Intent resultIntent = new Intent(context, DetalleNotificacionActivity.class);
         resultIntent.putExtra(DetalleNotificacionActivity.ID_NOTIFICACION, notificacion.getId());
+        int requestCode = (int)notificacion.getId();
         PendingIntent resultPendingIntent =
                 PendingIntent.getActivity(
                         context,
-                        0,
+                        requestCode,
                         resultIntent,
                         PendingIntent.FLAG_UPDATE_CURRENT
                 );
