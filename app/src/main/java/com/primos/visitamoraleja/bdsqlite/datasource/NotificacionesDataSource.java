@@ -80,7 +80,7 @@ public class NotificacionesDataSource extends AbstractDataSource {
 		List<Notificacion> resul = new ArrayList<Notificacion>();
 
 		Cursor cursor = database.query(NotificacionesSQLite.TABLE_NAME,
-				allColumns, null, null, null, null, null);
+				allColumns, null, null, null, null, NotificacionesSQLite.COLUMNA_FECHA_INICIO_VALIDEZ + " DESC");
 
 		cursor.moveToFirst();
 		while (!cursor.isAfterLast()) {
@@ -103,7 +103,7 @@ public class NotificacionesDataSource extends AbstractDataSource {
 		List<Notificacion> resul = new ArrayList<Notificacion>();
 		String where = NotificacionesSQLite.COLUMNA_ID_CATEGORIA + " = " + idCategoria;
 		Cursor cursor = database.query(NotificacionesSQLite.TABLE_NAME,
-				allColumns, where, null, null, null, null);
+				allColumns, where, null, null, null, NotificacionesSQLite.COLUMNA_FECHA_INICIO_VALIDEZ + " DESC");
 		cursor.moveToFirst();
 		while (!cursor.isAfterLast()) {
 			Notificacion notificacion = cursorToObject(cursor);
