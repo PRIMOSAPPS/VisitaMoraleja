@@ -1,12 +1,9 @@
 package com.primos.visitamoraleja;
 
-import java.util.List;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
-import com.primos.visitamoraleja.adaptadores.EventoAdaptador;
 import com.primos.visitamoraleja.bdsqlite.datasource.EventosDataSource;
 import com.primos.visitamoraleja.contenidos.Evento;
 
@@ -25,14 +22,8 @@ public class ListaEventosActivity extends ActionBarListActivity {
 		
 		idSitio = getIntent().getExtras().getLong(ID_SITIO);
 
-		cargarEventos();
 	}
-	
-	private void cargarEventos() {
-		List<Evento> lstEventos = dataSource.getBySitioId(idSitio);
-		setListAdapter(new EventoAdaptador(this, lstEventos));
-	}
-	
+
 	public void mostrarDetalle(View view) {
 		Evento evento = (Evento)view.getTag();
 

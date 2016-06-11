@@ -22,6 +22,8 @@ import android.util.Log;
 import com.primos.visitamoraleja.contenidos.Categoria;
 import com.primos.visitamoraleja.contenidos.Evento;
 import com.primos.visitamoraleja.contenidos.Sitio;
+import com.primos.visitamoraleja.dto.EventoActualizableDTO;
+import com.primos.visitamoraleja.eventos.EventosJsonParser;
 import com.primos.visitamoraleja.eventos.EventosXML_SAX;
 import com.primos.visitamoraleja.excepcion.EventosException;
 import com.primos.visitamoraleja.util.UtilPropiedades;
@@ -33,6 +35,9 @@ public class ConectorServidor {
 	private static String URL_GET_LISTA_SITIOS = null;//"http://10.0.2.2/eventos/sitios/SitiosToXML.php";
 	private static String URL_GET_LISTA_SITIOS_ACTUALIZABLES = null;
 	private static String URL_GET_LISTA_EVENTOS = null;//"http://10.0.2.2/eventos/eventos/EventosToXML.php";
+	private static String URL_GET_LISTA_EVENTOS_ACTUALIZABLES = null;//"http://10.0.2.2/eventos/eventos/EventosToXML.php";
+	private static String URL_GET_LISTA_IMAGENES_EVENTOS = null;//"http://10.0.2.2/eventos/eventos/EventosToXML.php";
+	private static String URL_GET_LISTA_SITIOS_EVENTOS = null;//"http://10.0.2.2/eventos/eventos/EventosToXML.php";
 	private Context contexto;
 
 	public ConectorServidor(Context contexto) {
@@ -52,17 +57,26 @@ public class ConectorServidor {
 			String rutaCategorias = propiedades.getProperty(UtilPropiedades.PROP_RUTA_CATEGORIAS_XML);
 			String rutaSitios = propiedades.getProperty(UtilPropiedades.PROP_RUTA_SITIOS_XML);
 			String rutaSitiosActualizables = propiedades.getProperty(UtilPropiedades.PROP_RUTA_SITIOS_ACTUALIZBLES_XML);
-			String rutaEventos = propiedades.getProperty(UtilPropiedades.PROP_RUTA_EVENTOS_XML);
+			String rutaEventos = propiedades.getProperty(UtilPropiedades.PROP_RUTA_EVENTOS_APP);
+			String rutaEventosActualizables = propiedades.getProperty(UtilPropiedades.PROP_RUTA_EVENTOS_DESCARGABLES_APP);
+			String rutaImagenesEvento = propiedades.getProperty(UtilPropiedades.PROP_RUTA_IMAGENES_EVENTO_APP);
+			String rutaSitiosEvento = propiedades.getProperty(UtilPropiedades.PROP_RUTA_SITIOS_EVENTO_APP);
 
 			URL_GET_LISTA_CATEGORIAS = servidor + rutaCategorias;
-			URL_GET_LISTA_EVENTOS = servidor + rutaEventos;
 			URL_GET_LISTA_SITIOS = servidor + rutaSitios;
 			URL_GET_LISTA_SITIOS_ACTUALIZABLES = servidor + rutaSitiosActualizables;
+			URL_GET_LISTA_EVENTOS = servidor + rutaEventos;
+			URL_GET_LISTA_EVENTOS_ACTUALIZABLES = servidor + rutaEventosActualizables;
+			URL_GET_LISTA_IMAGENES_EVENTOS = servidor + rutaImagenesEvento;
+			URL_GET_LISTA_SITIOS_EVENTOS = servidor + rutaSitiosEvento;
 		}
 		Log.d(TAG, "URL de las categorias para la actualizacion: " + URL_GET_LISTA_CATEGORIAS);
-		Log.d(TAG, "URL de los eventos para la actualizacion: " + URL_GET_LISTA_EVENTOS);
 		Log.d(TAG, "URL de los sitios para conocer los identificadores de sitios actualizables: " + URL_GET_LISTA_SITIOS_ACTUALIZABLES);
 		Log.d(TAG, "URL de los sitios para la actualizacion: " + URL_GET_LISTA_SITIOS);
+		Log.d(TAG, "URL de los eventos para la actualizacion: " + URL_GET_LISTA_EVENTOS);
+		Log.d(TAG, "URL de los eventos para conocer los identificadores de los eventos actualizables: " + URL_GET_LISTA_EVENTOS_ACTUALIZABLES);
+		Log.d(TAG, "URL de las imagenes pertenecientes a eventos: " + URL_GET_LISTA_IMAGENES_EVENTOS);
+		Log.d(TAG, "URL de los sitios pertenecientes a eventos: " + URL_GET_LISTA_SITIOS_EVENTOS);
 	}
 
 	/**
@@ -261,48 +275,121 @@ public class ConectorServidor {
 		}
 	}
 
+	private abstract class ICustomConector {
+		abstract String getUrl();
+		abstract List<NameValuePair> getParams() throws EventosException;
+	}
+
 	/**
 	 * Realiza la peticion al servidor de los eventos con una fecha de ultima actualizacion posterior a la
 	 * recibida como parametro. Recibe los eventos en XML y usa la clase EventosXML_SAX para convertir el
 	 * XML en una lista de objetos Evento.
-	 * 
-	 * @param ultimaActualizacion
-	 * @param idsCategoriasActualizacion 
+	 *
+	 * @oaram customConector
 	 * @return
 	 * @throws EventosException
 	 */
-	public List<Evento> getListaEventos(long ultimaActualizacion, String idsCategoriasActualizacion) throws EventosException {
+	public InputStream getRespuestaServidor(ICustomConector customConector) throws EventosException {
 		try {
-			Log.w(TAG, "Pidiendo la actualizacion de eventos para la ultimaActualizacion: " + ultimaActualizacion +
-					" y categorias: " + idsCategoriasActualizacion);
+			Log.w(TAG, "Pidiendo la actualizacion de eventos para la ultimaActualizacion: " + customConector);
 			HttpClient httpclient = new DefaultHttpClient();
 			/*Creamos el objeto de HttpClient que nos permitira conectarnos mediante peticiones http*/
-			HttpPost httppost = new HttpPost(URL_GET_LISTA_EVENTOS);
+			HttpPost httppost = new HttpPost(customConector.getUrl());
 
 			/*El objeto HttpPost permite que enviemos una peticion de tipo POST a una URL especificada*/
 			//ANADIR PARAMETROS
-			List<NameValuePair> params = new ArrayList<NameValuePair>();
-			params.add(new BasicNameValuePair("ultima_actualizacion", Long.toString(ultimaActualizacion) ) );
-			params.add(new BasicNameValuePair("version_app", VersionApp.getVersionApp(contexto)) );
+			List<NameValuePair> params = customConector.getParams();
 
-			if(idsCategoriasActualizacion != null) {
-				params.add(new BasicNameValuePair("ids_categorias", idsCategoriasActualizacion ) );
-			}
 			/* Una vez anadidos los parametros actualizamos la entidad de httppost, esto quiere decir
 			 * en pocas palabras anexamos los parametros al objeto para que al enviarse al servidor
 			 * envien los datos que hemos añadido
 			 */
 			httppost.setEntity(new UrlEncodedFormEntity(params));
-			
+
 			/*Finalmente ejecutamos enviando la info al server*/
 			HttpResponse resp = httpclient.execute(httppost);
 			HttpEntity ent = resp.getEntity();/*y obtenemos una respuesta*/
-			
+
 			String text = EntityUtils.toString(ent);
 			Log.w(TAG, text);
-			
-			InputStream is = new ByteArrayInputStream(text.getBytes());
-			
+
+			return new ByteArrayInputStream(text.getBytes());
+		} catch (Exception e) {
+			throw new EventosException("Error al realizar la peticion al servidor: " + e.getMessage(), e);
+		}
+	}
+
+	/**
+	 * Realiza la peticion al servidor de los eventos con una fecha de ultima actualizacion posterior a la
+	 * recibida como parametro. Recibe los eventos en XML y usa la clase EventosXML_SAX para convertir el
+	 * XML en una lista de objetos Evento.
+	 *
+	 * @param ultimaActualizacion
+	 * @return
+	 * @throws EventosException
+	 */
+	public List<EventoActualizableDTO> getListaEventosActualizables(final long ultimaActualizacion) throws EventosException {
+		try {
+
+			class CustomConectorEventosActualizables extends ICustomConector {
+				String getUrl() {
+					return URL_GET_LISTA_EVENTOS_ACTUALIZABLES;
+				}
+				List<NameValuePair> getParams() throws EventosException {
+					try {
+						Log.w(TAG, "Pidiendo la actualizacion de eventos para la ultimaActualizacion: " + ultimaActualizacion);
+						List<NameValuePair> params = new ArrayList<NameValuePair>();
+						params.add(new BasicNameValuePair("ultima_actualizacion", Long.toString(ultimaActualizacion)));
+						params.add(new BasicNameValuePair("version_app", VersionApp.getVersionApp(contexto)));
+
+						return params;
+					} catch(Exception e) {
+						throw new EventosException("Error al realizar la peticion al servidor: " + e.getMessage(), e);
+					}
+				}
+
+			}
+
+			InputStream is = getRespuestaServidor(new CustomConectorEventosActualizables());
+
+			EventosJsonParser parser = new EventosJsonParser();
+			return parser.parseEventosActualizables(is);
+		} catch (Exception e) {
+			throw new EventosException("Error al realizar la peticion al servidor: " + e.getMessage(), e);
+		}
+	}
+
+	/**
+	 * Realiza la peticion al servidor de los eventos con una fecha de ultima actualizacion posterior a la
+	 * recibida como parametro. Recibe los eventos en XML y usa la clase EventosXML_SAX para convertir el
+	 * XML en una lista de objetos Evento.
+	 *
+	 * @return
+	 * @throws EventosException
+	 */
+	public List<Evento> getEvento(final Evento evento) throws EventosException {
+		try {
+
+			class CustomConectorEventos extends ICustomConector {
+				String getUrl() {
+					return URL_GET_LISTA_EVENTOS;
+				}
+				List<NameValuePair> getParams() throws EventosException {
+					try {
+						Log.w(TAG, "Pidiendo la actualizacion de eventos para el evento: " + evento.getId());
+						List<NameValuePair> params = new ArrayList<NameValuePair>();
+						params.add(new BasicNameValuePair("id_evento", Long.toString(evento.getId())));
+						params.add(new BasicNameValuePair("version_app", VersionApp.getVersionApp(contexto)));
+
+						return params;
+					} catch(Exception e) {
+						throw new EventosException("Error al realizar la peticion al servidor: " + e.getMessage(), e);
+					}
+				}
+			}
+
+			InputStream is = getRespuestaServidor(new CustomConectorEventos());
+
 			EventosXML_SAX meXml = new EventosXML_SAX();
 			return meXml.leerEventosXML(is);
 		} catch (Exception e) {
@@ -310,4 +397,9 @@ public class ConectorServidor {
 		}
 	}
 
+	public List<Evento> getEvento(final EventoActualizableDTO eventoActualizable) throws EventosException {
+		Evento evento = new Evento();
+		evento.setId(eventoActualizable.getId());
+		return getEvento(evento);
+	}
 }

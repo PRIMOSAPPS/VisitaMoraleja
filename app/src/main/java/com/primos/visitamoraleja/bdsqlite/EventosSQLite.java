@@ -13,12 +13,9 @@ import android.util.Log;
 public class EventosSQLite extends SQLiteOpenHelper {
 	public final static String TABLE_NAME = "eventos";
 	public final static String COLUMNA_ID = "id";
-	public final static String COLUMNA_ID_CATEGORIA = "id_categoria";
-	public final static String COLUMNA_ID_SITIO = "id_sitio";
 	public final static String COLUMNA_NOMBRE = "nombre";
-	public final static String COLUMNA_ES_EVENTO = "es_evento";
-	public final static String COLUMNA_TEXTO_1 = "texto_1";
-	public final static String COLUMNA_TEXTO_2 = "texto_2";
+	public final static String COLUMNA_TEXTO = "texto";
+	public final static String COLUMNA_DESCRIPCION = "descripcion";
 	public final static String COLUMNA_NOMBRE_ICONO = "nombre_icono";
 	public final static String COLUMNA_LATITUD = "latitud";
 	public final static String COLUMNA_LONGITUD = "longitud";
@@ -31,8 +28,8 @@ public class EventosSQLite extends SQLiteOpenHelper {
 	private static final int DATABASE_VERSION = 1;
 	
 	private final static String CREATE_TABLA = "CREATE TABLE " + TABLE_NAME + 
-			" (id INTEGER PRIMARY KEY, id_categoria INTEGER, id_sitio INTEGER, nombre TEXT, es_evento INTEGER, texto_1 TEXT" +
-			", texto_2 TEXT, nombre_icono TEXT, latitud NUMERIC, longitud NUMERIC, inicio NUMERIC, fin NUMERIC" +
+			" (id INTEGER PRIMARY KEY, nombre TEXT, texto TEXT, descripcion TEXT, nombre_icono TEXT" +
+			", latitud NUMERIC, longitud NUMERIC, inicio NUMERIC, fin NUMERIC" +
 			", activo INTEGER, ultima_actualizacion NUMERIC )";
 
 	public EventosSQLite(Context context) {

@@ -21,7 +21,7 @@ import com.primos.visitamoraleja.util.UtilFechas;
  * @author h
  *
  */
-public class ManejadorEventosXML extends DefaultHandler {
+public class ManejadorEventosJSON extends DefaultHandler {
 	private StringBuilder cadena;
 	private List<Evento> lstEventos = null;
 	private Evento evento;
@@ -51,6 +51,7 @@ public class ManejadorEventosXML extends DefaultHandler {
 		try {
 			if(localName.equals("idEvento")) {
 				evento.setId(Long.parseLong(cadena.toString()));
+				/*
 			} else if(localName.equals("idSitio")) {
 				evento.setIdSitio(Long.parseLong(cadena.toString()));
 			} else if(localName.equals("idCategoria")) {
@@ -68,6 +69,7 @@ public class ManejadorEventosXML extends DefaultHandler {
 				String textoLargoBase64 = cadena.toString();
 				String datosTextoLargo = new String(Base64.decode(textoLargoBase64, Base64.DEFAULT));
 				evento.setTexto2(datosTextoLargo);
+				*/
 			} else if(localName.equals("nombreIcono")) {
 				evento.setNombreIcono(cadena.toString());
 			} else if(localName.equals("icono")) {

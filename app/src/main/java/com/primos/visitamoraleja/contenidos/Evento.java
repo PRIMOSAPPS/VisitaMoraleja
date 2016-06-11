@@ -1,11 +1,12 @@
 package com.primos.visitamoraleja.contenidos;
 
-import java.io.Serializable;
-import java.util.Date;
+import android.graphics.Bitmap;
 
 import com.primos.visitamoraleja.util.UtilFechas;
 
-import android.graphics.Bitmap;
+import java.io.Serializable;
+import java.util.Date;
+import java.util.List;
 
 public class Evento implements Serializable {
 
@@ -15,12 +16,9 @@ public class Evento implements Serializable {
 	private static final long serialVersionUID = 3847802472159042786L;
 	
 	private long id;
-	private long idCategoria;
-	private long idSitio;
-	private boolean esEvento;
 	private String nombre;
-	private String texto1;
-	private String texto2;
+	private String texto;
+	private String descripcion;
 	private String nombreIcono;
 	private Bitmap icono;
 	private double longitud;
@@ -29,6 +27,7 @@ public class Evento implements Serializable {
 	private Date fin;
 	private boolean activo;
 	private Date ultimaActualizacion;
+	private List<ImagenEvento> imagenes;
 	
 
 
@@ -49,42 +48,6 @@ public class Evento implements Serializable {
 
 
 
-	public long getIdCategoria() {
-		return idCategoria;
-	}
-
-
-
-	public void setIdCategoria(long idCategoria) {
-		this.idCategoria = idCategoria;
-	}
-
-
-
-	public long getIdSitio() {
-		return idSitio;
-	}
-
-
-
-	public void setIdSitio(long idSitio) {
-		this.idSitio = idSitio;
-	}
-
-
-
-	public boolean isEsEvento() {
-		return esEvento;
-	}
-
-
-
-	public void setEsEvento(boolean esEvento) {
-		this.esEvento = esEvento;
-	}
-
-
-
 	public String getNombre() {
 		return nombre;
 	}
@@ -95,31 +58,21 @@ public class Evento implements Serializable {
 		this.nombre = nombre;
 	}
 
-
-
-	public String getTexto1() {
-		return texto1;
+	public String getTexto() {
+		return texto;
 	}
 
-
-
-	public void setTexto1(String texto1) {
-		this.texto1 = texto1;
+	public void setTexto(String texto) {
+		this.texto = texto;
 	}
 
-
-
-	public String getTexto2() {
-		return texto2;
+	public String getDescripcion() {
+		return descripcion;
 	}
 
-
-
-	public void setTexto2(String texto2) {
-		this.texto2 = texto2;
+	public void setDescripcion(String descripcion) {
+		this.descripcion = descripcion;
 	}
-
-
 
 	public String getNombreIcono() {
 		return nombreIcono;
@@ -227,8 +180,7 @@ public class Evento implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Evento [id=" + id + ", idCategoria=" + idCategoria
-				+ ", idSitio=" + idSitio + ", nombre=" + nombre
+		return "Evento [id=" + id + ", nombre=" + nombre
 				+ ", nombreIcono=" + nombreIcono + "]";
 	}
 

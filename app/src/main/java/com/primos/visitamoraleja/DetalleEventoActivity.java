@@ -474,12 +474,6 @@ public class DetalleEventoActivity extends ActionBarListActivity implements
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.detalle_evento, menu);
 		asignarIconoFavorito(menu.findItem(R.id.actionbar_favorito));
-		lstEventosSitio = eventosDataSource.getBySitioId(sitio.getId());
-		Log.d(TAG, "Numero de eventos para el sitio " + sitio.getNombre() + " es " + lstEventosSitio.size());
-		if(lstEventosSitio.isEmpty()) {
-			MenuItem item = menu.findItem(R.id.actionbar_eventos);
-			item.setVisible(false);
-		}
 		return true;
 	}
 

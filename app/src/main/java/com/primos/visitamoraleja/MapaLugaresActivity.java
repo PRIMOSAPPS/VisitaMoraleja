@@ -1,5 +1,4 @@
 package com.primos.visitamoraleja;
-import java.util.List;
 
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
@@ -38,11 +37,11 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
-import com.primos.visitamoraleja.prueba.JSONParser;
 import com.primos.visitamoraleja.util.ObjRuta;
 import com.primos.visitamoraleja.util.ObjRuta.ResultadosRuta;
 import com.primos.visitamoraleja.util.UtilMapas;
-import com.primos.visitamoraleja.util.UtilPreferencias;
+
+import java.util.List;
 
 /**
  * Clase que se encarga de mostrar los datos (Foto, nombre, descripcion y coordenadas) de un lugar
@@ -442,10 +441,12 @@ public class MapaLugaresActivity extends FragmentActivity implements LocationLis
 	    @Override
 	    protected String doInBackground(Void... params) {
 	    	String resul = null;
+			/*
 	    	if(url != null) {
 		        JSONParser jParser = new JSONParser();
 		        resul = jParser.getJSONFromUrl(url);
 	    	}
+			*/
 	        return resul;
 	    }
 

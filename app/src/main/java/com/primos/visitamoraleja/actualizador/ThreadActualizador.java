@@ -25,6 +25,7 @@ import com.primos.visitamoraleja.bdsqlite.datasource.SitiosDataSource;
 import com.primos.visitamoraleja.contenidos.Categoria;
 import com.primos.visitamoraleja.contenidos.Evento;
 import com.primos.visitamoraleja.contenidos.Sitio;
+import com.primos.visitamoraleja.dto.EventoActualizableDTO;
 import com.primos.visitamoraleja.excepcion.EventosException;
 import com.primos.visitamoraleja.util.UltimaActualizacion;
 import com.primos.visitamoraleja.util.UtilConexion;
@@ -290,10 +291,12 @@ public class ThreadActualizador extends Thread implements IPrimosActivityLifecyc
 		try {
 			dataSource.open();
 
-			List<Evento> lstEventos = cs.getListaEventos(ultimaActualizacion,
-					idsCategoriasActualizacion);
+			List<EventoActualizableDTO> lstEventosActualizables = cs.getListaEventosActualizables(ultimaActualizacion);
 			Actualizador actualizador = new Actualizador(contexto);
-			actualizador.actualizarEventos(lstEventos);
+			for(EventoActualizableDTO eventoActualizableDTO : lstEventosActualizables) {
+				List<Evento> lstEventos = cs.getEvento(eventoActualizableDTO);
+				actualizador.actualizarEventos(lstEventos);
+			}
 			ultimaActualizacionActualizada = Math.max(ultimaActualizacionActualizada, actualizador.getUltimaActualizacion());
 		} finally {
 			dataSource.close();

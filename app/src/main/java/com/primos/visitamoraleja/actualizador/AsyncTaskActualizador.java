@@ -1,9 +1,5 @@
 package com.primos.visitamoraleja.actualizador;
 
-import java.text.ParseException;
-import java.util.Date;
-import java.util.List;
-
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
@@ -14,12 +10,15 @@ import com.primos.visitamoraleja.bdsqlite.datasource.CategoriasDataSource;
 import com.primos.visitamoraleja.bdsqlite.datasource.EventosDataSource;
 import com.primos.visitamoraleja.bdsqlite.datasource.SitiosDataSource;
 import com.primos.visitamoraleja.contenidos.Categoria;
-import com.primos.visitamoraleja.contenidos.Evento;
 import com.primos.visitamoraleja.contenidos.Sitio;
 import com.primos.visitamoraleja.excepcion.EventosException;
 import com.primos.visitamoraleja.util.UtilConexion;
 import com.primos.visitamoraleja.util.UtilFechas;
 import com.primos.visitamoraleja.util.UtilPreferencias;
+
+import java.text.ParseException;
+import java.util.Date;
+import java.util.List;
 
 /**
  * Realiza la acualizacion de los contenidos que tienen nuevas versiones en el servidor. La comprobacion de estas
@@ -124,16 +123,18 @@ public class AsyncTaskActualizador extends AsyncTask<Void, Void, AsyncTaskActual
 		EventosDataSource dataSource = new EventosDataSource(contexto);
 		try {
 			dataSource.open();
-			
-			long ultimaActualizacion = dataSource.getUltimaActualizacion();
-			Date dateUltimaActualizacion = UtilFechas.fechaToUTC(new Date(ultimaActualizacion));
-			ultimaActualizacion = dateUltimaActualizacion.getTime();
 
-			List<Evento> lstEventos = cs.getListaEventos(ultimaActualizacion, idsCategoriasActualizacion);
+			/*
+			List<Evento> lstEventosActualizables = cs.getListaEventosActualizables(ultimaActualizacion);
 			Actualizador actualizador = new Actualizador(contexto);
-			actualizador.actualizarEventos(lstEventos);
-		} catch (ParseException e) {
-			Log.e(TAG, "Excepcion al parsear la fecha para conseguir la ultima actualizacion en formato UTC: ", e);
+			for(Evento eventoActualizable : lstEventosActualizables) {
+				List<Evento> lstEventos = cs.getEvento(eventoActualizable);
+				actualizador.actualizarEventos(lstEventos);
+			}
+			ultimaActualizacionActualizada = Math.max(ultimaActualizacionActualizada, actualizador.getUltimaActualizacion());
+			*/
+		//} catch (ParseException e) {
+		//	Log.e(TAG, "Excepcion al parsear la fecha para conseguir la ultima actualizacion en formato UTC: ", e);
 		} finally {
 			dataSource.close();
 		}

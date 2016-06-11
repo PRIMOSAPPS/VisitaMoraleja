@@ -16,13 +16,13 @@ import com.primos.visitamoraleja.contenidos.Categoria;
 import com.primos.visitamoraleja.contenidos.Evento;
 import com.primos.visitamoraleja.contenidos.Sitio;
 import com.primos.visitamoraleja.xml.ManejadorCategoriasXML;
-import com.primos.visitamoraleja.xml.ManejadorEventosXML;
+import com.primos.visitamoraleja.xml.ManejadorEventosJSON;
 import com.primos.visitamoraleja.xml.ManejadorSitiosActualizablesXML;
 import com.primos.visitamoraleja.xml.ManejadorSitiosXML;
 
 /**
  * Lee los datos del XML recibido como un InputStream y devuelve una lista de los objetos resultantes.
- * Para ello se sirve de las clases ManejadorCategoriasXML, ManejadorSitiosXML o ManejadorEventosXML
+ * Para ello se sirve de las clases ManejadorCategoriasXML, ManejadorSitiosXML o ManejadorEventosJSON
  * segun corresponda
  * @author h
  *
@@ -76,7 +76,7 @@ public class EventosXML_SAX {
 		SAXParser parser = factory.newSAXParser();
 		XMLReader reader = parser.getXMLReader();
 		
-		ManejadorEventosXML manejador = new ManejadorEventosXML();
+		ManejadorEventosJSON manejador = new ManejadorEventosJSON();
 		reader.setContentHandler(manejador);
 		reader.parse(new InputSource(is));
 		

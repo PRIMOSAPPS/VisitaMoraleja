@@ -44,9 +44,7 @@ public class DetalleEventoTemporalActivity extends Activity {
 		String strFechaFin = "Hasta: " + dateFormat.format(evento.getFin());
 		tvFechasEvento.setText(strFechaInicio + "\n" + strFechaFin);
 		
-		String texto1 = evento.getTexto1();
-		String texto2 = evento.getTexto2();
-		String textoWebView = texto1 + "<div style='clear:both;'></div>" + texto2;
+		String textoWebView = evento.getTexto();
 		wvEventoTextoLargo1.loadDataWithBaseURL(null, textoWebView, Constantes.mimeType, Constantes.encoding, null);
 		
 		ItfAlmacenamiento almacenamiento = AlmacenamientoFactory.getAlmacenamiento(this);
