@@ -44,18 +44,6 @@ public class AlmacenamientoInterno implements ItfAlmacenamiento {
 	}
 
 	@Override
-	public Bitmap getIconoEvento(long idEvento, String nombre) {
-		String nombreImagen = PREFIJO_EVENTOS + nombre;
-		Bitmap resul = null;
-		try {
-			resul = getBitmap(nombreImagen);
-		} catch (FileNotFoundException e) {
-			Log.e(TAG, "Error leyendo el icono de evento: " + idEvento + " nombre " + nombre, e);
-		}
-		return resul;
-	}
-
-	@Override
 	public Bitmap getImagenSitio(long idSitio, String nombre) {
 		String nombreImagen = PREFIJO_SITIOS + nombre;
 		Bitmap resul = null;
@@ -103,18 +91,6 @@ public class AlmacenamientoInterno implements ItfAlmacenamiento {
 	}
 
 	@Override
-	public void addIconoEventos(Bitmap imagen, String nombreImagen,
-			long idEvento) {
-		String nombreImg = PREFIJO_EVENTOS + nombreImagen;
-		try {
-			Log.d("[AlmacenamientoInterno]", "addIconoEventos(" + nombreImagen + ", " + idEvento + ")");
-			guardarImagen(imagen, nombreImg);
-		} catch (FileNotFoundException e) {
-			Log.e(TAG, "Error guardando el icono de evento: " + idEvento + " nombre " + nombreImagen, e);
-		}
-	}
-
-	@Override
 	public void addImagenSitio(Bitmap imagen, String nombreImagen, long idSitio) {
 		String nombreImg = PREFIJO_SITIOS + nombreImagen;
 		try {
@@ -136,6 +112,86 @@ public class AlmacenamientoInterno implements ItfAlmacenamiento {
 			borrarImagen(nombreImg);
 		} catch (IOException e) {
 			Log.e(TAG, "Error borrando la imagen del sitio: " + idSitio + " nombre " + nombreImagen, e);
+		}
+	}
+
+	private String getNombreImagen(String prefijo, long identificador, String nombreImagen) {
+		return prefijo + identificador + nombreImagen;
+	}
+
+	@Override
+	public Bitmap getImagenEvento(long idEvento, String nombre) {
+		String nombreImagen = getNombreImagen(PREFIJO_EVENTOS, idEvento, nombre);
+		Bitmap resul = null;
+		try {
+			resul = getBitmap(nombreImagen);
+		} catch (FileNotFoundException e) {
+			Log.e(TAG, "Error leyendo el icono de evento: " + idEvento + " nombre " + nombre, e);
+		}
+		return resul;
+	}
+
+	@Override
+	public void addImagenEvento(Bitmap imagen, String nombreImagen,
+								long idEvento) {
+		String nombreImg = getNombreImagen(PREFIJO_EVENTOS, idEvento, nombreImagen);
+		try {
+			Log.d("[AlmacenamientoInterno]", "addIconoEventos(" + nombreImagen + ", " + idEvento + ")");
+			guardarImagen(imagen, nombreImg);
+		} catch (FileNotFoundException e) {
+			Log.e(TAG, "Error guardando el icono de evento: " + idEvento + " nombre " + nombreImagen, e);
+		}
+	}
+
+	/* (non-Javadoc)
+	 * @see com.primos.visitamoraleja.almacenamiento.ItfAlmacenamiento2#addImagenSitio(android.graphics.Bitmap, java.lang.String, long)
+	 */
+	@Override
+	public void borrarImagenEvento(String nombreImagen, long idEvento) {
+		try {
+			String nombreImg = getNombreImagen(PREFIJO_EVENTOS, idEvento, nombreImagen);
+			Log.d("[AlmacenamientoInterno]", "borrarImagenSitio(" + nombreImg + ", " + idEvento + ")");
+			borrarImagen(nombreImg);
+		} catch (IOException e) {
+			Log.e(TAG, "Error borrando la imagen del sitio: " + idEvento + " nombre " + nombreImagen, e);
+		}
+	}
+
+	@Override
+	public Bitmap getImagenSitioEvento(long idSitioEvento, String nombre) {
+		String nombreImagen = getNombreImagen(PREFIJO_EVENTOS, idSitioEvento, nombre);
+		Bitmap resul = null;
+		try {
+			resul = getBitmap(nombreImagen);
+		} catch (FileNotFoundException e) {
+			Log.e(TAG, "Error leyendo el icono de evento de evento: " + idSitioEvento + " nombre " + nombre, e);
+		}
+		return resul;
+	}
+
+	@Override
+	public void addImagenSitioEvento(Bitmap imagen, String nombreImagen,
+								long idSitioEvento) {
+		String nombreImg = getNombreImagen(PREFIJO_EVENTOS, idSitioEvento, nombreImagen);
+		try {
+			Log.d("[AlmacenamientoInterno]", "addIconoEventos(" + nombreImagen + ", " + idSitioEvento + ")");
+			guardarImagen(imagen, nombreImg);
+		} catch (FileNotFoundException e) {
+			Log.e(TAG, "Error guardando el icono de evento de evento: " + idSitioEvento + " nombre " + nombreImagen, e);
+		}
+	}
+
+	/* (non-Javadoc)
+	 * @see com.primos.visitamoraleja.almacenamiento.ItfAlmacenamiento2#addImagenSitio(android.graphics.Bitmap, java.lang.String, long)
+	 */
+	@Override
+	public void borrarImagenSitioEvento(String nombreImagen, long idSitioEvento) {
+		try {
+			String nombreImg = getNombreImagen(PREFIJO_EVENTOS, idSitioEvento, nombreImagen);
+			Log.d("[AlmacenamientoInterno]", "borrarImagenSitio(" + nombreImg + ", " + idSitioEvento + ")");
+			borrarImagen(nombreImg);
+		} catch (IOException e) {
+			Log.e(TAG, "Error borrando la imagen del sitio de evento: " + idSitioEvento + " nombre " + nombreImagen, e);
 		}
 	}
 }
