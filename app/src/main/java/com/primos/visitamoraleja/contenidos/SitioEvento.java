@@ -23,6 +23,10 @@ public class SitioEvento implements Serializable {
     private boolean activo;
     private Date ultimaActualizacion;
 
+    public SitioEvento() {
+        idSitioRegistrado = -1;
+    }
+
     public long getId() {
         return id;
     }

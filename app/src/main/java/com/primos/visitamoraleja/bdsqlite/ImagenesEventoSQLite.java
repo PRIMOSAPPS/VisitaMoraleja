@@ -11,7 +11,7 @@ import java.util.Date;
 /**
  * Created by h on 7/06/16.
  */
-public class ImagenesEvento extends SQLiteOpenHelper {
+public class ImagenesEventoSQLite extends SQLiteOpenHelper {
     public final static String TABLE_NAME = "imagenesevento";
     public final static String COLUMNA_ID = "id";
     public final static String COLUMNA_ID_EVENTO = "id_evento";
@@ -32,7 +32,7 @@ public class ImagenesEvento extends SQLiteOpenHelper {
             " grosor_linea TEXT, texto TEXT, coordenadas TEXT, " +
             " activo INTEGER, ultima_actualizacion NUMERIC )";
 
-    public ImagenesEvento(Context context) {
+    public ImagenesEventoSQLite(Context context) {
         super(context, TABLE_NAME, null, DATABASE_VERSION);
     }
 
