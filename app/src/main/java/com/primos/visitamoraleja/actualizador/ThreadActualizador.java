@@ -312,7 +312,7 @@ public class ThreadActualizador extends Thread implements IPrimosActivityLifecyc
 				ultimaActualizacionActualizada = ultimaActualizacion;
 				actualizarCategorias(ultimaActualizacion);
 				actualizarSitios(idsCategoriasActualizacion, ultimaActualizacion);
-				actualizarEventos(idsCategoriasActualizacion, ultimaActualizacion);
+				//actualizarEventos(idsCategoriasActualizacion, ultimaActualizacion);
 				PreferenciasActivity.setFechaUltimaComprobacionActualizacion(contexto, ultimaActualizacionActualizada);
 			}
 		} catch (EventosException e) {
