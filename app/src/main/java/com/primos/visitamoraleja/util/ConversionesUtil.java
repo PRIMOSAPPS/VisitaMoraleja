@@ -51,9 +51,19 @@ public class ConversionesUtil {
 	 * @throws UnsupportedEncodingException
 	 */
 	public static Bitmap getBitmap(StringBuilder cadena) throws UnsupportedEncodingException {
-		byte[] strImagenBase64 = cadena.toString().trim().getBytes("UTF-16"); ;
+		return getBitmap(cadena.toString());
+	}
+
+	/**
+	 * Las imagenes recibidas en los XML estan codificadas en base64, esta funcion convierte el String contenido en el XML
+	 * en un objeto tipo Bitmap
+	 * @param cadena
+	 * @return
+	 * @throws UnsupportedEncodingException
+	 */
+	public static Bitmap getBitmap(String cadena) throws UnsupportedEncodingException {
+		byte[] strImagenBase64 = cadena.trim().getBytes("UTF-16"); ;
 		byte[] base64decoded = Base64.decode(strImagenBase64, Base64.DEFAULT);
 		return BitmapFactory.decodeByteArray(base64decoded, 0, base64decoded.length);
 	}
-
 }
