@@ -51,12 +51,6 @@ public class InicioActivity extends Activity {
 				is.close();
 				Log.d("[InicioActivity]", "Se ha realizado la carga desde fichero de " + lstCategorias.size() + " categorias");
 				
-				is = this.getResources().openRawResource(R.raw.eventos_xml);
-				List<Evento> lstEventos = meXml.leerEventosXML(is);
-				actualizador.actualizarEventos(lstEventos);
-				is.close();
-				Log.d("[InicioActivity]", "Se ha realizado la carga desde fichero de " + lstEventos.size() + " eventos");
-				
 				// Los sitios es probable que superen ficheros de 1MB, por eso se realiza la carga de esta manera
 				int i=1;
 				int idResource = resources.getIdentifier("raw/sitios_xml_" + i,
