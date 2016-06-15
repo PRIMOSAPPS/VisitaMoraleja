@@ -31,7 +31,6 @@ public class SitioEventoSQLite extends SQLiteOpenHelper {
     private final static String CREATE_TABLA = "CREATE TABLE " + TABLE_NAME +
             " (id INTEGER PRIMARY KEY, id_evento INTEGER, es_sitio_registrado INTEGER, id_sitio_registrado INTEGER, " +
             "nombre TEXT, texto TEXT, descripcion TEXT, nombre_icono TEXT, latitud NUMERIC, longitud NUMERIC, " +
-            " grosor_linea TEXT, texto TEXT, coordenadas TEXT, " +
             " activo INTEGER, ultima_actualizacion NUMERIC )";
 
     public SitioEventoSQLite(Context context) {

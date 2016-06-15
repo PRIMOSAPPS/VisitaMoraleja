@@ -24,7 +24,9 @@ import com.primos.visitamoraleja.bdsqlite.datasource.EventosDataSource;
 import com.primos.visitamoraleja.bdsqlite.datasource.SitiosDataSource;
 import com.primos.visitamoraleja.contenidos.Categoria;
 import com.primos.visitamoraleja.contenidos.Evento;
+import com.primos.visitamoraleja.contenidos.ImagenEvento;
 import com.primos.visitamoraleja.contenidos.Sitio;
+import com.primos.visitamoraleja.contenidos.SitioEvento;
 import com.primos.visitamoraleja.dto.EventoActualizableDTO;
 import com.primos.visitamoraleja.excepcion.EventosException;
 import com.primos.visitamoraleja.util.UltimaActualizacion;
@@ -273,6 +275,28 @@ public class ThreadActualizador extends Thread implements IPrimosActivityLifecyc
 		});
 	}
 
+	private void ordenarSitioEventoPorFechaActualizacion(List<SitioEvento> sitiosEvento) {
+		Collections.sort(sitiosEvento, new Comparator<SitioEvento>() {
+			@Override
+			public int compare(SitioEvento lhs, SitioEvento rhs) {
+				Date dateLhs = lhs.getUltimaActualizacion();
+				Date dateRhs = rhs.getUltimaActualizacion();
+				return dateLhs.compareTo(dateRhs);
+			}
+		});
+	}
+
+	private void ordenarImagenEventoPorFechaActualizacion(List<ImagenEvento> imagenesEvento) {
+		Collections.sort(imagenesEvento, new Comparator<ImagenEvento>() {
+			@Override
+			public int compare(ImagenEvento lhs, ImagenEvento rhs) {
+				Date dateLhs = lhs.getUltimaActualizacion();
+				Date dateRhs = rhs.getUltimaActualizacion();
+				return dateLhs.compareTo(dateRhs);
+			}
+		});
+	}
+
 	/**
 	 * Realiza la actualizacion de los evenos, comprobando primero la mayor
 	 * fecha de ultima actualizacion de los evenos almacenados en la base de
@@ -296,6 +320,14 @@ public class ThreadActualizador extends Thread implements IPrimosActivityLifecyc
 			for(EventoActualizableDTO eventoActualizableDTO : lstEventosActualizables) {
 				List<Evento> lstEventos = cs.getEvento(eventoActualizableDTO);
 				actualizador.actualizarEventos(lstEventos);
+
+				List<SitioEvento> sitiosEvento = cs.getSitiosEvento(eventoActualizableDTO);
+				ordenarSitioEventoPorFechaActualizacion(sitiosEvento);
+				actualizador.actualizarSitiosEvento(sitiosEvento);
+
+				List<ImagenEvento> imagenesEvento = cs.getImagenesEvento(eventoActualizableDTO);
+				ordenarImagenEventoPorFechaActualizacion(imagenesEvento);
+				actualizador.actualizarImagenesEvento(imagenesEvento);
 			}
 			ultimaActualizacionActualizada = Math.max(ultimaActualizacionActualizada, actualizador.getUltimaActualizacion());
 		} finally {

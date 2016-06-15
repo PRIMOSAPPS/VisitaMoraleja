@@ -1,15 +1,16 @@
 package com.primos.visitamoraleja.eventos;
 
-import android.util.Base64;
 import android.util.Log;
 
 import com.primos.visitamoraleja.constantes.Constantes;
 import com.primos.visitamoraleja.contenidos.Evento;
 import com.primos.visitamoraleja.contenidos.FormaEvento;
+import com.primos.visitamoraleja.contenidos.ImagenEvento;
+import com.primos.visitamoraleja.contenidos.SitioEvento;
 import com.primos.visitamoraleja.dto.EventoActualizableDTO;
 import com.primos.visitamoraleja.util.ConversionesUtil;
-import com.primos.visitamoraleja.util.UtilFechas;
 import com.primos.visitamoraleja.util.UtilJson;
+import com.primos.visitamoraleja.util.UtilStrings;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -19,9 +20,9 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -34,10 +35,12 @@ public class EventosJsonParser {
         List<Evento> resul = new ArrayList<>();
 
         try {
-            String strJson = isToString(is);
+            String strJson = UtilStrings.isToString(is);
             JSONArray json = new JSONArray(strJson);
             for(int i=0; i<json.length(); i++) {
                 JSONObject jsonEvento = json.getJSONObject(i);
+                Evento eventoActualizable = parseEvento(jsonEvento);
+                resul.add(eventoActualizable);
             }
         } catch(Exception e) {
             Log.e(TAG, "Error al parserar la respuesta del servidor.", e);
@@ -46,12 +49,11 @@ public class EventosJsonParser {
         return resul;
     }
 
-
     public List<EventoActualizableDTO> parseEventosActualizables(InputStream is) {
         List<EventoActualizableDTO> resul = new ArrayList<>();
 
         try {
-            String strJson = isToString(is);
+            String strJson = UtilStrings.isToString(is);
             JSONArray json = new JSONArray(strJson);
             for(int i=0; i<json.length(); i++) {
                 JSONObject jsonEvento = json.getJSONObject(i);
@@ -61,6 +63,63 @@ public class EventosJsonParser {
         } catch(Exception e) {
             Log.e(TAG, "Error al parserar la respuesta del servidor.", e);
         }
+
+        return resul;
+    }
+
+    public List<SitioEvento> parseSitiosEvento(InputStream is) {
+        List<SitioEvento> resul = new ArrayList<>();
+
+        try {
+            String strJson = UtilStrings.isToString(is);
+            JSONArray json = new JSONArray(strJson);
+            for(int i=0; i<json.length(); i++) {
+                JSONObject jsonEvento = json.getJSONObject(i);
+                SitioEvento sitioEvento = parseSitioEvento(jsonEvento);
+                resul.add(sitioEvento);
+            }
+        } catch(Exception e) {
+            Log.e(TAG, "Error al parserar la respuesta del servidor.", e);
+        }
+
+        return resul;
+    }
+
+    public List<ImagenEvento> parseImagenesEvento(InputStream is) {
+        List<ImagenEvento> resul = new ArrayList<>();
+
+        try {
+            String strJson = UtilStrings.isToString(is);
+            JSONArray json = new JSONArray(strJson);
+            for(int i=0; i<json.length(); i++) {
+                JSONObject jsonEvento = json.getJSONObject(i);
+                ImagenEvento imagenEvento = parseImagenEvento(jsonEvento);
+                resul.add(imagenEvento);
+            }
+        } catch(Exception e) {
+            Log.e(TAG, "Error al parserar la respuesta del servidor.", e);
+        }
+
+        return resul;
+    }
+
+    private Evento parseEvento(JSONObject jsonEvento) throws JSONException, ParseException, UnsupportedEncodingException {
+        Evento resul = new Evento();
+        UtilJson utilJson = new UtilJson();
+
+        resul.setId(jsonEvento.getLong(Constantes.Json.ID));
+        resul.setNombre(utilJson.getStringFromBase64(jsonEvento, Constantes.Json.NOMBRE));
+        resul.setTexto(utilJson.getStringFromBase64(jsonEvento, Constantes.Json.TEXTO));
+        resul.setDescripcion(utilJson.getStringFromBase64(jsonEvento, Constantes.Json.DESCRIPCION));
+        resul.setNombreIcono(utilJson.getStringFromBase64(jsonEvento, Constantes.Json.NOMBRE_ICONO));
+        String cadenaImagen = jsonEvento.getString(Constantes.Json.ICONO);
+        resul.setIcono(ConversionesUtil.getBitmap(cadenaImagen));
+        resul.setLatitud(Double.parseDouble(jsonEvento.getString(Constantes.Json.LATITUD)));
+        resul.setLongitud(Double.parseDouble(jsonEvento.getString(Constantes.Json.LONGITUD)));
+        resul.setInicio(utilJson.getDate(jsonEvento, Constantes.Json.INICIO));
+        resul.setFin(utilJson.getDate(jsonEvento, Constantes.Json.FIN));
+        resul.setActivo(utilJson.getBoolean(jsonEvento, Constantes.Json.ACTIVO));
+        resul.setUltimaActualizacion(utilJson.getDate(jsonEvento, Constantes.Json.ULTIMA_ACTUALIZACION));
 
         return resul;
     }
@@ -108,15 +167,43 @@ public class EventosJsonParser {
         return resul;
     }
 
-    private String isToString(InputStream is) throws IOException{
-        BufferedReader streamReader = new BufferedReader(new InputStreamReader(is, "UTF-8"));
-        StringBuilder responseStrBuilder = new StringBuilder();
+    private SitioEvento parseSitioEvento(JSONObject jsonSitioEvento) throws JSONException, ParseException, UnsupportedEncodingException {
+        SitioEvento resul = new SitioEvento();
 
-        String inputStr;
-        while ((inputStr = streamReader.readLine()) != null) {
-            responseStrBuilder.append(inputStr);
-        }
+        UtilJson utilJson = new UtilJson();
+        resul.setId(jsonSitioEvento.getLong(Constantes.Json.ID));
+        resul.setIdEvento(jsonSitioEvento.getLong(Constantes.Json.ID_EVENTO));
+        resul.setEsSitioRegistrado(utilJson.getBoolean(jsonSitioEvento, Constantes.Json.ES_SITIO_REGISTRADO));
+        resul.setIdSitioRegistrado(jsonSitioEvento.getLong(Constantes.Json.ID_SITIO_REGISTRADO));
+        resul.setNombre(jsonSitioEvento.getString(Constantes.Json.NOMBRE));
+        resul.setTexto(jsonSitioEvento.getString(Constantes.Json.TEXTO));
+        resul.setDescripcion(jsonSitioEvento.getString(Constantes.Json.DESCRIPCION));
+        resul.setNombreIcono(utilJson.getStringFromBase64(jsonSitioEvento, Constantes.Json.NOMBRE_ICONO));
+        String cadenaImagen = jsonSitioEvento.getString(Constantes.Json.ICONO);
+        resul.setIcono(ConversionesUtil.getBitmap(cadenaImagen));
 
-        return responseStrBuilder.toString();
+        resul.setLatitud(Double.parseDouble(jsonSitioEvento.getString(Constantes.Json.LATITUD)));
+        resul.setLongitud(Double.parseDouble(jsonSitioEvento.getString(Constantes.Json.LONGITUD)));
+        resul.setActivo(utilJson.getBoolean(jsonSitioEvento, Constantes.Json.ACTIVO));
+        resul.setUltimaActualizacion(utilJson.getDate(jsonSitioEvento, Constantes.Json.ULTIMA_ACTUALIZACION));
+
+        return resul;
     }
+
+    private ImagenEvento parseImagenEvento(JSONObject jsonImagenEvento) throws JSONException, ParseException, UnsupportedEncodingException {
+        ImagenEvento resul = new ImagenEvento();
+
+        UtilJson utilJson = new UtilJson();
+        resul.setId(jsonImagenEvento.getLong(Constantes.Json.ID));
+        resul.setIdEvento(jsonImagenEvento.getLong(Constantes.Json.ID_EVENTO));
+        resul.setNombre(jsonImagenEvento.getString(Constantes.Json.NOMBRE));
+        String cadenaImagen = jsonImagenEvento.getString(Constantes.Json.IMAGEN);
+        resul.setImagen(ConversionesUtil.getBitmap(cadenaImagen));
+        resul.setActivo(utilJson.getBoolean(jsonImagenEvento, Constantes.Json.ACTIVO));
+        resul.setUltimaActualizacion(utilJson.getDate(jsonImagenEvento, Constantes.Json.ULTIMA_ACTUALIZACION));
+
+        return resul;
+    }
+
+
 }

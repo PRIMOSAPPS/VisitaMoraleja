@@ -22,6 +22,8 @@ public class Constantes {
 		public final static String ULTIMA_ACTUALIZACION = "ultima_actualizacion";
 
 		public final static String ID_EVENTO = "id_evento";
+		public final static String ES_SITIO_REGISTRADO = "es_sitio_registrado";
+		public final static String ID_SITIO_REGISTRADO = "id_sitio_registrado";
 		public final static String TIPO_FORMA = "tipo_forma";
 		public final static String COLOR_RELLENO = "color_relleno";
 		public final static String COLOR_LINEA = "color_linea";
@@ -31,6 +33,11 @@ public class Constantes {
 		public final static String LATITUD = "latitud";
 		public final static String LONGITUD = "longitud";
 		public final static String DESCRIPCION = "descripcion";
+		public static final String NOMBRE_ICONO = "nombre_icono";
+		public static final String ICONO = "icono";
+		public static final String INICIO = "inicio";
+		public static final String FIN = "fin";
+		public static final String IMAGEN = "imagen";
 	}
 
 }

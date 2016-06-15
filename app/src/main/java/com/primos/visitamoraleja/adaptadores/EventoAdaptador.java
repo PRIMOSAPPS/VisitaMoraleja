@@ -48,7 +48,7 @@ public class EventoAdaptador extends EventoSitioAdaptador<Evento> {
 		//TextView textDescripcionCorta = (TextView)view.findViewById(R.id.textDescripcion);
 		//textDescripcionCorta.setText(sitio.getTextoCorto1());
 		ItfAlmacenamiento almacenamiento = AlmacenamientoFactory.getAlmacenamiento(actividad);
-		Bitmap bitmap = almacenamiento.getIconoEvento(evento.getId(), evento.getNombreIcono());
+		Bitmap bitmap = almacenamiento.getImagenEvento(evento.getId(), evento.getNombreIcono());
 		imagen.setImageBitmap(bitmap);
 		
 //		LayoutParams params = new LayoutParams(LayoutParams.fill_parent,

@@ -21,7 +21,9 @@ import android.util.Log;
 
 import com.primos.visitamoraleja.contenidos.Categoria;
 import com.primos.visitamoraleja.contenidos.Evento;
+import com.primos.visitamoraleja.contenidos.ImagenEvento;
 import com.primos.visitamoraleja.contenidos.Sitio;
+import com.primos.visitamoraleja.contenidos.SitioEvento;
 import com.primos.visitamoraleja.dto.EventoActualizableDTO;
 import com.primos.visitamoraleja.eventos.EventosJsonParser;
 import com.primos.visitamoraleja.eventos.EventosXML_SAX;
@@ -390,8 +392,8 @@ public class ConectorServidor {
 
 			InputStream is = getRespuestaServidor(new CustomConectorEventos());
 
-			EventosXML_SAX meXml = new EventosXML_SAX();
-			return meXml.leerEventosXML(is);
+			EventosJsonParser parser = new EventosJsonParser();
+			return parser.parseEventos(is);
 		} catch (Exception e) {
 			throw new EventosException("Error al realizar la peticion al servidor: " + e.getMessage(), e);
 		}
@@ -401,5 +403,89 @@ public class ConectorServidor {
 		Evento evento = new Evento();
 		evento.setId(eventoActualizable.getId());
 		return getEvento(evento);
+	}
+
+	private List<SitioEvento> getSitiosEvento(final Long idSitio) throws EventosException {
+		try {
+
+			class CustomConectorEventos extends ICustomConector {
+				String getUrl() {
+					return URL_GET_LISTA_SITIOS_EVENTOS;
+				}
+				List<NameValuePair> getParams() throws EventosException {
+					try {
+						Log.w(TAG, "Pidiendo la actualizacion de sitios para el evento: " + idSitio);
+						List<NameValuePair> params = new ArrayList<NameValuePair>();
+						params.add(new BasicNameValuePair("id_sitio_evento", Long.toString(idSitio)));
+						params.add(new BasicNameValuePair("version_app", VersionApp.getVersionApp(contexto)));
+
+						return params;
+					} catch(Exception e) {
+						throw new EventosException("Error al realizar la peticion al servidor: " + e.getMessage(), e);
+					}
+				}
+			}
+
+			InputStream is = getRespuestaServidor(new CustomConectorEventos());
+
+			EventosJsonParser parser = new EventosJsonParser();
+			return parser.parseSitiosEvento(is);
+		} catch (Exception e) {
+			throw new EventosException("Error al realizar la peticion al servidor: " + e.getMessage(), e);
+		}
+	}
+
+	public List<SitioEvento> getSitiosEvento(final EventoActualizableDTO eventoActualizable) throws EventosException {
+		List<SitioEvento> resul = new ArrayList<>();
+
+		List<Long> idsSitios = eventoActualizable.getIdsSitios();
+		for(Long idSitio : idsSitios) {
+			List<SitioEvento> se = getSitiosEvento(idSitio);
+			resul.addAll(se);
+		}
+
+		return resul;
+	}
+
+	private List<ImagenEvento> getImagenesEvento(final Long idSitio) throws EventosException {
+		try {
+
+			class CustomConectorEventos extends ICustomConector {
+				String getUrl() {
+					return URL_GET_LISTA_IMAGENES_EVENTOS;
+				}
+				List<NameValuePair> getParams() throws EventosException {
+					try {
+						Log.w(TAG, "Pidiendo la actualizacion de imagenes para el evento: " + idSitio);
+						List<NameValuePair> params = new ArrayList<NameValuePair>();
+						params.add(new BasicNameValuePair("id_imagen_evento", Long.toString(idSitio)));
+						params.add(new BasicNameValuePair("version_app", VersionApp.getVersionApp(contexto)));
+
+						return params;
+					} catch(Exception e) {
+						throw new EventosException("Error al realizar la peticion al servidor: " + e.getMessage(), e);
+					}
+				}
+			}
+
+			InputStream is = getRespuestaServidor(new CustomConectorEventos());
+
+			EventosJsonParser parser = new EventosJsonParser();
+			return parser.parseImagenesEvento(is);
+		} catch (Exception e) {
+			throw new EventosException("Error al realizar la peticion al servidor: " + e.getMessage(), e);
+		}
+	}
+
+	public List<ImagenEvento> getImagenesEvento(final EventoActualizableDTO eventoActualizable) throws EventosException {
+		List<ImagenEvento> resul = new ArrayList<>();
+
+		List<Long> idsImagenes = eventoActualizable.getIdsImagenes();
+		for(Long idImagen : idsImagenes) {
+			List<ImagenEvento> im = getImagenesEvento(idImagen);
+			resul.addAll(im);
+		}
+
+		return resul;
 	}
 }

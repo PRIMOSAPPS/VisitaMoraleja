@@ -48,7 +48,7 @@ public class DetalleEventoTemporalActivity extends Activity {
 		wvEventoTextoLargo1.loadDataWithBaseURL(null, textoWebView, Constantes.mimeType, Constantes.encoding, null);
 		
 		ItfAlmacenamiento almacenamiento = AlmacenamientoFactory.getAlmacenamiento(this);
-		Bitmap bitmap = almacenamiento.getIconoEvento(evento.getId(), evento.getNombreIcono());
+		Bitmap bitmap = almacenamiento.getImagenEvento(evento.getId(), evento.getNombreIcono());
 		imgIcono.setImageBitmap(bitmap);
 	}
 	

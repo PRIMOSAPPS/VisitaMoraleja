@@ -10,10 +10,14 @@ import com.primos.visitamoraleja.almacenamiento.AlmacenamientoFactory;
 import com.primos.visitamoraleja.almacenamiento.ItfAlmacenamiento;
 import com.primos.visitamoraleja.bdsqlite.datasource.CategoriasDataSource;
 import com.primos.visitamoraleja.bdsqlite.datasource.EventosDataSource;
+import com.primos.visitamoraleja.bdsqlite.datasource.ImagenesEventoDatasource;
+import com.primos.visitamoraleja.bdsqlite.datasource.SitioEventoDataSource;
 import com.primos.visitamoraleja.bdsqlite.datasource.SitiosDataSource;
 import com.primos.visitamoraleja.contenidos.Categoria;
 import com.primos.visitamoraleja.contenidos.Evento;
+import com.primos.visitamoraleja.contenidos.ImagenEvento;
 import com.primos.visitamoraleja.contenidos.Sitio;
+import com.primos.visitamoraleja.contenidos.SitioEvento;
 import com.primos.visitamoraleja.excepcion.EventosException;
 
 /**
@@ -190,7 +194,53 @@ public class Actualizador {
 				} else {
 					dataSource.actualizar(evento);
 				}
-				almacenamiento.addIconoEventos(evento.getIcono(), evento.getNombreIcono(), id);
+				almacenamiento.addImagenEvento(evento.getIcono(), evento.getNombreIcono(), id);
+			}
+		} finally {
+			dataSource.close();
+		}
+	}
+
+	public void actualizarSitiosEvento(List<SitioEvento> sitiosEvento) {
+		ItfAlmacenamiento almacenamiento = AlmacenamientoFactory.getAlmacenamiento(contexto);
+		SitioEventoDataSource dataSource = new SitioEventoDataSource(contexto);
+		try {
+			dataSource.open();
+
+			Log.d("SitioEvento", sitiosEvento.toString());
+			for(SitioEvento sitioEvento : sitiosEvento) {
+				long id = sitioEvento.getId();
+				comprobarUltimaActualizacion(sitioEvento.getUltimaActualizacion());
+				SitioEvento existente = dataSource.getById(id);
+				if(existente == null) {
+					dataSource.insertar(sitioEvento);
+				} else {
+					dataSource.actualizar(sitioEvento);
+				}
+				almacenamiento.addImagenSitioEvento(sitioEvento.getIcono(), sitioEvento.getNombreIcono(), id);
+			}
+		} finally {
+			dataSource.close();
+		}
+	}
+
+	public void actualizarImagenesEvento(List<ImagenEvento> imagenesEvento) {
+		ItfAlmacenamiento almacenamiento = AlmacenamientoFactory.getAlmacenamiento(contexto);
+		ImagenesEventoDatasource dataSource = new ImagenesEventoDatasource(contexto);
+		try {
+			dataSource.open();
+
+			Log.d("ImagenEvento", imagenesEvento.toString());
+			for(ImagenEvento imagenEvento : imagenesEvento) {
+				long id = imagenEvento.getId();
+				comprobarUltimaActualizacion(imagenEvento.getUltimaActualizacion());
+				ImagenEvento existente = dataSource.getById(id);
+				if(existente == null) {
+					dataSource.insertar(imagenEvento);
+				} else {
+					dataSource.actualizar(imagenEvento);
+				}
+				almacenamiento.addImagenSitioEvento(imagenEvento.getImagen(), imagenEvento.getNombre(), imagenEvento.getIdEvento());
 			}
 		} finally {
 			dataSource.close();
