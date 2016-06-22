@@ -1,0 +1,88 @@
+<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawer_layout_lateral"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:context=".actividades.eventos.EventoPrincipalActivity">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight=".45"
+            >
+
+            <ImageSwitcher
+                android:id="@+id/imageSlider"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+        </LinearLayout>
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight=".45"
+            android:id="@+id/scrollView" >
+
+            <WebView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="#FFFFFF"
+                android:gravity="bottom"
+                android:scrollbars="vertical"
+                android:id="@+id/textoEvento" />
+        </ScrollView>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight=".10">
+
+            <Button
+                android:layout_weight=".33"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:text="@string/map_mapa"
+                android:id="@+id/evtVerMapa"
+                android:gravity="center" />
+
+            <Button
+                android:layout_weight=".33"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:text="@string/sitios"
+                android:id="@+id/evtVerSitios"
+                android:gravity="center" />
+
+            <Button
+                android:layout_weight=".33"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:text="@string/actividades"
+                android:id="@+id/evtVerActividades"
+                android:gravity="center" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <!-- The navigation drawer -->
+
+    <ListView
+        android:id="@+id/menuLateralListaSitios"
+        android:layout_width="240dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:background="@color/menu_lateral_color_fondo"
+        android:choiceMode="singleChoice"
+        android:divider="@android:color/transparent"
+        android:dividerHeight="0dp" />
+
+</android.support.v4.widget.DrawerLayout>
