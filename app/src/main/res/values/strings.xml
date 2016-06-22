@@ -21,7 +21,6 @@
     <string name="dondeComer">Comer y Dormir</string>
     <string name="dondeComprar">De Compras</string>
     <string name="serviciosReparaciones">Servicios y Reparaciones</string>
-    <string name="favoritos">Favoritos</string>
     <string name="copiright">Diseño de Apps © 2015 - Acerda de</string>
     <string name="quieres_aparecer_app">¿Quieres aparecer en esta App?</string>
     <string name="eventosNormal">Eventos normal</string>
@@ -99,5 +98,8 @@
 
     <string name="nombre_servicio_actualizador">Servicio de notificación de actualización de datos pendiente</string>
     <string name="title_notificacion_nuevas_actualizaciones">Existe nueva información en la aplicación. Pulsa si quieres actualiza.</string>
+
+    <string name="sitios">Sitios</string>
+    <string name="actividades">Actividades</string>
 
 </resources>
