@@ -27,10 +27,11 @@ public class DetalleEventoTemporalActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_detalle_evento_temporal);
+		setContentView(R.layout.activity_evento_principal);
 		dataSource = new EventosDataSource(this);
 		dataSource.open();
-		
+
+		/*
 		TextView tvNombreEvento = (TextView) findViewById(R.id.tvNombreEvento);
 		TextView tvFechasEvento = (TextView) findViewById(R.id.tvFechasEvento);
 		WebView wvEventoTextoLargo1 = (WebView) findViewById(R.id.wvEventoTextoLargo1);
@@ -50,6 +51,7 @@ public class DetalleEventoTemporalActivity extends Activity {
 		ItfAlmacenamiento almacenamiento = AlmacenamientoFactory.getAlmacenamiento(this);
 		Bitmap bitmap = almacenamiento.getImagenEvento(evento.getId(), evento.getNombreIcono());
 		imgIcono.setImageBitmap(bitmap);
+		*/
 	}
 	
 	public void mostrarEnMapa(View boton_pulsado) {

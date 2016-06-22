@@ -71,9 +71,8 @@ public class MainActivity extends ActionBarActivity implements IPrimosActividyLi
     	startActivity(intent);
 	}
 
-	public void mostrarFavoritos(View view) {
-    	Intent intent = new Intent(this, EventoListaNormalActivity.class);
-    	intent.putExtra(EventoListaNormalActivity.FAVORITOS, "true");
+	public void mostrarEventos(View view) {
+    	Intent intent = new Intent(this, ListaEventosActivity.class);
     	startActivity(intent);
 	}
 	
