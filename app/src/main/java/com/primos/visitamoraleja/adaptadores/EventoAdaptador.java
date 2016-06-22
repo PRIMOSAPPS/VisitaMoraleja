@@ -35,13 +35,13 @@ public class EventoAdaptador extends EventoSitioAdaptador<Evento> {
 		LayoutInflater inflater = actividad.getLayoutInflater();
 		View view = inflater.inflate(R.layout.evento_lista_normal, null, true);
 
-		List<Evento> listaEventos = (List<Evento>)listaObjetos;
+		List<Evento> listaEventos = listaObjetos;
 		Evento evento = listaEventos.get(position);
 		
 		actualizaGradiente(view, evento);
 		
 		view.setTag(evento);
-        TextView textNombreSitio = (TextView)view.findViewById(R.id.textNombreSitio);
+        TextView textNombreSitio = (TextView)view.findViewById(R.id.textNombreEvento);
 		textNombreSitio.setText(evento.getNombre());
 		
 		ImageView imagen = (ImageView)view.findViewById(R.id.imagenListaEventos);
