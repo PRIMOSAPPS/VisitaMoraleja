@@ -57,10 +57,6 @@
             android:label="@string/app_name"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".EventosActivity"
-            android:label="@string/title_activity_eventos"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".DetalleEventoActivity"
             android:label="@string/title_activity_detalle_evento"
             android:screenOrientation="portrait" />
@@ -69,7 +65,7 @@
             android:label="@string/title_activity_evento_lista_normal"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".DetalleContenidoActivity"
+            android:name=".actividades.eventos.EventoPrincipalActivity"
             android:label="@string/title_activity_detalle_contenido"
             android:screenOrientation="portrait" />
         <activity
