@@ -175,9 +175,9 @@ public class EventosJsonParser {
         resul.setIdEvento(jsonSitioEvento.getLong(Constantes.Json.ID_EVENTO));
         resul.setEsSitioRegistrado(utilJson.getBoolean(jsonSitioEvento, Constantes.Json.ES_SITIO_REGISTRADO));
         resul.setIdSitioRegistrado(jsonSitioEvento.getLong(Constantes.Json.ID_SITIO_REGISTRADO));
-        resul.setNombre(jsonSitioEvento.getString(Constantes.Json.NOMBRE));
-        resul.setTexto(jsonSitioEvento.getString(Constantes.Json.TEXTO));
-        resul.setDescripcion(jsonSitioEvento.getString(Constantes.Json.DESCRIPCION));
+        resul.setNombre(utilJson.getStringFromBase64(jsonSitioEvento, Constantes.Json.NOMBRE));
+        resul.setTexto(utilJson.getStringFromBase64(jsonSitioEvento, Constantes.Json.TEXTO));
+        resul.setDescripcion(utilJson.getStringFromBase64(jsonSitioEvento, Constantes.Json.DESCRIPCION));
         resul.setNombreIcono(utilJson.getStringFromBase64(jsonSitioEvento, Constantes.Json.NOMBRE_ICONO));
         String cadenaImagen = jsonSitioEvento.getString(Constantes.Json.ICONO);
         resul.setIcono(ConversionesUtil.getBitmap(cadenaImagen));
@@ -196,7 +196,7 @@ public class EventosJsonParser {
         UtilJson utilJson = new UtilJson();
         resul.setId(jsonImagenEvento.getLong(Constantes.Json.ID));
         resul.setIdEvento(jsonImagenEvento.getLong(Constantes.Json.ID_EVENTO));
-        resul.setNombre(jsonImagenEvento.getString(Constantes.Json.NOMBRE));
+        resul.setNombre(utilJson.getStringFromBase64(jsonImagenEvento, Constantes.Json.NOMBRE));
         String cadenaImagen = jsonImagenEvento.getString(Constantes.Json.IMAGEN);
         resul.setImagen(ConversionesUtil.getBitmap(cadenaImagen));
         resul.setActivo(utilJson.getBoolean(jsonImagenEvento, Constantes.Json.ACTIVO));
