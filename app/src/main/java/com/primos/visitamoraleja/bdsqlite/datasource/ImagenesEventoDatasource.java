@@ -85,6 +85,17 @@ public class ImagenesEventoDatasource extends AbstractDataSource {
         return resul;
     }
 
+    public List<ImagenEvento> getByIdEvento(long idEvento) {
+        List<ImagenEvento> resul = null;
+        String where = ImagenesEventoSQLite.COLUMNA_ID_EVENTO + " = " + idEvento;
+        Cursor cursor = database.query(ImagenesEventoSQLite.TABLE_NAME,
+                allColumns, where, null, null, null, null);
+        resul = getListaByCursor(cursor);
+        cursor.close();
+
+        return resul;
+    }
+
     private List<ImagenEvento> getListaByCursor(Cursor cursor) {
         List<ImagenEvento> resul = new ArrayList<>();
         cursor.moveToFirst();
