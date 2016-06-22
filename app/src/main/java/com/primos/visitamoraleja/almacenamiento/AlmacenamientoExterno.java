@@ -238,12 +238,17 @@ public class AlmacenamientoExterno implements ItfAlmacenamiento {
 		}
 	}
 
+	@Override
+	public String getDirImagenEvento(long idEvento, String nombre) {
+		return getDirApp() + DIR_EVENTOS + File.separator + idEvento + File.separator + nombre;
+	}
+
 	/* (non-Javadoc)
 	 * @see com.primos.visitamoraleja.almacenamiento.ItfAlmacenamiento2#getPathIconoEvento(long, java.lang.String)
 	 */
 	@Override
 	public Bitmap getImagenEvento(long idEvento, String nombre) {
-		String pathImagen = getDirApp() + DIR_EVENTOS + File.separator + idEvento + File.separator + nombre;
+		String pathImagen = getDirImagenEvento(idEvento, nombre);
 		return BitmapFactory.decodeFile(pathImagen);
 	}
 

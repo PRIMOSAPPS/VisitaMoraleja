@@ -1,5 +1,6 @@
 package com.primos.visitamoraleja.almacenamiento;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -120,8 +121,13 @@ public class AlmacenamientoInterno implements ItfAlmacenamiento {
 	}
 
 	@Override
+	public String getDirImagenEvento(long idEvento, String nombre) {
+		return getNombreImagen(PREFIJO_EVENTOS, idEvento, nombre);
+	}
+
+	@Override
 	public Bitmap getImagenEvento(long idEvento, String nombre) {
-		String nombreImagen = getNombreImagen(PREFIJO_EVENTOS, idEvento, nombre);
+		String nombreImagen = getDirImagenEvento(idEvento, nombre);
 		Bitmap resul = null;
 		try {
 			resul = getBitmap(nombreImagen);

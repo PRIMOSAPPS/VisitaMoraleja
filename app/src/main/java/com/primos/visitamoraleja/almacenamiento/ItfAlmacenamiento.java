@@ -46,14 +46,22 @@ public interface ItfAlmacenamiento {
 	 * Borra una imagen que pertenece a un sitio al almacenamiento cuyo nombre es nombreImagen y pertenece
 	 * a un sitio con identificador idSitio
 	 * 
-	 * @param imagen
 	 * @param nombreImagen
+	 * @param idSitio
 	 * @param idSitio
 	 */
 	public abstract void borrarImagenSitio(String nombreImagen, long idSitio);
 
 	////////////////////////////////////////////////////////////////////
 	// EVENTOS
+
+	/**
+	 * Devuelve el path de una imagen
+	 * @param idEvento
+	 * @param nombre
+	 * @return
+	 */
+	String getDirImagenEvento(long idEvento, String nombre);
 
 	/**
 	 * Devuelve la imagen que pertenece a un evento con identificador idEvento y nombre
