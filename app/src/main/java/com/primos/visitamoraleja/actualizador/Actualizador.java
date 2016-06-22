@@ -240,7 +240,7 @@ public class Actualizador {
 				} else {
 					dataSource.actualizar(imagenEvento);
 				}
-				almacenamiento.addImagenSitioEvento(imagenEvento.getImagen(), imagenEvento.getNombre(), imagenEvento.getIdEvento());
+				almacenamiento.addImagenEvento(imagenEvento.getImagen(), imagenEvento.getNombre(), imagenEvento.getIdEvento());
 			}
 		} finally {
 			dataSource.close();
