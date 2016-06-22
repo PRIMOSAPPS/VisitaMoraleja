@@ -86,9 +86,9 @@ public class ConfigMenuLateral {
 //			valoresMenuLateral[i++] = categoria.getDescripcion();
 		}
 		IND_FAVORITOS=listaItemsMenu.size();
-		DatosItemMenuLateral datosItemFavoritos = new DatosItemMenuLateral((String)resources.getText(R.string.favoritos),
-				R.mipmap.ic_favoritosml);
-		listaItemsMenu.add(datosItemFavoritos);
+		//DatosItemMenuLateral datosItemFavoritos = new DatosItemMenuLateral((String)resources.getText(R.string.favoritos),
+		//		R.mipmap.ic_favoritosml);
+		//listaItemsMenu.add(datosItemFavoritos);
 		IND_MAPA = listaItemsMenu.size();
 		DatosItemMenuLateral datosItemPreferenciasMapa = new DatosItemMenuLateral(
 				(String)resources.getText(R.string.map_mapa), R.mipmap.ic_localizar);

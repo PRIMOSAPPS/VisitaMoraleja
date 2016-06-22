@@ -107,8 +107,8 @@ public class ControlMapaGeneral implements ControlMapaItf {
             DatosOpcionCategoriaMapa datosItem = new DatosOpcionCategoriaMapa(categoria, textoMenu, identificadorImagen);
             listaItemsMenu.add(datosItem);
         }
-        DatosItemMenuLateral datosItemFavoritos = new DatosItemMenuLateral((String)resources.getText(R.string.favoritos),
-                R.mipmap.ic_favoritosml);
+        //DatosItemMenuLateral datosItemFavoritos = new DatosItemMenuLateral((String)resources.getText(R.string.favoritos),
+        //        R.mipmap.ic_favoritosml);
 
         ListView lstViewOpciones = (ListView)actividad.findViewById(R.id.listaOpcionesMapa);
         lstViewOpciones.setAdapter(new OpcionCategoriaMapaAdaptador(actividad, listaItemsMenu));
