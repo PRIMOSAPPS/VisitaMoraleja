@@ -1,10 +1,5 @@
 package com.primos.visitamoraleja.almacenamiento;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
 import android.graphics.BitmapFactory;
@@ -12,6 +7,11 @@ import android.os.Environment;
 import android.util.Log;
 
 import com.primos.visitamoraleja.util.UtilPropiedades;
+
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 /**
  * Clase que se encarga de guardar y recuperar las imagenes en almacenamiento externo.
@@ -34,6 +34,8 @@ public class AlmacenamientoExterno implements ItfAlmacenamiento {
 	private final static String DIR_CATEGORIAS = File.separator + "categorias";
 	private final static String DIR_SITIOS = File.separator + "sitios";
 	private final static String DIR_SITIOS_EVENTO = File.separator + "sitios_evento";
+	private final static String DIR_CATEGORIAS_EVENTO = File.separator + "categorias_evento";
+	private final static String DIR_ACTIVIDADES_EVENTO = File.separator + "actividades_evento";
 	/**
 	 * Directorio de almacenamiento externo por defecto para la aplicacion. 
 	 */
@@ -308,6 +310,60 @@ public class AlmacenamientoExterno implements ItfAlmacenamiento {
 		try {
 			Log.d("[AlmacenamientoExterno]", "borrarImagenEvento(" + nombreImagen + ", " + idSitioEvento + ")");
 			borrarImagen(DIR_SITIOS_EVENTO, nombreImagen, idSitioEvento);
+		} catch (IOException e) {
+			Log.e(TAG, "Error al trabajar con el almacenamiento externo al borrar una imagen para los eventos: ", e);
+		}
+	}
+
+	@Override
+	public Bitmap getImagenCategoriaEvento(long idCategoriaEvento, String nombre) {
+		String pathImagen = getDirApp() + DIR_CATEGORIAS_EVENTO + File.separator + idCategoriaEvento + File.separator + nombre;
+		return BitmapFactory.decodeFile(pathImagen);
+	}
+
+	@Override
+	public void addImagenCategoriaEvento(Bitmap imagen, String nombreImagen,
+										 long idCategoriaEvento) {
+		try {
+			Log.d("[AlmacenamientoExterno]", "addImagenCategoriaEvento(" + nombreImagen + ", " + idCategoriaEvento + ")");
+			addImagen(imagen, DIR_CATEGORIAS_EVENTO, nombreImagen, idCategoriaEvento);
+		} catch (IOException e) {
+			Log.e(TAG, "Error al trabajar con el almacenamiento externo al guardar una imagen para los eventos: ", e);
+		}
+	}
+
+	@Override
+	public void borrarImagenCategoriaEvento(String nombreImagen, long idCategoriaEvento) {
+		try {
+			Log.d("[AlmacenamientoExterno]", "borrarImagenCategoriaEvento(" + nombreImagen + ", " + idCategoriaEvento + ")");
+			borrarImagen(DIR_CATEGORIAS_EVENTO, nombreImagen, idCategoriaEvento);
+		} catch (IOException e) {
+			Log.e(TAG, "Error al trabajar con el almacenamiento externo al borrar una imagen para los eventos: ", e);
+		}
+	}
+
+	@Override
+	public Bitmap getImagenActividadEvento(long idActividadEvento, String nombre) {
+		String pathImagen = getDirApp() + DIR_ACTIVIDADES_EVENTO + File.separator + idActividadEvento + File.separator + nombre;
+		return BitmapFactory.decodeFile(pathImagen);
+	}
+
+	@Override
+	public void addImagenActividadEvento(Bitmap imagen, String nombreImagen,
+										 long idActividadEvento) {
+		try {
+			Log.d("[AlmacenamientoExterno]", "addImagenActividadEvento(" + nombreImagen + ", " + idActividadEvento + ")");
+			addImagen(imagen, DIR_ACTIVIDADES_EVENTO, nombreImagen, idActividadEvento);
+		} catch (IOException e) {
+			Log.e(TAG, "Error al trabajar con el almacenamiento externo al guardar una imagen para los eventos: ", e);
+		}
+	}
+
+	@Override
+	public void borrarImagenActividadEvento(String nombreImagen, long idActividadEvento) {
+		try {
+			Log.d("[AlmacenamientoExterno]", "borrarImagenActividadEvento(" + nombreImagen + ", " + idActividadEvento + ")");
+			borrarImagen(DIR_ACTIVIDADES_EVENTO, nombreImagen, idActividadEvento);
 		} catch (IOException e) {
 			Log.e(TAG, "Error al trabajar con el almacenamiento externo al borrar una imagen para los eventos: ", e);
 		}

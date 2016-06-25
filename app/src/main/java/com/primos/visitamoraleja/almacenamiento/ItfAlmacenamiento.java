@@ -121,4 +121,60 @@ public interface ItfAlmacenamiento {
 	 * @param idSitioEvento
 	 */
 	public abstract void borrarImagenSitioEvento(String nombreImagen, long idSitioEvento);
+
+	/**
+	 * Devuelve la imagen que pertenece a una categoria de un evento
+	 *
+	 * @param idCategoriaEvento
+	 * @param nombre
+	 * @return
+	 */
+	public abstract Bitmap getImagenCategoriaEvento(long idCategoriaEvento, String nombre);
+
+	/**
+	 * Aniade una imagen que pertenece a una categoria de un evento
+	 *
+	 * @param imagen
+	 * @param nombreImagen
+	 * @param idCategoriaEvento
+	 */
+	public abstract void addImagenCategoriaEvento(Bitmap imagen, String nombreImagen,
+											  long idCategoriaEvento);
+
+	/**
+	 * Aniade una imagen que pertenece a una categoria de un evento
+	 *
+	 * @param nombreImagen
+	 * @param idCategoriaEvento
+	 */
+	public abstract void borrarImagenCategoriaEvento(String nombreImagen, long idCategoriaEvento);
+
+	/**
+	 * Devuelve la imagen que pertenece a un sitio de un evento con identificador idEvento y nombre
+	 *
+	 * @param idActividadEvento
+	 * @param nombre
+	 * @return
+	 */
+	public abstract Bitmap getImagenActividadEvento(long idActividadEvento, String nombre);
+
+	/**
+	 * Aniade una imagen que pertenece a un sitio de un evento al almacenamiento cuyo nombre es nombreImagen y pertenece
+	 * a un evento con identificador idEvento
+	 *
+	 * @param imagen
+	 * @param nombreImagen
+	 * @param idActividadEvento
+	 */
+	public abstract void addImagenActividadEvento(Bitmap imagen, String nombreImagen,
+											  long idActividadEvento);
+
+	/**
+	 * Aniade una imagen que pertenece a un sitio de un evento al almacenamiento cuyo nombre es nombreImagen y pertenece
+	 * a un evento con identificador idEvento
+	 *
+	 * @param nombreImagen
+	 * @param idActividadEvento
+	 */
+	public abstract void borrarImagenActividadEvento(String nombreImagen, long idActividadEvento);
 }

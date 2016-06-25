@@ -15,8 +15,11 @@ import android.util.Log;
 public class AlmacenamientoInterno implements ItfAlmacenamiento {
 	private final static String TAG = "AlmacenamientoInterno";
 	private final static String PREFIJO_EVENTOS = "eventos_";
+	private final static String PREFIJO_CATEGORIAS_EVENTOS = "categorias_eventos_";
+	private final static String PREFIJO_ACTIVIDADES_EVENTOS = "actividades_eventos_";
 	private final static String PREFIJO_CATEGORIAS = "categorias_";
 	private final static String PREFIJO_SITIOS = "sitios_";
+	private final static String PREFIJO_SITIOS_EVENTOSs = "sitios_eventos_";
 	
 	private Context contexto;
 
@@ -165,7 +168,7 @@ public class AlmacenamientoInterno implements ItfAlmacenamiento {
 
 	@Override
 	public Bitmap getImagenSitioEvento(long idSitioEvento, String nombre) {
-		String nombreImagen = getNombreImagen(PREFIJO_EVENTOS, idSitioEvento, nombre);
+		String nombreImagen = getNombreImagen(PREFIJO_SITIOS_EVENTOSs, idSitioEvento, nombre);
 		Bitmap resul = null;
 		try {
 			resul = getBitmap(nombreImagen);
@@ -178,7 +181,7 @@ public class AlmacenamientoInterno implements ItfAlmacenamiento {
 	@Override
 	public void addImagenSitioEvento(Bitmap imagen, String nombreImagen,
 								long idSitioEvento) {
-		String nombreImg = getNombreImagen(PREFIJO_EVENTOS, idSitioEvento, nombreImagen);
+		String nombreImg = getNombreImagen(PREFIJO_SITIOS_EVENTOSs, idSitioEvento, nombreImagen);
 		try {
 			Log.d("[AlmacenamientoInterno]", "addIconoEventos(" + nombreImagen + ", " + idSitioEvento + ")");
 			guardarImagen(imagen, nombreImg);
@@ -193,11 +196,81 @@ public class AlmacenamientoInterno implements ItfAlmacenamiento {
 	@Override
 	public void borrarImagenSitioEvento(String nombreImagen, long idSitioEvento) {
 		try {
-			String nombreImg = getNombreImagen(PREFIJO_EVENTOS, idSitioEvento, nombreImagen);
+			String nombreImg = getNombreImagen(PREFIJO_SITIOS_EVENTOSs, idSitioEvento, nombreImagen);
 			Log.d("[AlmacenamientoInterno]", "borrarImagenSitio(" + nombreImg + ", " + idSitioEvento + ")");
 			borrarImagen(nombreImg);
 		} catch (IOException e) {
 			Log.e(TAG, "Error borrando la imagen del sitio de evento: " + idSitioEvento + " nombre " + nombreImagen, e);
+		}
+	}
+
+	@Override
+	public Bitmap getImagenCategoriaEvento(long idCategoriaEvento, String nombre) {
+		String nombreImagen = getNombreImagen(PREFIJO_CATEGORIAS_EVENTOS, idCategoriaEvento, nombre);
+		Bitmap resul = null;
+		try {
+			resul = getBitmap(nombreImagen);
+		} catch (FileNotFoundException e) {
+			Log.e(TAG, "Error leyendo el icono de la categoria de evento: " + idCategoriaEvento + " nombre " + nombre, e);
+		}
+		return resul;
+	}
+
+	@Override
+	public void addImagenCategoriaEvento(Bitmap imagen, String nombreImagen,
+									 long idCategoriaEvento) {
+		String nombreImg = getNombreImagen(PREFIJO_CATEGORIAS_EVENTOS, idCategoriaEvento, nombreImagen);
+		try {
+			Log.d("[AlmacenamientoInterno]", "addImagenCategoriaEvento(" + nombreImagen + ", " + idCategoriaEvento + ")");
+			guardarImagen(imagen, nombreImg);
+		} catch (FileNotFoundException e) {
+			Log.e(TAG, "Error guardando el icono de la categoria de evento: " + idCategoriaEvento + " nombre " + nombreImagen, e);
+		}
+	}
+
+	@Override
+	public void borrarImagenCategoriaEvento(String nombreImagen, long idCategoriaEvento) {
+		try {
+			String nombreImg = getNombreImagen(PREFIJO_CATEGORIAS_EVENTOS, idCategoriaEvento, nombreImagen);
+			Log.d("[AlmacenamientoInterno]", "borrarImagenCategoriaEvento(" + nombreImg + ", " + idCategoriaEvento + ")");
+			borrarImagen(nombreImg);
+		} catch (IOException e) {
+			Log.e(TAG, "Error borrando la imagen de la categoria de evento: " + idCategoriaEvento + " nombre " + nombreImagen, e);
+		}
+	}
+
+	@Override
+	public Bitmap getImagenActividadEvento(long idActividadEvento, String nombre) {
+		String nombreImagen = getNombreImagen(PREFIJO_ACTIVIDADES_EVENTOS, idActividadEvento, nombre);
+		Bitmap resul = null;
+		try {
+			resul = getBitmap(nombreImagen);
+		} catch (FileNotFoundException e) {
+			Log.e(TAG, "Error leyendo el icono de la actividad de evento: " + idActividadEvento + " nombre " + nombre, e);
+		}
+		return resul;
+	}
+
+	@Override
+	public void addImagenActividadEvento(Bitmap imagen, String nombreImagen,
+										 long idActividadEvento) {
+		String nombreImg = getNombreImagen(PREFIJO_ACTIVIDADES_EVENTOS, idActividadEvento, nombreImagen);
+		try {
+			Log.d("[AlmacenamientoInterno]", "addImagenActividadEvento(" + nombreImagen + ", " + idActividadEvento + ")");
+			guardarImagen(imagen, nombreImg);
+		} catch (FileNotFoundException e) {
+			Log.e(TAG, "Error guardando el icono de la actividad de evento: " + idActividadEvento + " nombre " + nombreImagen, e);
+		}
+	}
+
+	@Override
+	public void borrarImagenActividadEvento(String nombreImagen, long idActividadEvento) {
+		try {
+			String nombreImg = getNombreImagen(PREFIJO_ACTIVIDADES_EVENTOS, idActividadEvento, nombreImagen);
+			Log.d("[AlmacenamientoInterno]", "borrarImagenActividadEvento(" + nombreImg + ", " + idActividadEvento + ")");
+			borrarImagen(nombreImg);
+		} catch (IOException e) {
+			Log.e(TAG, "Error borrando la imagen de la actividad de evento: " + idActividadEvento + " nombre " + nombreImagen, e);
 		}
 	}
 }
