@@ -55,7 +55,7 @@ public class ManejadorEventosJSON extends DefaultHandler {
 			} else if(localName.equals("idSitio")) {
 				evento.setIdSitio(Long.parseLong(cadena.toString()));
 			} else if(localName.equals("idCategoria")) {
-				evento.setIdCategoria(Long.parseLong(cadena.toString()));
+				evento.setIdCategoriaEvento(Long.parseLong(cadena.toString()));
 			} else if(localName.equals("nombre")) {
 				evento.setNombre(cadena.toString());
 			} else if(localName.equals("esEvento")) {
