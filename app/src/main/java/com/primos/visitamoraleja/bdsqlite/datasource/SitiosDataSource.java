@@ -70,7 +70,7 @@ public class SitiosDataSource extends AbstractDataSource {
 	/**
 	 * Convierte un objeto sitio en un objeto ContentValues que podra ser usado para insercion/actualizacion
 	 * de la base de datos.
-	 * @param evento
+	 * @param sitio
 	 * @return
 	 */
 	private ContentValues objectToContentValues(Sitio sitio) {
@@ -142,7 +142,7 @@ public class SitiosDataSource extends AbstractDataSource {
 
 	/**
 	 * Devuelve la lista de sitios cuyo estado de favoritos coincide con el indicado.
-	 * @param nombreCat
+	 * @param favorito
 	 * @return
 	 */
 	public List<Sitio> getByFavorito(int favorito) {
@@ -195,8 +195,7 @@ public class SitiosDataSource extends AbstractDataSource {
 	
 	/**
 	 * Devuelve la fecha de la ultima actualizacion de la tabla
-	 * @param idPoblacion
-	 * @return 
+	 * @return
 	 */
 	public long getUltimaActualizacion() {
 		String sql = "SELECT MAX(" + SitiosSQLite.COLUMNA_ULTIMA_ACTUALIZACION + ") FROM " +

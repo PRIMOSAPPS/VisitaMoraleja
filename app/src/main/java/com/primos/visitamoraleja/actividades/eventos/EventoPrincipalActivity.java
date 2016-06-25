@@ -1,8 +1,10 @@
 package com.primos.visitamoraleja.actividades.eventos;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.webkit.WebView;
 
 import com.primos.visitamoraleja.R;
@@ -19,12 +21,13 @@ public class EventoPrincipalActivity extends Activity {
 	//private SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 	//private EventosDataSource dataSource = null;
 	//private Evento evento;
+	private long idEvento;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_evento_principal);
-		long idEvento = (long) getIntent().getExtras().get(EventoPrincipalActivity.ID_EVENTO);
+		idEvento = (long) getIntent().getExtras().get(EventoPrincipalActivity.ID_EVENTO);
 
 		Evento evento = null;
 		EventosDataSource dataSource = null;
@@ -85,6 +88,18 @@ public class EventoPrincipalActivity extends Activity {
 		finish();
 	}
 	*/
+
+	public void verSitios(View view) {
+		Intent i = new Intent(this, ListaSitiosEventoActivity.class);
+		i.putExtra(EventoPrincipalActivity.ID_EVENTO, idEvento);
+		startActivity(i);
+	}
+
+	public void verActividades(View view) {
+		Intent i = new Intent(this, ListaActividadesEventoActivity.class);
+		i.putExtra(EventoPrincipalActivity.ID_EVENTO, idEvento);
+		startActivity(i);
+	}
 
 	@Override
 	protected void onPause() {

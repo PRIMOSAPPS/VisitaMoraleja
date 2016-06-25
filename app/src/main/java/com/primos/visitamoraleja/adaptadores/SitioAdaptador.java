@@ -21,7 +21,7 @@ import com.primos.visitamoraleja.contenidos.Sitio;
  * @author h
  *
  */
-public class SitioAdaptador extends EventoSitioAdaptador<Sitio> {
+public class SitioAdaptador extends AbstractAdaptador<Sitio> {
 
 	public SitioAdaptador(Activity actividad, List<Sitio> listaSitios) {
 		super(actividad, listaSitios);

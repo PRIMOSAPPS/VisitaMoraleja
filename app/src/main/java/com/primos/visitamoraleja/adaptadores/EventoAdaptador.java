@@ -4,9 +4,6 @@ import java.util.List;
 
 import android.app.Activity;
 import android.graphics.Bitmap;
-import android.graphics.PorterDuff.Mode;
-import android.graphics.drawable.GradientDrawable;
-import android.graphics.drawable.GradientDrawable.Orientation;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,7 +21,7 @@ import com.primos.visitamoraleja.contenidos.Evento;
  * @author h
  *
  */
-public class EventoAdaptador extends EventoSitioAdaptador<Evento> {
+public class EventoAdaptador extends AbstractAdaptador<Evento> {
 
 	public EventoAdaptador(Activity actividad, List<Evento> listaEventos) {
 		super(actividad, listaEventos);
@@ -37,8 +34,6 @@ public class EventoAdaptador extends EventoSitioAdaptador<Evento> {
 
 		List<Evento> listaEventos = listaObjetos;
 		Evento evento = listaEventos.get(position);
-		
-		actualizaGradiente(view, evento);
 		
 		view.setTag(evento);
         TextView textNombreSitio = (TextView)view.findViewById(R.id.textNombreEvento);
@@ -55,14 +50,6 @@ public class EventoAdaptador extends EventoSitioAdaptador<Evento> {
 //				15 + (position * 5));
 //		view.setLayoutParams(params);
 		return view;
-	}
-	
-	private void actualizaGradiente(View view, Evento evento) {
-		int backgroundResource = R.drawable.gradiente_evento_inactivo;
-		if(evento.isActivoPorFecha()) {
-			backgroundResource = R.drawable.gradiente_evento_activo;
-		}
-		view.setBackgroundResource(backgroundResource);
 	}
 
 }

@@ -60,6 +60,7 @@
                 android:layout_height="match_parent"
                 android:text="@string/sitios"
                 android:id="@+id/evtVerSitios"
+                android:onClick="verSitios"
                 android:gravity="center" />
 
             <Button
@@ -68,6 +69,7 @@
                 android:layout_height="match_parent"
                 android:text="@string/actividades"
                 android:id="@+id/evtVerActividades"
+                android:onClick="verActividades"
                 android:gravity="center" />
         </LinearLayout>
 

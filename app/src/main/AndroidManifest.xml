@@ -69,6 +69,12 @@
             android:label="@string/title_activity_detalle_contenido"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".actividades.eventos.ListaActividadesEventoActivity"
+            android:label="@string/title_activity_detalle_evento_temporal" />
+        <activity
+            android:name=".actividades.eventos.ListaSitiosEventoActivity"
+            android:label="@string/title_activity_detalle_evento_temporal" />
+        <activity
             android:name=".PreferenciasActivity"
             android:label="@string/title_activity_preferencias"
             android:screenOrientation="portrait" />
@@ -102,20 +108,19 @@
             android:label="Acerca de" />
         <activity
             android:name=".MapsActivity"
-            android:label="@string/title_activity_maps"/>
+            android:label="@string/title_activity_maps" />
 
         <service
             android:name=".service.ServicioComprobadorActualizaciones"
             android:enabled="true"
             android:icon="@drawable/ic_launcher"
-            android:label="@string/nombre_servicio_actualizador"/>
-
-
+            android:label="@string/nombre_servicio_actualizador" />
         <service android:name="com.parse.PushService" />
 
         <receiver
             android:name=".receiver.ComprobadorActualizacionesBroadcastReceiver"
-            android:exported="false" android:enabled="true">
+            android:enabled="true"
+            android:exported="false">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="android.intent.action.PACKAGE_ADDED" />
@@ -153,7 +158,7 @@
         </receiver>
 
         <activity android:name=".DetalleNotificacionActivity" />
-
+        <activity android:name=".actividades.ListaGeneralActivity"></activity>
     </application>
 
 </manifest>

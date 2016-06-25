@@ -17,7 +17,7 @@ import java.util.List;
 public class ListaEventosActivity extends ActionBarListActivity {
 	public final static String ID_SITIO = "id_sitio";
 	
-	private EventosDataSource dataSource;
+	protected EventosDataSource dataSource;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
