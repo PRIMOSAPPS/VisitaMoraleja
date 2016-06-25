@@ -15,6 +15,7 @@ public class SitioEventoSQLite extends SQLiteOpenHelper {
     public final static String TABLE_NAME = "sitiosevento";
     public final static String COLUMNA_ID = "id";
     public final static String COLUMNA_ID_EVENTO = "id_evento";
+    public final static String COLUMNA_ID_CATEGORIA = "id_categoria";
     public final static String COLUMNA_ES_SITIO_REGISTRADO = "es_sitio_registrado";
     public final static String COLUMNA_ID_SITIO_REGISTRADO = "id_sitio_registrado";
     public final static String COLUMNA_NOMBRE = "nombre";
@@ -29,7 +30,7 @@ public class SitioEventoSQLite extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION = 1;
 
     private final static String CREATE_TABLA = "CREATE TABLE " + TABLE_NAME +
-            " (id INTEGER PRIMARY KEY, id_evento INTEGER, es_sitio_registrado INTEGER, id_sitio_registrado INTEGER, " +
+            " (id INTEGER PRIMARY KEY, id_evento INTEGER, id_categoria INTEGER, es_sitio_registrado INTEGER, id_sitio_registrado INTEGER, " +
             "nombre TEXT, texto TEXT, descripcion TEXT, nombre_icono TEXT, latitud NUMERIC, longitud NUMERIC, " +
             " activo INTEGER, ultima_actualizacion NUMERIC )";
 

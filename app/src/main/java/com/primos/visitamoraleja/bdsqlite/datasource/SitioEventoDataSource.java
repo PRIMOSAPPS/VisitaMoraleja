@@ -22,6 +22,7 @@ public class SitioEventoDataSource extends AbstractDataSource {
     // Database fields
     private String[] allColumns = {SitioEventoSQLite.COLUMNA_ID,
             SitioEventoSQLite.COLUMNA_ID_EVENTO,
+            SitioEventoSQLite.COLUMNA_ID_CATEGORIA,
             SitioEventoSQLite.COLUMNA_ES_SITIO_REGISTRADO,
             SitioEventoSQLite.COLUMNA_ID_SITIO_REGISTRADO,
             SitioEventoSQLite.COLUMNA_NOMBRE,
@@ -52,6 +53,7 @@ public class SitioEventoDataSource extends AbstractDataSource {
         ContentValues valores = new ContentValues();
         valores.put(SitioEventoSQLite.COLUMNA_ID, sitioEvento.getId());
         valores.put(SitioEventoSQLite.COLUMNA_ID_EVENTO, sitioEvento.getIdEvento());
+        valores.put(SitioEventoSQLite.COLUMNA_ID_CATEGORIA, sitioEvento.getIdCategoriaEvento());
         int esSitioRegistrado = ConversionesUtil.booleanToInt(sitioEvento.isEsSitioRegistrado());
         valores.put(SitioEventoSQLite.COLUMNA_ES_SITIO_REGISTRADO, esSitioRegistrado);
         valores.put(SitioEventoSQLite.COLUMNA_ID_SITIO_REGISTRADO, sitioEvento.getIdSitioRegistrado());
@@ -154,6 +156,7 @@ public class SitioEventoDataSource extends AbstractDataSource {
         SitioEvento resul = new SitioEvento();
         resul.setId(cursor.getLong(cursor.getColumnIndex(SitioEventoSQLite.COLUMNA_ID)));
         resul.setIdEvento(cursor.getLong(cursor.getColumnIndex(SitioEventoSQLite.COLUMNA_ID_EVENTO)));
+        resul.setIdCategoriaEvento(cursor.getLong(cursor.getColumnIndex(SitioEventoSQLite.COLUMNA_ID_CATEGORIA)));
         int esSitioRegistrado = cursor.getInt(cursor.getColumnIndex(SitioEventoSQLite.COLUMNA_ES_SITIO_REGISTRADO));
         resul.setEsSitioRegistrado(ConversionesUtil.intToBoolean(esSitioRegistrado));
         resul.setIdSitioRegistrado(cursor.getLong(cursor.getColumnIndex(SitioEventoSQLite.COLUMNA_ID_SITIO_REGISTRADO)));

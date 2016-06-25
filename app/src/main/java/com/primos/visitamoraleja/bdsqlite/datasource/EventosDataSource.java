@@ -134,7 +134,7 @@ public class EventosDataSource extends AbstractDataSource {
 	public List<Evento> getAll() {
 		List<Evento> resul = new ArrayList<Evento>();
 
-		String seleccion = EventosSQLite.COLUMNA_ACTIVO + " = 1";
+		String seleccion = EventosSQLite.COLUMNA_ACTIVO + " = 1 OR 1=1";
 		Cursor cursor = database.query(EventosSQLite.TABLE_NAME,
 				allColumns, seleccion, null, null, null, null);
 
@@ -154,7 +154,8 @@ public class EventosDataSource extends AbstractDataSource {
 		Evento resul = new Evento();
 		resul.setId(cursor.getLong(cursor.getColumnIndex(EventosSQLite.COLUMNA_ID)));
 		resul.setNombre(cursor.getString(cursor.getColumnIndex(EventosSQLite.COLUMNA_NOMBRE)));
-		int intEsEvento = cursor.getInt(cursor.getColumnIndex(EventosSQLite.COLUMNA_DESCRIPCION));
+		resul.setTexto(cursor.getString(cursor.getColumnIndex(EventosSQLite.COLUMNA_TEXTO)));
+		resul.setDescripcion(cursor.getString(cursor.getColumnIndex(EventosSQLite.COLUMNA_DESCRIPCION)));
 		resul.setNombreIcono(cursor.getString(cursor.getColumnIndex(EventosSQLite.COLUMNA_NOMBRE_ICONO)));
 		long latitud = cursor.getLong(cursor.getColumnIndex(EventosSQLite.COLUMNA_LATITUD));
 		long longitud = cursor.getLong(cursor.getColumnIndex(EventosSQLite.COLUMNA_LONGITUD));

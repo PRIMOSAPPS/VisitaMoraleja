@@ -50,6 +50,7 @@ public class FormaEventoDataSource extends AbstractDataSource {
         ContentValues valores = new ContentValues();
         valores.put(FormaEventoSQLite.COLUMNA_ID, formaEvento.getId());
         valores.put(FormaEventoSQLite.COLUMNA_ID_EVENTO, formaEvento.getIdEvento());
+        valores.put(FormaEventoSQLite.COLUMNA_ID_CATEGORIA, formaEvento.getIdCategoriaEvento());
         valores.put(FormaEventoSQLite.COLUMNA_TIPO_FORMA, formaEvento.getTipoForma());
         valores.put(FormaEventoSQLite.COLUMNA_COLOR_RELLENO, formaEvento.getColorRelleno());
         valores.put(FormaEventoSQLite.COLUMNA_COLOR_LINEA, formaEvento.getColorLinea());
@@ -149,7 +150,7 @@ public class FormaEventoDataSource extends AbstractDataSource {
         FormaEvento resul = new FormaEvento();
         resul.setId(cursor.getLong(cursor.getColumnIndex(FormaEventoSQLite.COLUMNA_ID)));
         resul.setIdEvento(cursor.getLong(cursor.getColumnIndex(FormaEventoSQLite.COLUMNA_ID_EVENTO)));
-
+        resul.setIdCategoriaEvento(cursor.getLong(cursor.getColumnIndex(FormaEventoSQLite.COLUMNA_ID_CATEGORIA)));
 
         resul.setTipoForma(cursor.getString(cursor.getColumnIndex(FormaEventoSQLite.COLUMNA_TIPO_FORMA)));
         resul.setColorRelleno(cursor.getString(cursor.getColumnIndex(FormaEventoSQLite.COLUMNA_COLOR_RELLENO)));
