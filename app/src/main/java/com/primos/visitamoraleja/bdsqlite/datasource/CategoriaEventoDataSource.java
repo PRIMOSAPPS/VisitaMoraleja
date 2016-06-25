@@ -89,6 +89,17 @@ public class CategoriaEventoDataSource extends AbstractDataSource {
         return resul;
     }
 
+    public List<CategoriaEvento> getByIdEvento(long idEvento) {
+        List<CategoriaEvento> resul = new ArrayList<>();
+        String where = CategoriaEventoSQLite.COLUMNA_ID_EVENTO + " = " + idEvento;
+        Cursor cursor = database.query(CategoriaEventoSQLite.TABLE_NAME,
+                allColumns, where, null, null, null, null);
+        resul = getListaByCursor(cursor);
+        cursor.close();
+
+        return resul;
+    }
+
     private List<CategoriaEvento> getListaByCursor(Cursor cursor) {
         List<CategoriaEvento> resul = new ArrayList<>();
         cursor.moveToFirst();

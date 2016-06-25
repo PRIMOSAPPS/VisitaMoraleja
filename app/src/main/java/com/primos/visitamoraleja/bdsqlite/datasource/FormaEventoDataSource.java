@@ -82,6 +82,17 @@ public class FormaEventoDataSource extends AbstractDataSource {
                 + " = " + id, null);
     }
 
+    public List<FormaEvento> getByIdEvento(long idEvento) {
+        List<FormaEvento> resul = new ArrayList<>();
+        String where = FormaEventoSQLite.COLUMNA_ID_EVENTO + " = " + idEvento;
+        Cursor cursor = database.query(FormaEventoSQLite.TABLE_NAME,
+                allColumns, where, null, null, null, null);
+        resul = getListaByCursor(cursor);
+        cursor.close();
+
+        return resul;
+    }
+
     public FormaEvento getById(long id) {
         FormaEvento resul = null;
         String where = FormaEventoSQLite.COLUMNA_ID + " = " + id;

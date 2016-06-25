@@ -102,6 +102,17 @@ public class SitioEventoDataSource extends AbstractDataSource {
         return resul;
     }
 
+    public List<SitioEvento> getByIdEvento(long idEvento) {
+        List<SitioEvento> resul = new ArrayList<SitioEvento>();
+        String where = SitioEventoSQLite.COLUMNA_ID_EVENTO + " = " + idEvento;
+        Cursor cursor = database.query(SitioEventoSQLite.TABLE_NAME,
+                allColumns, where, null, null, null, null);
+        resul = getListaByCursor(cursor);
+        cursor.close();
+
+        return resul;
+    }
+
     private List<SitioEvento> getListaByCursor(Cursor cursor) {
         List<SitioEvento> resul = new ArrayList<>();
         cursor.moveToFirst();
@@ -141,7 +152,6 @@ public class SitioEventoDataSource extends AbstractDataSource {
                 allColumns, seleccion, null, null, null, null);
 
         resul = getListaByCursor(cursor);
-        cursor.close();
         // make sure to close the cursor
         cursor.close();
         return resul;
