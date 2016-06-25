@@ -19,14 +19,22 @@ import org.apache.http.util.EntityUtils;
 import android.content.Context;
 import android.util.Log;
 
+import com.primos.visitamoraleja.contenidos.ActividadEvento;
 import com.primos.visitamoraleja.contenidos.Categoria;
+import com.primos.visitamoraleja.contenidos.CategoriaEvento;
 import com.primos.visitamoraleja.contenidos.Evento;
 import com.primos.visitamoraleja.contenidos.ImagenEvento;
 import com.primos.visitamoraleja.contenidos.Sitio;
 import com.primos.visitamoraleja.contenidos.SitioEvento;
 import com.primos.visitamoraleja.dto.EventoActualizableDTO;
+import com.primos.visitamoraleja.eventos.ActividadesEventoJsonParser;
+import com.primos.visitamoraleja.eventos.CategoriasEventoJsonParser;
+import com.primos.visitamoraleja.eventos.EventoActualizableJsonParser;
 import com.primos.visitamoraleja.eventos.EventosJsonParser;
 import com.primos.visitamoraleja.eventos.EventosXML_SAX;
+import com.primos.visitamoraleja.eventos.IJsonParser;
+import com.primos.visitamoraleja.eventos.ImagenesEventoJsonParser;
+import com.primos.visitamoraleja.eventos.SitiosEventoJsonParser;
 import com.primos.visitamoraleja.excepcion.EventosException;
 import com.primos.visitamoraleja.util.UtilPropiedades;
 import com.primos.visitamoraleja.util.VersionApp;
@@ -40,6 +48,8 @@ public class ConectorServidor {
 	private static String URL_GET_LISTA_EVENTOS_ACTUALIZABLES = null;//"http://10.0.2.2/eventos/eventos/EventosToXML.php";
 	private static String URL_GET_LISTA_IMAGENES_EVENTOS = null;//"http://10.0.2.2/eventos/eventos/EventosToXML.php";
 	private static String URL_GET_LISTA_SITIOS_EVENTOS = null;//"http://10.0.2.2/eventos/eventos/EventosToXML.php";
+	private static String URL_GET_LISTA_CATEGORIAS_EVENTOS = null;//"http://10.0.2.2/eventos/eventos/EventosToXML.php";
+	private static String URL_GET_LISTA_ACTIVIDADES_EVENTOS = null;//"http://10.0.2.2/eventos/eventos/EventosToXML.php";
 	private Context contexto;
 
 	public ConectorServidor(Context contexto) {
@@ -63,6 +73,8 @@ public class ConectorServidor {
 			String rutaEventosActualizables = propiedades.getProperty(UtilPropiedades.PROP_RUTA_EVENTOS_DESCARGABLES_APP);
 			String rutaImagenesEvento = propiedades.getProperty(UtilPropiedades.PROP_RUTA_IMAGENES_EVENTO_APP);
 			String rutaSitiosEvento = propiedades.getProperty(UtilPropiedades.PROP_RUTA_SITIOS_EVENTO_APP);
+			String rutaCategoriasEvento = propiedades.getProperty(UtilPropiedades.PROP_RUTA_CATEGORIAS_EVENTO_APP);
+			String rutaActividadesEvento = propiedades.getProperty(UtilPropiedades.PROP_RUTA_ACTIVIDADES_EVENTO_APP);
 
 			URL_GET_LISTA_CATEGORIAS = servidor + rutaCategorias;
 			URL_GET_LISTA_SITIOS = servidor + rutaSitios;
@@ -71,6 +83,8 @@ public class ConectorServidor {
 			URL_GET_LISTA_EVENTOS_ACTUALIZABLES = servidor + rutaEventosActualizables;
 			URL_GET_LISTA_IMAGENES_EVENTOS = servidor + rutaImagenesEvento;
 			URL_GET_LISTA_SITIOS_EVENTOS = servidor + rutaSitiosEvento;
+			URL_GET_LISTA_CATEGORIAS_EVENTOS = servidor + rutaCategoriasEvento;
+			URL_GET_LISTA_ACTIVIDADES_EVENTOS = servidor + rutaActividadesEvento;
 		}
 		Log.d(TAG, "URL de las categorias para la actualizacion: " + URL_GET_LISTA_CATEGORIAS);
 		Log.d(TAG, "URL de los sitios para conocer los identificadores de sitios actualizables: " + URL_GET_LISTA_SITIOS_ACTUALIZABLES);
@@ -354,8 +368,8 @@ public class ConectorServidor {
 
 			InputStream is = getRespuestaServidor(new CustomConectorEventosActualizables());
 
-			EventosJsonParser parser = new EventosJsonParser();
-			return parser.parseEventosActualizables(is);
+			IJsonParser<EventoActualizableDTO> parser = new EventoActualizableJsonParser();
+			return parser.parse(is);
 		} catch (Exception e) {
 			throw new EventosException("Error al realizar la peticion al servidor: " + e.getMessage(), e);
 		}
@@ -392,8 +406,8 @@ public class ConectorServidor {
 
 			InputStream is = getRespuestaServidor(new CustomConectorEventos());
 
-			EventosJsonParser parser = new EventosJsonParser();
-			return parser.parseEventos(is);
+			IJsonParser<Evento> parser = new EventosJsonParser();
+			return parser.parse(is);
 		} catch (Exception e) {
 			throw new EventosException("Error al realizar la peticion al servidor: " + e.getMessage(), e);
 		}
@@ -428,8 +442,8 @@ public class ConectorServidor {
 
 			InputStream is = getRespuestaServidor(new CustomConectorEventos());
 
-			EventosJsonParser parser = new EventosJsonParser();
-			return parser.parseSitiosEvento(is);
+			IJsonParser<SitioEvento> parser = new SitiosEventoJsonParser();
+			return parser.parse(is);
 		} catch (Exception e) {
 			throw new EventosException("Error al realizar la peticion al servidor: " + e.getMessage(), e);
 		}
@@ -447,7 +461,7 @@ public class ConectorServidor {
 		return resul;
 	}
 
-	private List<ImagenEvento> getImagenesEvento(final Long idSitio) throws EventosException {
+	private List<ImagenEvento> getImagenesEvento(final Long idImagen) throws EventosException {
 		try {
 
 			class CustomConectorEventos extends ICustomConector {
@@ -456,9 +470,9 @@ public class ConectorServidor {
 				}
 				List<NameValuePair> getParams() throws EventosException {
 					try {
-						Log.w(TAG, "Pidiendo la actualizacion de imagenes para el evento: " + idSitio);
+						Log.w(TAG, "Pidiendo la actualizacion de imagenes para el evento: " + idImagen);
 						List<NameValuePair> params = new ArrayList<NameValuePair>();
-						params.add(new BasicNameValuePair("id_imagen_evento", Long.toString(idSitio)));
+						params.add(new BasicNameValuePair("id_imagen_evento", Long.toString(idImagen)));
 						params.add(new BasicNameValuePair("version_app", VersionApp.getVersionApp(contexto)));
 
 						return params;
@@ -470,8 +484,8 @@ public class ConectorServidor {
 
 			InputStream is = getRespuestaServidor(new CustomConectorEventos());
 
-			EventosJsonParser parser = new EventosJsonParser();
-			return parser.parseImagenesEvento(is);
+			IJsonParser<ImagenEvento> parser = new ImagenesEventoJsonParser();
+			return parser.parse(is);
 		} catch (Exception e) {
 			throw new EventosException("Error al realizar la peticion al servidor: " + e.getMessage(), e);
 		}
@@ -483,6 +497,90 @@ public class ConectorServidor {
 		List<Long> idsImagenes = eventoActualizable.getIdsImagenes();
 		for(Long idImagen : idsImagenes) {
 			List<ImagenEvento> im = getImagenesEvento(idImagen);
+			resul.addAll(im);
+		}
+
+		return resul;
+	}
+
+	private List<CategoriaEvento> getCategoriasEvento(final Long id) throws EventosException {
+		try {
+
+			class CustomConectorEventos extends ICustomConector {
+				String getUrl() {
+					return URL_GET_LISTA_CATEGORIAS_EVENTOS;
+				}
+				List<NameValuePair> getParams() throws EventosException {
+					try {
+						Log.w(TAG, "Pidiendo la actualizacion de imagenes para el evento: " + id);
+						List<NameValuePair> params = new ArrayList<NameValuePair>();
+						params.add(new BasicNameValuePair("id_categoria_evento", Long.toString(id)));
+						params.add(new BasicNameValuePair("version_app", VersionApp.getVersionApp(contexto)));
+
+						return params;
+					} catch(Exception e) {
+						throw new EventosException("Error al realizar la peticion al servidor: " + e.getMessage(), e);
+					}
+				}
+			}
+
+			InputStream is = getRespuestaServidor(new CustomConectorEventos());
+
+			IJsonParser<CategoriaEvento> parser = new CategoriasEventoJsonParser();
+			return parser.parse(is);
+		} catch (Exception e) {
+			throw new EventosException("Error al realizar la peticion al servidor: " + e.getMessage(), e);
+		}
+	}
+
+	public List<CategoriaEvento> getCategoriasEvento(final EventoActualizableDTO eventoActualizable) throws EventosException {
+		List<CategoriaEvento> resul = new ArrayList<>();
+
+		List<Long> ids = eventoActualizable.getIdsCategoriasEvento();
+		for(Long id : ids) {
+			List<CategoriaEvento> im = getCategoriasEvento(id);
+			resul.addAll(im);
+		}
+
+		return resul;
+	}
+
+	private List<ActividadEvento> getActividadesEvento(final Long id) throws EventosException {
+		try {
+
+			class CustomConectorEventos extends ICustomConector {
+				String getUrl() {
+					return URL_GET_LISTA_ACTIVIDADES_EVENTOS;
+				}
+				List<NameValuePair> getParams() throws EventosException {
+					try {
+						Log.w(TAG, "Pidiendo la actualizacion de imagenes para el evento: " + id);
+						List<NameValuePair> params = new ArrayList<NameValuePair>();
+						params.add(new BasicNameValuePair("id_actividad_evento", Long.toString(id)));
+						params.add(new BasicNameValuePair("version_app", VersionApp.getVersionApp(contexto)));
+
+						return params;
+					} catch(Exception e) {
+						throw new EventosException("Error al realizar la peticion al servidor: " + e.getMessage(), e);
+					}
+				}
+			}
+
+			InputStream is = getRespuestaServidor(new CustomConectorEventos());
+
+			IJsonParser<ActividadEvento> parser = new ActividadesEventoJsonParser();
+			return parser.parse(is);
+		} catch (Exception e) {
+			throw new EventosException("Error al realizar la peticion al servidor: " + e.getMessage(), e);
+		}
+	}
+
+	public List<ActividadEvento> getActividadesEvento(final EventoActualizableDTO eventoActualizable) throws EventosException {
+		List<ActividadEvento> resul = new ArrayList<>();
+
+		List<Long> ids = eventoActualizable.getIdsCategoriasEvento();
+		for(Long id : ids) {
+			List<ActividadEvento> im = getActividadesEvento(id);
 			resul.addAll(im);
 		}
 

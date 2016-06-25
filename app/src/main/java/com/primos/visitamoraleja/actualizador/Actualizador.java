@@ -8,13 +8,18 @@ import android.util.Log;
 
 import com.primos.visitamoraleja.almacenamiento.AlmacenamientoFactory;
 import com.primos.visitamoraleja.almacenamiento.ItfAlmacenamiento;
+import com.primos.visitamoraleja.bdsqlite.datasource.ActividadEventoDataSource;
+import com.primos.visitamoraleja.bdsqlite.datasource.CategoriaEventoDataSource;
 import com.primos.visitamoraleja.bdsqlite.datasource.CategoriasDataSource;
 import com.primos.visitamoraleja.bdsqlite.datasource.EventosDataSource;
 import com.primos.visitamoraleja.bdsqlite.datasource.ImagenesEventoDatasource;
 import com.primos.visitamoraleja.bdsqlite.datasource.SitioEventoDataSource;
 import com.primos.visitamoraleja.bdsqlite.datasource.SitiosDataSource;
+import com.primos.visitamoraleja.contenidos.ActividadEvento;
 import com.primos.visitamoraleja.contenidos.Categoria;
+import com.primos.visitamoraleja.contenidos.CategoriaEvento;
 import com.primos.visitamoraleja.contenidos.Evento;
+import com.primos.visitamoraleja.contenidos.CategoriaEvento;
 import com.primos.visitamoraleja.contenidos.ImagenEvento;
 import com.primos.visitamoraleja.contenidos.Sitio;
 import com.primos.visitamoraleja.contenidos.SitioEvento;
@@ -241,6 +246,52 @@ public class Actualizador {
 					dataSource.actualizar(imagenEvento);
 				}
 				almacenamiento.addImagenEvento(imagenEvento.getImagen(), imagenEvento.getNombre(), imagenEvento.getIdEvento());
+			}
+		} finally {
+			dataSource.close();
+		}
+	}
+
+	public void actualizarCategoriasEvento(List<CategoriaEvento> categoriasEvento) {
+		ItfAlmacenamiento almacenamiento = AlmacenamientoFactory.getAlmacenamiento(contexto);
+		CategoriaEventoDataSource dataSource = new CategoriaEventoDataSource(contexto);
+		try {
+			dataSource.open();
+
+			Log.d("CategoriaEvento", categoriasEvento.toString());
+			for(CategoriaEvento categoriaEvento : categoriasEvento) {
+				long id = categoriaEvento.getId();
+				comprobarUltimaActualizacion(categoriaEvento.getUltimaActualizacion());
+				CategoriaEvento existente = dataSource.getById(id);
+				if(existente == null) {
+					dataSource.insertar(categoriaEvento);
+				} else {
+					dataSource.actualizar(categoriaEvento);
+				}
+				almacenamiento.addImagenCategoriaEvento(categoriaEvento.getIcono(), categoriaEvento.getNombreIcono(), categoriaEvento.getId());
+			}
+		} finally {
+			dataSource.close();
+		}
+	}
+
+	public void actualizarActividadesEvento(List<ActividadEvento> actividadesEventos) {
+		ItfAlmacenamiento almacenamiento = AlmacenamientoFactory.getAlmacenamiento(contexto);
+		ActividadEventoDataSource dataSource = new ActividadEventoDataSource(contexto);
+		try {
+			dataSource.open();
+
+			Log.d("CategoriaEvento", actividadesEventos.toString());
+			for(ActividadEvento actividadEvento : actividadesEventos) {
+				long id = actividadEvento.getId();
+				comprobarUltimaActualizacion(actividadEvento.getUltimaActualizacion());
+				ActividadEvento existente = dataSource.getById(id);
+				if(existente == null) {
+					dataSource.insertar(actividadEvento);
+				} else {
+					dataSource.actualizar(actividadEvento);
+				}
+				almacenamiento.addImagenActividadEvento(actividadEvento.getIcono(), actividadEvento.getNombreIcono(), actividadEvento.getId());
 			}
 		} finally {
 			dataSource.close();

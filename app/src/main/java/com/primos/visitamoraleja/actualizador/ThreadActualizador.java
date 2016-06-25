@@ -22,8 +22,11 @@ import com.primos.visitamoraleja.R;
 import com.primos.visitamoraleja.bdsqlite.datasource.CategoriasDataSource;
 import com.primos.visitamoraleja.bdsqlite.datasource.EventosDataSource;
 import com.primos.visitamoraleja.bdsqlite.datasource.SitiosDataSource;
+import com.primos.visitamoraleja.contenidos.ActividadEvento;
 import com.primos.visitamoraleja.contenidos.Categoria;
+import com.primos.visitamoraleja.contenidos.CategoriaEvento;
 import com.primos.visitamoraleja.contenidos.Evento;
+import com.primos.visitamoraleja.contenidos.IContenidoUltimaActualizacion;
 import com.primos.visitamoraleja.contenidos.ImagenEvento;
 import com.primos.visitamoraleja.contenidos.Sitio;
 import com.primos.visitamoraleja.contenidos.SitioEvento;
@@ -193,7 +196,7 @@ public class ThreadActualizador extends Thread implements IPrimosActivityLifecyc
 
 				// Ordenamos los sitios por la hora de ultima actualizacion, para que si la actualizacion
 				// se interrumpe, pueda continuar
-				ordenarSitioPorFechaActualizacion(lstSitiosActualizables);
+				ordenarContenidoPorFechaActualizacion(lstSitiosActualizables);
 				
 				synchronized (semaforo) {
 					try {
@@ -263,33 +266,11 @@ public class ThreadActualizador extends Thread implements IPrimosActivityLifecyc
 			dataSource.close();
 		}
 	}
-	
-	private void ordenarSitioPorFechaActualizacion(List<Sitio> lstSitios) {
-		Collections.sort(lstSitios, new Comparator<Sitio>() {
-			@Override
-			public int compare(Sitio lhs, Sitio rhs) {
-				Date dateLhs = lhs.getUltimaActualizacion();
-				Date dateRhs = rhs.getUltimaActualizacion();
-				return dateLhs.compareTo(dateRhs);
-			}
-		});
-	}
 
-	private void ordenarSitioEventoPorFechaActualizacion(List<SitioEvento> sitiosEvento) {
-		Collections.sort(sitiosEvento, new Comparator<SitioEvento>() {
+	private <IContenido extends IContenidoUltimaActualizacion> void ordenarContenidoPorFechaActualizacion(List<IContenido> contenido) {
+		Collections.sort(contenido, new Comparator<IContenido>() {
 			@Override
-			public int compare(SitioEvento lhs, SitioEvento rhs) {
-				Date dateLhs = lhs.getUltimaActualizacion();
-				Date dateRhs = rhs.getUltimaActualizacion();
-				return dateLhs.compareTo(dateRhs);
-			}
-		});
-	}
-
-	private void ordenarImagenEventoPorFechaActualizacion(List<ImagenEvento> imagenesEvento) {
-		Collections.sort(imagenesEvento, new Comparator<ImagenEvento>() {
-			@Override
-			public int compare(ImagenEvento lhs, ImagenEvento rhs) {
+			public int compare(IContenido lhs, IContenido rhs) {
 				Date dateLhs = lhs.getUltimaActualizacion();
 				Date dateRhs = rhs.getUltimaActualizacion();
 				return dateLhs.compareTo(dateRhs);
@@ -322,12 +303,20 @@ public class ThreadActualizador extends Thread implements IPrimosActivityLifecyc
 				actualizador.actualizarEventos(lstEventos);
 
 				List<SitioEvento> sitiosEvento = cs.getSitiosEvento(eventoActualizableDTO);
-				ordenarSitioEventoPorFechaActualizacion(sitiosEvento);
+				ordenarContenidoPorFechaActualizacion(sitiosEvento);
 				actualizador.actualizarSitiosEvento(sitiosEvento);
 
 				List<ImagenEvento> imagenesEvento = cs.getImagenesEvento(eventoActualizableDTO);
-				ordenarImagenEventoPorFechaActualizacion(imagenesEvento);
+				ordenarContenidoPorFechaActualizacion(imagenesEvento);
 				actualizador.actualizarImagenesEvento(imagenesEvento);
+
+				List<CategoriaEvento> categoriasEvento = cs.getCategoriasEvento(eventoActualizableDTO);
+				ordenarContenidoPorFechaActualizacion(categoriasEvento);
+				actualizador.actualizarCategoriasEvento(categoriasEvento);
+
+				List<ActividadEvento> actividadesEvento = cs.getActividadesEvento(eventoActualizableDTO);
+				ordenarContenidoPorFechaActualizacion(actividadesEvento);
+				actualizador.actualizarActividadesEvento(actividadesEvento);
 			}
 			ultimaActualizacionActualizada = Math.max(ultimaActualizacionActualizada, actualizador.getUltimaActualizacion());
 		} finally {
