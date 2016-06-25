@@ -6,27 +6,23 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * Created by h on 7/06/16.
+ * Created by h on 24/06/16.
  */
-public class SitioEvento implements Serializable, IContenidoUltimaActualizacion {
+public class ActividadEvento implements Serializable, IContenidoUltimaActualizacion {
     private long id;
     private long idEvento;
     private long idCategoriaEvento;
-    private boolean esSitioRegistrado;
-    private long idSitioRegistrado;
     private String nombre;
     private String texto;
     private String descripcion;
     private String nombreIcono;
     private Bitmap icono;
+    private Date inicio;
+    private Date fin;
     private double longitud;
     private double latitud;
     private boolean activo;
     private Date ultimaActualizacion;
-
-    public SitioEvento() {
-        idSitioRegistrado = -1;
-    }
 
     public long getId() {
         return id;
@@ -44,20 +40,12 @@ public class SitioEvento implements Serializable, IContenidoUltimaActualizacion 
         this.idEvento = idEvento;
     }
 
-    public boolean isEsSitioRegistrado() {
-        return esSitioRegistrado;
+    public long getIdCategoriaEvento() {
+        return idCategoriaEvento;
     }
 
-    public void setEsSitioRegistrado(boolean esSitioRegistrado) {
-        this.esSitioRegistrado = esSitioRegistrado;
-    }
-
-    public long getIdSitioRegistrado() {
-        return idSitioRegistrado;
-    }
-
-    public void setIdSitioRegistrado(long idSitioRegistrado) {
-        this.idSitioRegistrado = idSitioRegistrado;
+    public void setIdCategoriaEvento(long idCategoriaEvento) {
+        this.idCategoriaEvento = idCategoriaEvento;
     }
 
     public String getNombre() {
@@ -100,6 +88,22 @@ public class SitioEvento implements Serializable, IContenidoUltimaActualizacion 
         this.icono = icono;
     }
 
+    public Date getInicio() {
+        return inicio;
+    }
+
+    public void setInicio(Date inicio) {
+        this.inicio = inicio;
+    }
+
+    public Date getFin() {
+        return fin;
+    }
+
+    public void setFin(Date fin) {
+        this.fin = fin;
+    }
+
     public double getLongitud() {
         return longitud;
     }
@@ -130,13 +134,5 @@ public class SitioEvento implements Serializable, IContenidoUltimaActualizacion 
 
     public void setUltimaActualizacion(Date ultimaActualizacion) {
         this.ultimaActualizacion = ultimaActualizacion;
-    }
-
-    public long getIdCategoriaEvento() {
-        return idCategoriaEvento;
-    }
-
-    public void setIdCategoriaEvento(long idCategoriaEvento) {
-        this.idCategoriaEvento = idCategoriaEvento;
     }
 }

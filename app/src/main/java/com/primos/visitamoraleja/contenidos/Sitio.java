@@ -5,7 +5,7 @@ import java.util.Date;
 
 import android.graphics.Bitmap;
 
-public class Sitio implements Serializable {
+public class Sitio implements Serializable, IContenidoUltimaActualizacion {
 
 	/**
 	 * 

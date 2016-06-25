@@ -8,7 +8,7 @@ import java.util.Date;
 /**
  * Created by h on 7/06/16.
  */
-public class ImagenEvento implements Serializable {
+public class ImagenEvento implements Serializable, IContenidoUltimaActualizacion {
     private long id;
     private long idEvento;
     private String nombre;

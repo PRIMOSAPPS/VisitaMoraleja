@@ -6,27 +6,17 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * Created by h on 7/06/16.
+ * Created by h on 24/06/16.
  */
-public class SitioEvento implements Serializable, IContenidoUltimaActualizacion {
+public class CategoriaEvento implements Serializable, IContenidoUltimaActualizacion {
     private long id;
     private long idEvento;
-    private long idCategoriaEvento;
-    private boolean esSitioRegistrado;
-    private long idSitioRegistrado;
     private String nombre;
     private String texto;
-    private String descripcion;
     private String nombreIcono;
     private Bitmap icono;
-    private double longitud;
-    private double latitud;
     private boolean activo;
     private Date ultimaActualizacion;
-
-    public SitioEvento() {
-        idSitioRegistrado = -1;
-    }
 
     public long getId() {
         return id;
@@ -42,22 +32,6 @@ public class SitioEvento implements Serializable, IContenidoUltimaActualizacion 
 
     public void setIdEvento(long idEvento) {
         this.idEvento = idEvento;
-    }
-
-    public boolean isEsSitioRegistrado() {
-        return esSitioRegistrado;
-    }
-
-    public void setEsSitioRegistrado(boolean esSitioRegistrado) {
-        this.esSitioRegistrado = esSitioRegistrado;
-    }
-
-    public long getIdSitioRegistrado() {
-        return idSitioRegistrado;
-    }
-
-    public void setIdSitioRegistrado(long idSitioRegistrado) {
-        this.idSitioRegistrado = idSitioRegistrado;
     }
 
     public String getNombre() {
@@ -76,14 +50,6 @@ public class SitioEvento implements Serializable, IContenidoUltimaActualizacion 
         this.texto = texto;
     }
 
-    public String getDescripcion() {
-        return descripcion;
-    }
-
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
-    }
-
     public String getNombreIcono() {
         return nombreIcono;
     }
@@ -100,22 +66,6 @@ public class SitioEvento implements Serializable, IContenidoUltimaActualizacion 
         this.icono = icono;
     }
 
-    public double getLongitud() {
-        return longitud;
-    }
-
-    public void setLongitud(double longitud) {
-        this.longitud = longitud;
-    }
-
-    public double getLatitud() {
-        return latitud;
-    }
-
-    public void setLatitud(double latitud) {
-        this.latitud = latitud;
-    }
-
     public boolean isActivo() {
         return activo;
     }
@@ -130,13 +80,5 @@ public class SitioEvento implements Serializable, IContenidoUltimaActualizacion 
 
     public void setUltimaActualizacion(Date ultimaActualizacion) {
         this.ultimaActualizacion = ultimaActualizacion;
-    }
-
-    public long getIdCategoriaEvento() {
-        return idCategoriaEvento;
-    }
-
-    public void setIdCategoriaEvento(long idCategoriaEvento) {
-        this.idCategoriaEvento = idCategoriaEvento;
     }
 }

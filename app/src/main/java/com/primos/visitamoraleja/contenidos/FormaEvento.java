@@ -6,9 +6,10 @@ import java.util.Date;
 /**
  * Created by h on 6/06/16.
  */
-public class FormaEvento implements Serializable {
+public class FormaEvento implements Serializable, IContenidoUltimaActualizacion {
     private long id;
     private long idEvento;
+    private long idCategoriaEvento;
     private String tipoForma;
     private String colorRelleno;
     private String colorLinea;
@@ -98,5 +99,13 @@ public class FormaEvento implements Serializable {
 
     public void setUltimaActualizacion(Date ultimaActualizacion) {
         this.ultimaActualizacion = ultimaActualizacion;
+    }
+
+    public long getIdCategoriaEvento() {
+        return idCategoriaEvento;
+    }
+
+    public void setIdCategoriaEvento(long idCategoriaEvento) {
+        this.idCategoriaEvento = idCategoriaEvento;
     }
 }

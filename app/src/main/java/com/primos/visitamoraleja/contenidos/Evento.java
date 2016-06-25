@@ -23,6 +23,7 @@ public class Evento implements Serializable {
 	private Bitmap icono;
 	private double longitud;
 	private double latitud;
+	private int zoomInicial;
 	private Date inicio;
 	private Date fin;
 	private boolean activo;
@@ -35,6 +36,13 @@ public class Evento implements Serializable {
 	}
 
 
+	public int getZoomInicial() {
+		return zoomInicial;
+	}
+
+	public void setZoomInicial(int zoomInicial) {
+		this.zoomInicial = zoomInicial;
+	}
 
 	public long getId() {
 		return id;
