@@ -16,6 +16,24 @@ public class EventoActualizableDTO {
     private List<FormaEvento> formas;
     private List<Long> idsImagenes;
     private List<Long> idsSitios;
+    private List<Long> idsCategoriasEvento;
+    private List<Long> idsActividades;
+
+    public List<Long> getIdsCategoriasEvento() {
+        return idsCategoriasEvento;
+    }
+
+    public void setIdsCategoriasEvento(List<Long> idsCategoriasEvento) {
+        this.idsCategoriasEvento = idsCategoriasEvento;
+    }
+
+    public List<Long> getIdsActividades() {
+        return idsActividades;
+    }
+
+    public void setIdsActividades(List<Long> idsActividades) {
+        this.idsActividades = idsActividades;
+    }
 
     public long getId() {
         return id;

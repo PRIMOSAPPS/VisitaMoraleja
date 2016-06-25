@@ -57,6 +57,14 @@ public class UtilPropiedades {
 	 */
 	public final static String PROP_RUTA_SITIOS_EVENTO_APP = "RutaSitiosEventoApp";
 	/**
+	 * Ruta en el servidor para pedir los datos de actualizacion de los sitios registrados en eventos
+	 */
+	public final static String PROP_RUTA_CATEGORIAS_EVENTO_APP = "RutaCategoriasEventoApp";
+	/**
+	 * Ruta en el servidor para pedir los datos de actualizacion de los sitios registrados en eventos
+	 */
+	public final static String PROP_RUTA_ACTIVIDADES_EVENTO_APP = "RutaActividadesEventoApp";
+	/**
 	 * ApplicationId para registrarse en Parse y recibir las notificaciones push
 	 */
 	public final static String PROP_PARSE_APPLICATION_ID = "parseApplicationId";
