@@ -85,7 +85,7 @@ public class ConfigMenuLateral {
 			listaItemsMenu.add(datosItem);
 //			valoresMenuLateral[i++] = categoria.getDescripcion();
 		}
-		IND_FAVORITOS=listaItemsMenu.size();
+		//IND_FAVORITOS=listaItemsMenu.size();
 		//DatosItemMenuLateral datosItemFavoritos = new DatosItemMenuLateral((String)resources.getText(R.string.favoritos),
 		//		R.mipmap.ic_favoritosml);
 		//listaItemsMenu.add(datosItemFavoritos);
@@ -131,6 +131,7 @@ public class ConfigMenuLateral {
 					} else {
 						actividadSitios.cargarSitios(categoriaSeleccionada, false);
 					}
+					/*
 				} else if(indice == IND_FAVORITOS) {
 					categoriaSeleccionada = null;
 					mostrarFavoritos = true;
@@ -141,6 +142,7 @@ public class ConfigMenuLateral {
 					} else {
 						actividadSitios.cargarSitios(categoriaSeleccionada, mostrarFavoritos);
 					}
+					*/
 				} else if(indice == IND_PREFERENCIAS) {
 					Intent intent = new Intent(actividadRecibida, PreferenciasActivity.class);
 					actividadRecibida.startActivity(intent);
