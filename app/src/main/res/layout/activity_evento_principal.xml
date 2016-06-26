@@ -52,6 +52,7 @@
                 android:layout_height="match_parent"
                 android:text="@string/map_mapa"
                 android:id="@+id/evtVerMapa"
+                android:onClick="verMapa"
                 android:gravity="center" />
 
             <Button
