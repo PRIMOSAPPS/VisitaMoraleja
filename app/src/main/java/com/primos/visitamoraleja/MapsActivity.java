@@ -66,7 +66,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap = googleMap;
 
         ControlMapaFactory factoria = new ControlMapaFactory();
-        ControlMapaItf controlMapa = factoria.createControlMapa(1);
+        ControlMapaItf controlMapa = factoria.createControlMapa(ControlMapaFactory.TIPOS_MAPAS.GENERAL);
         controlMapa.tratarMapa(mMap, this);
     }
 
