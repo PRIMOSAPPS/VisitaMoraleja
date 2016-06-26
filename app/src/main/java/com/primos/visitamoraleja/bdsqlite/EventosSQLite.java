@@ -19,6 +19,7 @@ public class EventosSQLite extends SQLiteOpenHelper {
 	public final static String COLUMNA_NOMBRE_ICONO = "nombre_icono";
 	public final static String COLUMNA_LATITUD = "latitud";
 	public final static String COLUMNA_LONGITUD = "longitud";
+	public final static String COLUMNA_ZOOM_INICIAL = "zoom_inicial";
 	public final static String COLUMNA_INICIO = "inicio";
 	public final static String COLUMNA_FIN = "fin";
 	public final static String COLUMNA_ACTIVO = "activo";
@@ -29,7 +30,7 @@ public class EventosSQLite extends SQLiteOpenHelper {
 	
 	private final static String CREATE_TABLA = "CREATE TABLE " + TABLE_NAME + 
 			" (id INTEGER PRIMARY KEY, nombre TEXT, texto TEXT, descripcion TEXT, nombre_icono TEXT" +
-			", latitud NUMERIC, longitud NUMERIC, inicio NUMERIC, fin NUMERIC" +
+			", latitud NUMERIC, longitud NUMERIC, zoom_inicial NUMERIC, inicio NUMERIC, fin NUMERIC" +
 			", activo INTEGER, ultima_actualizacion NUMERIC )";
 
 	public EventosSQLite(Context context) {

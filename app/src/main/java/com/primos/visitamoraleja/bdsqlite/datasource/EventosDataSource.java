@@ -29,6 +29,7 @@ public class EventosDataSource extends AbstractDataSource {
 			EventosSQLite.COLUMNA_NOMBRE_ICONO,
 			EventosSQLite.COLUMNA_LATITUD,
 			EventosSQLite.COLUMNA_LONGITUD,
+			EventosSQLite.COLUMNA_ZOOM_INICIAL,
 			EventosSQLite.COLUMNA_INICIO,
 			EventosSQLite.COLUMNA_FIN,
 			EventosSQLite.COLUMNA_ACTIVO,
@@ -59,6 +60,7 @@ public class EventosDataSource extends AbstractDataSource {
 		valores.put(EventosSQLite.COLUMNA_NOMBRE_ICONO, evento.getNombreIcono());
 		valores.put(EventosSQLite.COLUMNA_LATITUD, evento.getLatitud());
 		valores.put(EventosSQLite.COLUMNA_LONGITUD, evento.getLongitud());
+		valores.put(EventosSQLite.COLUMNA_ZOOM_INICIAL, evento.getZoomInicial());
 		valores.put(EventosSQLite.COLUMNA_INICIO, evento.getInicio().getTime());
 		valores.put(EventosSQLite.COLUMNA_FIN, evento.getFin().getTime());
 		int activo = ConversionesUtil.booleanToInt(evento.isActivo());
@@ -161,6 +163,8 @@ public class EventosDataSource extends AbstractDataSource {
 		long longitud = cursor.getLong(cursor.getColumnIndex(EventosSQLite.COLUMNA_LONGITUD));
 		resul.setLatitud(latitud);
 		resul.setLongitud(longitud);
+		float zoomInicial = cursor.getFloat(cursor.getColumnIndex(EventosSQLite.COLUMNA_ZOOM_INICIAL));
+		resul.setZoomInicial(zoomInicial);
 		long inicio = cursor.getLong(cursor.getColumnIndex(EventosSQLite.COLUMNA_INICIO));
 		resul.setInicio(new Date(inicio));
 		long fin = cursor.getLong(cursor.getColumnIndex(EventosSQLite.COLUMNA_FIN));
