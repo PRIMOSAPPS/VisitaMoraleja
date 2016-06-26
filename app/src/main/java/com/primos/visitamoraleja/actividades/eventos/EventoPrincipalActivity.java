@@ -101,6 +101,12 @@ public class EventoPrincipalActivity extends Activity {
 		startActivity(i);
 	}
 
+	public void verMapa(View view) {
+		Intent i = new Intent(this, MapsEventosActivity.class);
+		i.putExtra(EventoPrincipalActivity.ID_EVENTO, idEvento);
+		startActivity(i);
+	}
+
 	@Override
 	protected void onPause() {
 		super.onPause();
