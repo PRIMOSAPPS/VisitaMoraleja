@@ -54,7 +54,10 @@
                 android:text="@string/map_mapa"
                 android:id="@+id/evtVerMapa"
                 android:onClick="verMapa"
-                android:gravity="center" />
+                android:gravity="center"
+                android:layout_marginRight="-8dip"
+                android:layout_marginLeft="-8dip"
+                android:layout_marginBottom="-8dip" />
 
             <Button
                 android:layout_weight=".33"
@@ -63,7 +66,10 @@
                 android:text="@string/sitios"
                 android:id="@+id/evtVerSitios"
                 android:onClick="verSitios"
-                android:gravity="center" />
+                android:gravity="center"
+                android:layout_marginLeft="-8dip"
+                android:layout_marginRight="-8dip"
+                android:layout_marginBottom="-8dip" />
 
             <Button
                 android:layout_weight=".33"
@@ -72,7 +78,10 @@
                 android:text="@string/actividades"
                 android:id="@+id/evtVerActividades"
                 android:onClick="verActividades"
-                android:gravity="center" />
+                android:gravity="center"
+                android:layout_marginLeft="-8dip"
+                android:layout_marginRight="-8dip"
+                android:layout_marginBottom="-8dip" />
         </LinearLayout>
 
     </LinearLayout>
