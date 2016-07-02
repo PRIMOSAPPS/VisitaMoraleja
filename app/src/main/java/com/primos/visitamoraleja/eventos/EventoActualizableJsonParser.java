@@ -62,7 +62,7 @@ public class EventoActualizableJsonParser extends AbstractJsonParser<EventoActua
         resul.setColorLinea(jsonFormaEvento.getString(Constantes.Json.COLOR_LINEA));
         resul.setGrosorLinea(jsonFormaEvento.getString(Constantes.Json.GROSOR_LINEA));
         resul.setTexto(utilJson.getStringFromBase64(jsonFormaEvento, Constantes.Json.TEXTO));
-        resul.setCoordenadas(jsonFormaEvento.getString(Constantes.Json.COORDENADAS));
+        resul.setCoordenadas(utilJson.getStringFromBase64(jsonFormaEvento, Constantes.Json.COORDENADAS));
         resul.setActivo(utilJson.getBoolean(jsonFormaEvento, Constantes.Json.ACTIVO));
         resul.setUltimaActualizacion(utilJson.getDate(jsonFormaEvento, Constantes.Json.ULTIMA_ACTUALIZACION));
 

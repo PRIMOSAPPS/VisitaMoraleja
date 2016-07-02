@@ -26,7 +26,7 @@ public class EventosSQLite extends SQLiteOpenHelper {
 	public final static String COLUMNA_ULTIMA_ACTUALIZACION = "ultima_actualizacion";
 
 	
-	private static final int DATABASE_VERSION = 1;
+	private static final int DATABASE_VERSION = 2;
 	
 	private final static String CREATE_TABLA = "CREATE TABLE " + TABLE_NAME + 
 			" (id INTEGER PRIMARY KEY, nombre TEXT, texto TEXT, descripcion TEXT, nombre_icono TEXT" +

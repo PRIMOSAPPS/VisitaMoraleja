@@ -15,13 +15,16 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
+import android.widget.Toast;
 
 import com.primos.visitamoraleja.adaptadores.SitioAdaptador;
+import com.primos.visitamoraleja.almacenamiento.ItfAlmacenamiento;
 import com.primos.visitamoraleja.bdsqlite.datasource.CategoriasDataSource;
 import com.primos.visitamoraleja.bdsqlite.datasource.SitiosDataSource;
 import com.primos.visitamoraleja.contenidos.Categoria;
 import com.primos.visitamoraleja.contenidos.Sitio;
 import com.primos.visitamoraleja.menulateral.ConfigMenuLateral;
+import com.primos.visitamoraleja.permisos.Permisos;
 
 public class EventoListaNormalActivity extends  ActionBarListActivity {
 	public final static String FAVORITOS = "favoritos";
@@ -69,10 +72,30 @@ public class EventoListaNormalActivity extends  ActionBarListActivity {
 		// Se asigna el titulo del action bar
 		setTitulo(strParaTitulo);
 		
-		cargarSitios(categoriaSeleccionada, mostrarFavoritos);
-
+		Permisos permisosUtil = new Permisos();
+		if(!permisosUtil.preguntarPermisos(this, ItfAlmacenamiento.permisosNecesarios)) {
+			cargarSitios(categoriaSeleccionada, mostrarFavoritos);
+		}
 	}
-	
+	@Override
+	public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+		switch (requestCode) {
+			case Permisos.REQUEST_CODE_ASK_MULTIPLE_PERMISSIONS: {
+//				Permisos permisos = new Permisos();
+//				boolean concedidos = permisos.checkSiPermisosConcedidos(permissions, grantResults);
+//				if(concedidos) {
+					cargarSitios(categoriaSeleccionada, mostrarFavoritos);
+//				} else {
+//					Toast.makeText(this, R.string.permisos_necesarios, Toast.LENGTH_SHORT)
+//							.show();
+//				}
+			}
+			break;
+			default:
+				super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+		}
+	}
+
 	private String getTextoTitulo() {
 		String resul = null;
 		if(categoriaSeleccionada != null) {

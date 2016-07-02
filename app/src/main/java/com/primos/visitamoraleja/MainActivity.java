@@ -1,7 +1,13 @@
 package com.primos.visitamoraleja;
 
+import android.Manifest;
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
@@ -14,13 +20,16 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.primos.visitamoraleja.actualizador.ThreadActualizador;
+import com.primos.visitamoraleja.almacenamiento.ItfAlmacenamiento;
 import com.primos.visitamoraleja.menulateral.ConfigMenuLateral;
+import com.primos.visitamoraleja.permisos.Permisos;
 import com.primos.visitamoraleja.util.UtilPreferencias;
 import com.primos.visitamoraleja.views.DialogoAutocompletar;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-
+import java.util.Map;
 
 
 public class MainActivity extends ActionBarActivity implements IPrimosActividyLifeCycleEmisor {
@@ -122,13 +131,58 @@ public class MainActivity extends ActionBarActivity implements IPrimosActividyLi
 	
 	
 	private void actualizar() {
-//		AsyncTaskActualizador actualizador = new AsyncTaskActualizador(this, false);
-//		actualizador.execute((Void)null);
-		
+		Permisos permisosUtil = new Permisos();
+		if(!permisosUtil.preguntarPermisos(this, ItfAlmacenamiento.permisosNecesarios)) {
+			lanzarActualizacion();
+		}
+	}
+
+	private void lanzarActualizacion() {
 		ThreadActualizador actualizador = new ThreadActualizador(this);
 		actualizador.start();
 	}
-	
+
+	@Override
+	public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+		switch (requestCode) {
+			case Permisos.REQUEST_CODE_ASK_MULTIPLE_PERMISSIONS: {
+
+				Permisos permisos = new Permisos();
+				boolean concedidos = permisos.checkSiPermisosConcedidos(permissions, grantResults);
+				if(concedidos) {
+					lanzarActualizacion();
+				} else {
+					Toast.makeText(this, R.string.permisos_necesarios, Toast.LENGTH_SHORT)
+							.show();
+				}
+
+				/*
+				Map<String, Integer> perms = new HashMap<String, Integer>();
+				// Initial
+				perms.put(Manifest.permission.READ_EXTERNAL_STORAGE, PackageManager.PERMISSION_GRANTED);
+				perms.put(Manifest.permission.WRITE_EXTERNAL_STORAGE, PackageManager.PERMISSION_GRANTED);
+				// Fill with results
+				for (int i = 0; i < permissions.length; i++) {
+					perms.put(permissions[i], grantResults[i]);
+				}
+				if (perms.get(Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
+						&& perms.get(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+					// All Permissions Granted
+					lanzarActualizacion();
+				} else {
+					// Permission Denied
+					Toast.makeText(MainActivity.this, "Some Permission is Denied", Toast.LENGTH_SHORT)
+							.show();
+				}
+				*/
+			}
+			break;
+			default:
+				super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+		}
+	}
+
+
 	public void actualizar(View view) {
 		actualizar();
 //		AsyncTaskActualizador actualizador = new AsyncTaskActualizador(this, true);

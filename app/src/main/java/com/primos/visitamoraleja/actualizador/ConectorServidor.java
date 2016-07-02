@@ -578,7 +578,7 @@ public class ConectorServidor {
 	public List<ActividadEvento> getActividadesEvento(final EventoActualizableDTO eventoActualizable) throws EventosException {
 		List<ActividadEvento> resul = new ArrayList<>();
 
-		List<Long> ids = eventoActualizable.getIdsCategoriasEvento();
+		List<Long> ids = eventoActualizable.getIdsActividades();
 		for(Long id : ids) {
 			List<ActividadEvento> im = getActividadesEvento(id);
 			resul.addAll(im);

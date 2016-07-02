@@ -101,5 +101,8 @@
 
     <string name="sitios">Sitios</string>
     <string name="actividades">Actividades</string>
+    <string name="title_activity_maps_eventos">Eventos</string>
+    <string name="title_activity_sitio_evento_detalle">SitioEventoDetalle</string>
 
+    <string name="permisos_necesarios">La aplicación necesita más permisos de los concedidos para una correcta ejecución</string>
 </resources>

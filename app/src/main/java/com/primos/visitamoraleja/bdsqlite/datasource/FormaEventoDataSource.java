@@ -22,6 +22,7 @@ public class FormaEventoDataSource extends AbstractDataSource {
     // Database fields
     private String[] allColumns = {FormaEventoSQLite.COLUMNA_ID,
             FormaEventoSQLite.COLUMNA_ID_EVENTO,
+            FormaEventoSQLite.COLUMNA_ID_CATEGORIA,
             FormaEventoSQLite.COLUMNA_TIPO_FORMA,
             FormaEventoSQLite.COLUMNA_COLOR_RELLENO,
             FormaEventoSQLite.COLUMNA_COLOR_LINEA,

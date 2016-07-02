@@ -27,7 +27,7 @@ import com.primos.visitamoraleja.bdsqlite.datasource.SitiosDataSource;
 import com.primos.visitamoraleja.contenidos.Categoria;
 
 public class ConfigMenuLateral {
-	private static int IND_FAVORITOS = 5;
+	private static int IND_EVENTOS = 5;
 	private static int IND_MAPA = 6;
 	private static int IND_VER_NOTIFICACIONES = -1;
 	private static int IND_PREFERENCIAS = 8;
@@ -85,10 +85,10 @@ public class ConfigMenuLateral {
 			listaItemsMenu.add(datosItem);
 //			valoresMenuLateral[i++] = categoria.getDescripcion();
 		}
-		//IND_FAVORITOS=listaItemsMenu.size();
-		//DatosItemMenuLateral datosItemFavoritos = new DatosItemMenuLateral((String)resources.getText(R.string.favoritos),
-		//		R.mipmap.ic_favoritosml);
-		//listaItemsMenu.add(datosItemFavoritos);
+		IND_EVENTOS=listaItemsMenu.size();
+		DatosItemMenuLateral datosItemEventos = new DatosItemMenuLateral((String)resources.getText(R.string.eventos),
+				R.drawable.ic_eventos);
+		listaItemsMenu.add(datosItemEventos);
 		IND_MAPA = listaItemsMenu.size();
 		DatosItemMenuLateral datosItemPreferenciasMapa = new DatosItemMenuLateral(
 				(String)resources.getText(R.string.map_mapa), R.mipmap.ic_localizar);

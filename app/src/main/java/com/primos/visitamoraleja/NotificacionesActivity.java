@@ -10,14 +10,17 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.primos.visitamoraleja.adaptadores.NotificacionAdapter;
+import com.primos.visitamoraleja.almacenamiento.ItfAlmacenamiento;
 import com.primos.visitamoraleja.bdsqlite.datasource.NotificacionesDataSource;
 import com.primos.visitamoraleja.bdsqlite.datasource.SitiosDataSource;
 import com.primos.visitamoraleja.contenidos.Notificacion;
 import com.primos.visitamoraleja.contenidos.NotificacionSitio;
 import com.primos.visitamoraleja.contenidos.Sitio;
 import com.primos.visitamoraleja.menulateral.ConfigMenuLateral;
+import com.primos.visitamoraleja.permisos.Permisos;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,7 +45,20 @@ public class NotificacionesActivity extends ActionBarListActivity {
 		dataSource.open();
 		dataSourceSitios = new SitiosDataSource(this);
 		dataSourceSitios.open();
-		
+
+		Permisos permisosUtil = new Permisos();
+		if(!permisosUtil.preguntarPermisos(this, ItfAlmacenamiento.permisosNecesarios)) {
+			cargar();
+		}
+
+		mDrawerOptions = (ListView) findViewById(R.id.menuLateralListaSitios);
+		mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout_lateral);
+		ConfigMenuLateral cml = new ConfigMenuLateral(this, null, true);
+		cml.iniciarMenuLateral();
+
+	}
+
+	private void cargar() {
 		Bundle extras = getIntent().getExtras();
 		// Si se recibe una notificacion solo se muestra esta
 		List<NotificacionSitio> lstNotificacionesSitios = null;
@@ -57,14 +73,28 @@ public class NotificacionesActivity extends ActionBarListActivity {
 			List<Notificacion> lstNotificaciones = dataSource.getAll();
 			lstNotificacionesSitios = getlistaNotificacionesSitio(lstNotificaciones);
 		}
-		
-		setListAdapter(new NotificacionAdapter(this, lstNotificacionesSitios));
-		
-		mDrawerOptions = (ListView) findViewById(R.id.menuLateralListaSitios);
-		mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout_lateral);
-		ConfigMenuLateral cml = new ConfigMenuLateral(this, null, true);
-		cml.iniciarMenuLateral();
 
+		setListAdapter(new NotificacionAdapter(this, lstNotificacionesSitios));
+	}
+
+
+	@Override
+	public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+		switch (requestCode) {
+			case Permisos.REQUEST_CODE_ASK_MULTIPLE_PERMISSIONS: {
+//				Permisos permisos = new Permisos();
+//				boolean concedidos = permisos.checkSiPermisosConcedidos(permissions, grantResults);
+//				if(concedidos) {
+					cargar();
+//				} else {
+//					Toast.makeText(this, R.string.permisos_necesarios, Toast.LENGTH_SHORT)
+//							.show();
+//				}
+			}
+			break;
+			default:
+				super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+		}
 	}
 	
 	private List<NotificacionSitio> getlistaNotificacionesSitio(Notificacion notificacion) {

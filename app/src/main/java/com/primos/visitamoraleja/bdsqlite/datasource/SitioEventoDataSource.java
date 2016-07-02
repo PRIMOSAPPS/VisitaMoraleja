@@ -103,11 +103,10 @@ public class SitioEventoDataSource extends AbstractDataSource {
     }
 
     public List<SitioEvento> getByIdEvento(long idEvento) {
-        List<SitioEvento> resul = new ArrayList<SitioEvento>();
         String where = SitioEventoSQLite.COLUMNA_ID_EVENTO + " = " + idEvento;
         Cursor cursor = database.query(SitioEventoSQLite.TABLE_NAME,
                 allColumns, where, null, null, null, null);
-        resul = getListaByCursor(cursor);
+        List<SitioEvento> resul = getListaByCursor(cursor);
         cursor.close();
 
         return resul;
@@ -174,8 +173,8 @@ public class SitioEventoDataSource extends AbstractDataSource {
         resul.setTexto(cursor.getString(cursor.getColumnIndex(SitioEventoSQLite.COLUMNA_TEXTO)));
         resul.setDescripcion(cursor.getString(cursor.getColumnIndex(SitioEventoSQLite.COLUMNA_DESCRIPCION)));
         resul.setNombreIcono(cursor.getString(cursor.getColumnIndex(SitioEventoSQLite.COLUMNA_NOMBRE_ICONO)));
-        long latitud = cursor.getLong(cursor.getColumnIndex(SitioEventoSQLite.COLUMNA_LATITUD));
-        long longitud = cursor.getLong(cursor.getColumnIndex(SitioEventoSQLite.COLUMNA_LONGITUD));
+        double latitud = cursor.getDouble(cursor.getColumnIndex(SitioEventoSQLite.COLUMNA_LATITUD));
+        double longitud = cursor.getDouble(cursor.getColumnIndex(SitioEventoSQLite.COLUMNA_LONGITUD));
         resul.setLatitud(latitud);
         resul.setLongitud(longitud);
         int intActivo = cursor.getInt(cursor.getColumnIndex(SitiosSQLite.COLUMNA_ACTIVO));

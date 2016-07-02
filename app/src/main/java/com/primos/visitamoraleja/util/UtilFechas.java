@@ -13,6 +13,7 @@ import java.util.TimeZone;
  */
 public class UtilFechas {
 	private final static String FORMATO_FECHA = "dd-MM-yyyy HH:mm:ss";
+
 	private final static TimeZone TIMEZONE_DEFAULT = TimeZone.getDefault();
 
 	private final static String IDZONE_UTC = "UTC";
@@ -85,7 +86,7 @@ public class UtilFechas {
 	/**
 	 * Convierte un objeto Date, asumiendo TimeZone UTC en un objeto Date que representa
 	 * la fecha en TimeZone local
-	 * @param date
+	 * @param dateUTC
 	 * @return
 	 * @throws ParseException
 	 */

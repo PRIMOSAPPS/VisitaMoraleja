@@ -35,8 +35,10 @@ public class SitioAdaptador extends AbstractAdaptador<Sitio> {
 		Sitio sitio = listaSitios.get(position);
 		
 		view.setTag(sitio);
-        TextView textNombreSitio = (TextView)view.findViewById(R.id.textNombreSitio);
-		textNombreSitio.setText(sitio.getNombre());
+        TextView textNombreEvento = (TextView)view.findViewById(R.id.textNombreEvento);
+		if(textNombreEvento != null) {
+			textNombreEvento.setText(sitio.getNombre());
+		}
 		
 		ImageView imagen = (ImageView)view.findViewById(R.id.imagenListaEventos);
 		//TextView textDescripcionCorta = (TextView)view.findViewById(R.id.textDescripcion);

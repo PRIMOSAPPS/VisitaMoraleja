@@ -15,6 +15,7 @@ import com.primos.visitamoraleja.bdsqlite.datasource.SitiosDataSource;
 import com.primos.visitamoraleja.constantes.Constantes;
 import com.primos.visitamoraleja.contenidos.Notificacion;
 import com.primos.visitamoraleja.contenidos.Sitio;
+import com.primos.visitamoraleja.permisos.Permisos;
 import com.primos.visitamoraleja.util.UtilImage;
 
 public class DetalleNotificacionActivity extends ActionBarListActivity {
@@ -42,6 +43,9 @@ public class DetalleNotificacionActivity extends ActionBarListActivity {
 
         Sitio sitio = dataSourceSitios.getById(notificacion.getIdSitio());
         if(sitio != null) {
+
+            Permisos permisosUtil = new Permisos();
+            permisosUtil.preguntarPermisos(this, ItfAlmacenamiento.permisosNecesarios);
 
             ItfAlmacenamiento almacenamiento = AlmacenamientoFactory.getAlmacenamiento(this);
             Bitmap bitmap = almacenamiento.getImagenSitio(sitio.getId(), sitio.getNombreLogotipo());

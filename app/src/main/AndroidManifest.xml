@@ -158,7 +158,11 @@
         </receiver>
 
         <activity android:name=".DetalleNotificacionActivity" />
-        <activity android:name=".actividades.ListaGeneralActivity"></activity>
+        <activity
+            android:name=".actividades.eventos.MapsEventosActivity"
+            android:label="@string/title_activity_maps_eventos" />
+        <activity android:name=".actividades.eventos.SitioEventoDetalleActivity" />
+        <activity android:name=".actividades.eventos.ActividadEventoDetalleActivity"></activity>
     </application>
 
 </manifest>

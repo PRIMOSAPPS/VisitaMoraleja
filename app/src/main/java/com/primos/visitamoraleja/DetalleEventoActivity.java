@@ -27,6 +27,7 @@ import android.widget.Toast;
 import android.widget.ViewSwitcher;
 
 import com.primos.visitamoraleja.adaptadores.ImageAdapter;
+import com.primos.visitamoraleja.almacenamiento.ItfAlmacenamiento;
 import com.primos.visitamoraleja.bdsqlite.datasource.CategoriasDataSource;
 import com.primos.visitamoraleja.bdsqlite.datasource.EventosDataSource;
 import com.primos.visitamoraleja.bdsqlite.datasource.SitiosDataSource;
@@ -35,6 +36,7 @@ import com.primos.visitamoraleja.contenidos.Categoria;
 import com.primos.visitamoraleja.contenidos.Evento;
 import com.primos.visitamoraleja.contenidos.Sitio;
 import com.primos.visitamoraleja.menulateral.ConfigMenuLateral;
+import com.primos.visitamoraleja.permisos.Permisos;
 
 public class DetalleEventoActivity extends ActionBarListActivity implements
 		AdapterView.OnItemSelectedListener, ViewSwitcher.ViewFactory,
@@ -63,6 +65,9 @@ public class DetalleEventoActivity extends ActionBarListActivity implements
 		eventosDataSource.open();
 		// setContentView(R.layout.activity_detalle_evento);
 		setContentView(R.layout.fragment_detalle_evento);
+
+		Permisos permisosUtil = new Permisos();
+		permisosUtil.preguntarPermisos(this, ItfAlmacenamiento.permisosNecesarios);
 
 		TextView textViewDireccion = (TextView) findViewById(R.id.textDireccion);
 		final WebView webViewTextoLargo1 = (WebView) findViewById(R.id.wvSitioTextoLargo1);

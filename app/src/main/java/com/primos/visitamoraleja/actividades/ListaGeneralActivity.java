@@ -6,9 +6,10 @@ import android.view.View;
 
 import com.primos.visitamoraleja.ActionBarListActivity;
 import com.primos.visitamoraleja.R;
+import com.primos.visitamoraleja.actividades.eventos.AbstractEventos;
 import com.primos.visitamoraleja.bdsqlite.datasource.AbstractDataSource;
 
-public abstract class ListaGeneralActivity extends ActionBarListActivity {
+public abstract class ListaGeneralActivity extends AbstractEventos {
 
     protected AbstractDataSource dataSource;
 
@@ -17,6 +18,8 @@ public abstract class ListaGeneralActivity extends ActionBarListActivity {
     protected abstract void cargar();
 
     protected abstract String getTitulo();
+
+    protected abstract void mostrarDetalle(View view);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +33,8 @@ public abstract class ListaGeneralActivity extends ActionBarListActivity {
 
         getTitulo();
         cargar();
+
+        initMenuLateral();
     }
 
     protected void openDataSource() {

@@ -1,19 +1,25 @@
 package com.primos.visitamoraleja.actividades.eventos;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.webkit.WebView;
+import android.widget.ListView;
 
+import com.primos.visitamoraleja.ActionBarListActivity;
+import com.primos.visitamoraleja.MainActivity;
 import com.primos.visitamoraleja.R;
 import com.primos.visitamoraleja.bdsqlite.datasource.EventosDataSource;
 import com.primos.visitamoraleja.constantes.Constantes;
 import com.primos.visitamoraleja.contenidos.Evento;
+import com.primos.visitamoraleja.menulateral.ConfigMenuLateral;
 import com.primos.visitamoraleja.slider.ControlSlider;
 
-public class EventoPrincipalActivity extends Activity {
+public class EventoPrincipalActivity extends AbstractEventos {
 	public final static String ID_EVENTO = "idEvento";
 	public final static String EVENTO = "evento";
 	private final static String TAG = "[" + EventoPrincipalActivity.class.getName() + "]";
@@ -22,6 +28,9 @@ public class EventoPrincipalActivity extends Activity {
 	//private EventosDataSource dataSource = null;
 	//private Evento evento;
 	private long idEvento;
+
+	private DrawerLayout mDrawer;
+	private ListView mDrawerOptions;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -49,45 +58,8 @@ public class EventoPrincipalActivity extends Activity {
 			}
 		}
 
-		/*
-		dataSource = new EventosDataSource(this);
-		dataSource.open();
-		
-		TextView tvNombreEvento = (TextView) findViewById(R.id.tvNombreEvento);
-		TextView tvFechasEvento = (TextView) findViewById(R.id.tvFechasEvento);
-		WebView wvEventoTextoLargo1 = (WebView) findViewById(R.id.wvEventoTextoLargo1);
-		ImageView imgIcono = (ImageView) findViewById(R.id.imgIconoEvento);
-		
-
-		evento = dataSource.getById(idEvento);
-		tvNombreEvento.setText(evento.getNombre());
-		
-		String strFechaInicio = "Desde: " + dateFormat.format(evento.getInicio());
-		String strFechaFin = "Hasta: " + dateFormat.format(evento.getFin());
-		tvFechasEvento.setText(strFechaInicio + "\n" + strFechaFin);
-		
-		String textoWebView = evento.getTexto();
-		wvEventoTextoLargo1.loadDataWithBaseURL(null, textoWebView, Constantes.mimeType, Constantes.encoding, null);
-		
-		ItfAlmacenamiento almacenamiento = AlmacenamientoFactory.getAlmacenamiento(this);
-		Bitmap bitmap = almacenamiento.getImagenEvento(evento.getId(), evento.getNombreIcono());
-		imgIcono.setImageBitmap(bitmap);
-		*/
+		initMenuLateral();
 	}
-
-	/*
-	public void mostrarEnMapa(View boton_pulsado) {
-		Intent lanzarmapa = new Intent(this, MapaLugaresActivity.class);
-		lanzarmapa.putExtra("nombre", evento.getNombre());
-		lanzarmapa.putExtra("latitud", evento.getLatitud());
-		lanzarmapa.putExtra("longitud", evento.getLongitud());
-		lanzarmapa.putExtra(MapaLugaresActivity.ORIGEN, EVENTO);
-		lanzarmapa.putExtra(MapaLugaresActivity.ID_RECIBIDO, evento.getId());
-
-		startActivity(lanzarmapa);
-		finish();
-	}
-	*/
 
 	public void verSitios(View view) {
 		Intent i = new Intent(this, ListaSitiosEventoActivity.class);

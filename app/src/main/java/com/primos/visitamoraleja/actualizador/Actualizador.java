@@ -12,6 +12,7 @@ import com.primos.visitamoraleja.bdsqlite.datasource.ActividadEventoDataSource;
 import com.primos.visitamoraleja.bdsqlite.datasource.CategoriaEventoDataSource;
 import com.primos.visitamoraleja.bdsqlite.datasource.CategoriasDataSource;
 import com.primos.visitamoraleja.bdsqlite.datasource.EventosDataSource;
+import com.primos.visitamoraleja.bdsqlite.datasource.FormaEventoDataSource;
 import com.primos.visitamoraleja.bdsqlite.datasource.ImagenesEventoDatasource;
 import com.primos.visitamoraleja.bdsqlite.datasource.SitioEventoDataSource;
 import com.primos.visitamoraleja.bdsqlite.datasource.SitiosDataSource;
@@ -20,6 +21,7 @@ import com.primos.visitamoraleja.contenidos.Categoria;
 import com.primos.visitamoraleja.contenidos.CategoriaEvento;
 import com.primos.visitamoraleja.contenidos.Evento;
 import com.primos.visitamoraleja.contenidos.CategoriaEvento;
+import com.primos.visitamoraleja.contenidos.FormaEvento;
 import com.primos.visitamoraleja.contenidos.ImagenEvento;
 import com.primos.visitamoraleja.contenidos.Sitio;
 import com.primos.visitamoraleja.contenidos.SitioEvento;
@@ -200,6 +202,27 @@ public class Actualizador {
 					dataSource.actualizar(evento);
 				}
 				almacenamiento.addImagenEvento(evento.getIcono(), evento.getNombreIcono(), id);
+			}
+		} finally {
+			dataSource.close();
+		}
+	}
+
+	public void actualizarFormasEvento(List<FormaEvento> formasEvento) {
+		FormaEventoDataSource dataSource = new FormaEventoDataSource(contexto);
+		try {
+			dataSource.open();
+
+			Log.d("FormaEvento", formasEvento.toString());
+			for(FormaEvento formaEvento : formasEvento) {
+				long id = formaEvento.getId();
+				comprobarUltimaActualizacion(formaEvento.getUltimaActualizacion());
+				FormaEvento existente = dataSource.getById(id);
+				if(existente == null) {
+					dataSource.insertar(formaEvento);
+				} else {
+					dataSource.actualizar(formaEvento);
+				}
 			}
 		} finally {
 			dataSource.close();

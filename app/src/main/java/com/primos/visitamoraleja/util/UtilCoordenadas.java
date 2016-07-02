@@ -38,10 +38,10 @@ public class UtilCoordenadas {
      * @return
      */
     public CoordenadasForma parse(String coordenadas) {
-        List<LatLng> coordenadasForma = new ArrayList<>();
 
         String[] puntoCoordenadas = coordenadas.split(SEPARADOR_PUNTO_COORDENADAS);
         LatLng punto = parseCoordenadaLngLat(puntoCoordenadas[0]);
+        List<LatLng> coordenadasForma = parseSerieCoordenadasLngLat(puntoCoordenadas[1]);
 
         CoordenadasForma resul = new CoordenadasForma(punto, coordenadasForma);
         return resul;
@@ -64,13 +64,35 @@ public class UtilCoordenadas {
      * @param coordenada
      * @return
      */
-    private LatLng parseCoordenadaLngLat(String coordenada) {
-        LatLng resul = null;
+    public LatLng parseCoordenadaLngLat(String coordenada) {
         String[] longLat = coordenada.split(SEPARADOR_LATITUD_LONGITUD);
+        return parseCoordenada(longLat[1], longLat[0]);
+    }
 
-        double longitud = Double.parseDouble(longLat[0]);
-        double latitud = Double.parseDouble(longLat[1]);
-        resul = new LatLng(latitud, longitud);
+    /**
+     * Parsea un String con el formato yyyy,xxxx donde yyyy es la longitud y xxxx es la latitud a un
+     * objeto LatLng
+     * @param coordenada
+     * @return
+     */
+    public LatLng parseCoordenadaLatLng(String coordenada) {
+        String[] longLat = coordenada.split(SEPARADOR_LATITUD_LONGITUD);
+        return parseCoordenada(longLat[0], longLat[1]);
+    }
+
+
+    /**
+     * Parsea un String con el formato yyyy,xxxx donde yyyy es la longitud y xxxx es la latitud a un
+     * objeto LatLng
+     * @param lati
+     * @param longi
+     * @return
+     */
+    private LatLng parseCoordenada(String lati, String longi) {
+
+        double latitud = Double.parseDouble(lati);
+        double longitud = Double.parseDouble(longi);
+        LatLng resul = new LatLng(latitud, longitud);
         return resul;
     }
 }

@@ -1,6 +1,8 @@
 package com.primos.visitamoraleja.actividades.eventos;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 
 import com.primos.visitamoraleja.R;
 import com.primos.visitamoraleja.actividades.ListaGeneralActivity;
@@ -31,6 +33,14 @@ public class ListaSitiosEventoActivity extends ListaGeneralActivity {
     @Override
     protected String getTitulo() {
         return getResources().getString(R.string.sitios);
+    }
+
+    @Override
+    public void mostrarDetalle(View view) {
+        SitioEvento sitioEvento = (SitioEvento)view.getTag();
+        Intent i = new Intent(this, SitioEventoDetalleActivity.class);
+        i.putExtra(SitioEventoDetalleActivity.ID_SITIO_EVENTO, sitioEvento.getId());
+        startActivity(i);
     }
 
     @Override

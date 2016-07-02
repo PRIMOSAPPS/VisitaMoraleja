@@ -159,8 +159,8 @@ public class EventosDataSource extends AbstractDataSource {
 		resul.setTexto(cursor.getString(cursor.getColumnIndex(EventosSQLite.COLUMNA_TEXTO)));
 		resul.setDescripcion(cursor.getString(cursor.getColumnIndex(EventosSQLite.COLUMNA_DESCRIPCION)));
 		resul.setNombreIcono(cursor.getString(cursor.getColumnIndex(EventosSQLite.COLUMNA_NOMBRE_ICONO)));
-		long latitud = cursor.getLong(cursor.getColumnIndex(EventosSQLite.COLUMNA_LATITUD));
-		long longitud = cursor.getLong(cursor.getColumnIndex(EventosSQLite.COLUMNA_LONGITUD));
+		double latitud = cursor.getDouble(cursor.getColumnIndex(EventosSQLite.COLUMNA_LATITUD));
+		double longitud = cursor.getDouble(cursor.getColumnIndex(EventosSQLite.COLUMNA_LONGITUD));
 		resul.setLatitud(latitud);
 		resul.setLongitud(longitud);
 		float zoomInicial = cursor.getFloat(cursor.getColumnIndex(EventosSQLite.COLUMNA_ZOOM_INICIAL));

@@ -1,8 +1,11 @@
 package com.primos.visitamoraleja.almacenamiento;
 
+import android.Manifest;
 import android.graphics.Bitmap;
 
 public interface ItfAlmacenamiento {
+
+	public static String[] permisosNecesarios = {Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE};
 
 	/**
 	 * Devuelve la imagen que pertenece a una categoria con identificador idCategoria y nombre

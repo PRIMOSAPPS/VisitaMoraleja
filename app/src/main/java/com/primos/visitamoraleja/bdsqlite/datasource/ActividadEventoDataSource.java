@@ -177,8 +177,8 @@ public class ActividadEventoDataSource extends AbstractDataSource {
         resul.setInicio(new Date(inicio));
         long fin = cursor.getLong(cursor.getColumnIndex(ActividadEventoSQLite.COLUMNA_FIN));
         resul.setFin(new Date(fin));
-        long latitud = cursor.getLong(cursor.getColumnIndex(ActividadEventoSQLite.COLUMNA_LATITUD));
-        long longitud = cursor.getLong(cursor.getColumnIndex(ActividadEventoSQLite.COLUMNA_LONGITUD));
+        double latitud = cursor.getDouble(cursor.getColumnIndex(ActividadEventoSQLite.COLUMNA_LATITUD));
+        double longitud = cursor.getDouble(cursor.getColumnIndex(ActividadEventoSQLite.COLUMNA_LONGITUD));
         resul.setLatitud(latitud);
         resul.setLongitud(longitud);
         int intActivo = cursor.getInt(cursor.getColumnIndex(SitiosSQLite.COLUMNA_ACTIVO));

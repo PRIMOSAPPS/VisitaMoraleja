@@ -1,0 +1,19 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    >
+
+    <item android:id="@+id/actionbar_menu_lateral"
+        android:title="@string/actionbar_notificacion"
+        android:orderInCategory="100"
+        app:showAsAction="always"
+        android:icon="@mipmap/ic_menu_lateral"/>
+    
+    <item
+        android:id="@+id/actionbar_inicio"
+        android:icon="@drawable/ic_actionbar_inicio"
+        android:orderInCategory="200"
+        android:title="@string/actionbar_inicio"
+        app:showAsAction="ifRoom"/>
+
+</menu>

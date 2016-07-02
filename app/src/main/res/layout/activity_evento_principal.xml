@@ -44,7 +44,8 @@
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight=".10">
+            android:layout_weight=".10"
+            android:layout_gravity="left|bottom|right">
 
             <Button
                 android:layout_weight=".33"

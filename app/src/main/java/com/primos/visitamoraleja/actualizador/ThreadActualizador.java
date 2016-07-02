@@ -299,6 +299,8 @@ public class ThreadActualizador extends Thread implements IPrimosActivityLifecyc
 			List<EventoActualizableDTO> lstEventosActualizables = cs.getListaEventosActualizables(ultimaActualizacion);
 			Actualizador actualizador = new Actualizador(contexto);
 			for(EventoActualizableDTO eventoActualizableDTO : lstEventosActualizables) {
+				actualizador.actualizarFormasEvento(eventoActualizableDTO.getFormas());
+
 				List<Evento> lstEventos = cs.getEvento(eventoActualizableDTO);
 				actualizador.actualizarEventos(lstEventos);
 
