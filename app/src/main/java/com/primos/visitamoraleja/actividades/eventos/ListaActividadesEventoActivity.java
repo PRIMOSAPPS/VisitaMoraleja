@@ -14,6 +14,8 @@ import com.primos.visitamoraleja.contenidos.ActividadEvento;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -100,6 +102,21 @@ public class ListaActividadesEventoActivity extends AbstractEventos {
         int indice = 0;
         for(String fecha : keys) {
             List<ActividadEvento> actividadesFecha = actividadesAgrupadas.get(fecha);
+            // Se ordenan las actividades por inicio
+            Collections.sort(actividadesFecha, new Comparator<ActividadEvento>() {
+                @Override
+                public int compare(ActividadEvento lhs, ActividadEvento rhs) {
+                    int resul = 0;
+                    if(lhs != null && rhs != null) {
+                        Date lhsDate = lhs.getInicio();
+                        Date rhsDate = rhs.getInicio();
+                        if(lhsDate != null && rhsDate != null) {
+                            resul = lhsDate.compareTo(rhsDate);
+                        }
+                    }
+                    return 0;
+                }
+            });
             if(!actividadesAgrupadas.isEmpty()) {
                 listDataHeader.add(fecha);
 
