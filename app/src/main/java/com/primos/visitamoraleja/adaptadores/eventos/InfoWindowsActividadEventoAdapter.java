@@ -39,7 +39,7 @@ public class InfoWindowsActividadEventoAdapter implements GoogleMap.InfoWindowAd
         // Getting view from the layout file info_window_layout
         View v = actividad.getLayoutInflater().inflate(R.layout.infowindows_formaevento, null);
         TextView text = (TextView)v.findViewById(R.id.txtTextoFormaEvento);
-        text.setText(actividadEvento.getLatitud() + "-" + actividadEvento.getLongitud() + "-" + actividadEvento.getDescripcion());
+        text.setText(actividadEvento.getDescripcion());
 
         ImageView imagenView = (ImageView)v.findViewById(R.id.imagenInfoWindowEvento);
         ItfAlmacenamiento almacenamiento = AlmacenamientoFactory.getAlmacenamiento(actividad);
