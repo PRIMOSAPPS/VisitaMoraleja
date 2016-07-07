@@ -55,6 +55,7 @@
                 android:id="@+id/evtVerMapa"
                 android:onClick="verMapa"
                 android:gravity="center"
+                android:background="@color/botones_evento_principal_activo"
                 android:layout_marginRight="-8dip"
                 android:layout_marginLeft="-8dip"
                 android:layout_marginBottom="-8dip" />
@@ -69,7 +70,8 @@
                 android:gravity="center"
                 android:layout_marginLeft="-8dip"
                 android:layout_marginRight="-8dip"
-                android:layout_marginBottom="-8dip" />
+                android:layout_marginBottom="-8dip"
+                android:background="@color/botones_evento_principal_activo" />
 
             <Button
                 android:layout_weight=".33"
@@ -81,7 +83,8 @@
                 android:gravity="center"
                 android:layout_marginLeft="-8dip"
                 android:layout_marginRight="-8dip"
-                android:layout_marginBottom="-8dip" />
+                android:layout_marginBottom="-8dip"
+                android:background="@color/botones_evento_principal_activo" />
         </LinearLayout>
 
     </LinearLayout>

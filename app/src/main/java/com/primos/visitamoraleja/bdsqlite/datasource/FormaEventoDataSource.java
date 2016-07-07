@@ -83,6 +83,11 @@ public class FormaEventoDataSource extends AbstractDataSource {
                 + " = " + id, null);
     }
 
+    public void deleteByIdEvento(long idEvento) {
+        database.delete(FormaEventoSQLite.TABLE_NAME, FormaEventoSQLite.COLUMNA_ID_EVENTO
+                + " = " + idEvento, null);
+    }
+
     public List<FormaEvento> getByIdEvento(long idEvento) {
         List<FormaEvento> resul = new ArrayList<>();
         String where = FormaEventoSQLite.COLUMNA_ID_EVENTO + " = " + idEvento;

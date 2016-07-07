@@ -2,15 +2,19 @@ package com.primos.visitamoraleja.eventos;
 
 import com.primos.visitamoraleja.constantes.Constantes;
 import com.primos.visitamoraleja.contenidos.ActividadEvento;
+import com.primos.visitamoraleja.contenidos.ImagenActividadEvento;
 import com.primos.visitamoraleja.contenidos.SitioEvento;
 import com.primos.visitamoraleja.util.ConversionesUtil;
 import com.primos.visitamoraleja.util.UtilJson;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
 import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by h on 5/06/16.
@@ -31,6 +35,18 @@ public class ActividadesEventoJsonParser extends AbstractJsonParser<ActividadEve
         resul.setNombreIcono(utilJson.getStringFromBase64(json, Constantes.Json.NOMBRE_ICONO));
         String cadenaImagen = json.getString(Constantes.Json.ICONO);
         resul.setIcono(ConversionesUtil.getBitmap(cadenaImagen));
+
+        String idsImagenes = json.getString(Constantes.Json.IDS_IMAGENES);
+        JSONArray idsImagenesJson = new JSONArray(idsImagenes);
+        List<ImagenActividadEvento> imagenesActividad = new ArrayList<>();
+        for(int i=0;i<idsImagenesJson.length(); i++) {
+            long idImagen = idsImagenesJson.getLong(i);
+            ImagenActividadEvento imagenActividad = new ImagenActividadEvento();
+            imagenActividad.setId(idImagen);
+            imagenesActividad.add(imagenActividad);
+        }
+        resul.setImagenes(imagenesActividad);
+
         resul.setInicio(utilJson.getDate(json, Constantes.Json.INICIO));
         resul.setFin(utilJson.getDate(json, Constantes.Json.FIN));
         resul.setLatitud(Double.parseDouble(json.getString(Constantes.Json.LATITUD)));

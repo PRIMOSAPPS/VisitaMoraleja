@@ -15,6 +15,9 @@ import com.primos.visitamoraleja.contenidos.ActividadEvento;
 import com.primos.visitamoraleja.contenidos.SitioEvento;
 import com.primos.visitamoraleja.util.UtilImage;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 /**
  * Created by h on 27/06/16.
  */
@@ -54,6 +57,22 @@ public class InfoWindowsActividadEventoAdapter implements GoogleMap.InfoWindowAd
 
         TextView tituloInfoWindowEvento = (TextView)v.findViewById(R.id.tituloInfoWindowEvento);
         tituloInfoWindowEvento.setText(actividadEvento.getNombre());
+
+        Date inicio = actividadEvento.getInicio();
+        if(inicio != null) {
+            StringBuilder sbInicioFin = new StringBuilder();
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+            sbInicioFin.append(sdf.format(inicio));
+
+            Date fin = actividadEvento.getInicio();
+            if(fin != null) {
+                sdf = new SimpleDateFormat("HH:mm");
+                sbInicioFin.append("-");
+                sbInicioFin.append(sdf.format(fin));
+            }
+
+            TextView inicioFinActividad = (TextView)v.findViewById(R.id.inicioFinActividad);
+        }
 
         return v;
     }

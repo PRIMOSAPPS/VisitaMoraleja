@@ -2,7 +2,7 @@ package com.primos.visitamoraleja.mapas;
 
 import com.primos.visitamoraleja.contenidos.Categoria;
 
-public class DatosOpcionCategoriaMapa {
+public class DatosOpcionCategoriaMapa implements IDatosOpcionMapa {
 	private String textoMenu;
 	private int identificadorIcono;
 	private Categoria categoria;

@@ -2,6 +2,10 @@ package com.primos.visitamoraleja.actividades.eventos;
 
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.support.v4.widget.DrawerLayout;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ListView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -13,11 +17,14 @@ import com.primos.visitamoraleja.R;
 import com.primos.visitamoraleja.mapas.ControlMapaFactory;
 import com.primos.visitamoraleja.mapas.ControlMapaItf;
 import com.primos.visitamoraleja.mapas.eventos.ControlMapaEventos;
+import com.primos.visitamoraleja.menulateral.ConfigMenuLateral;
 
 public class MapsEventosActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
-    long idEvento;
+    private DrawerLayout mDrawer;
+    private ListView mDrawerOptions;
+    private long idEvento;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +37,11 @@ public class MapsEventosActivity extends FragmentActivity implements OnMapReadyC
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
+        mDrawerOptions = (ListView) findViewById(R.id.menuLateralListaSitios);
+        mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout_lateral);
+        ConfigMenuLateral cml = new ConfigMenuLateral(this, null, true);
+        cml.iniciarMenuLateral();
     }
 
 
@@ -50,5 +62,23 @@ public class MapsEventosActivity extends FragmentActivity implements OnMapReadyC
         ControlMapaEventos controlMapa = (ControlMapaEventos)factoria.createControlMapa(ControlMapaFactory.TIPOS_MAPAS.EVENTOS);
         controlMapa.init(idEvento, this);
         controlMapa.tratarMapa(mMap, this);
+    }
+
+    public void mostrarOpciones(View view) {
+        ListView lstOpciones = (ListView)findViewById(R.id.listaOpcionesMapaEventos);
+        int visibilidad = lstOpciones.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE;
+        lstOpciones.setVisibility(visibilidad);
+
+        int idResourceImgBoton = lstOpciones.getVisibility() == View.GONE ? R.mipmap.ic_launcher : R.mipmap.ic_cerrar_opciones;
+        Button btnMenu = (Button)findViewById(R.id.btnMostrarOpcionesEventos);
+        btnMenu.setBackgroundResource(idResourceImgBoton);
+    }
+
+    public void mostrarMenuLateral(View view) {
+        if (mDrawer.isDrawerOpen(mDrawerOptions)){
+            mDrawer.closeDrawers();
+        }else{
+            mDrawer.openDrawer(mDrawerOptions);
+        }
     }
 }

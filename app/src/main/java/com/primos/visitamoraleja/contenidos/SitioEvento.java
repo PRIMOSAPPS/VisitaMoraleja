@@ -8,7 +8,7 @@ import java.util.Date;
 /**
  * Created by h on 7/06/16.
  */
-public class SitioEvento implements Serializable, IContenidoUltimaActualizacion, IGeneral {
+public class SitioEvento implements Serializable, IContenidoUltimaActualizacion, IContenidoGeneral {
     private long id;
     private long idEvento;
     private long idCategoriaEvento;

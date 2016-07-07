@@ -15,9 +15,7 @@ import android.widget.ViewSwitcher;
 import com.primos.visitamoraleja.R;
 import com.primos.visitamoraleja.almacenamiento.AlmacenamientoFactory;
 import com.primos.visitamoraleja.almacenamiento.ItfAlmacenamiento;
-import com.primos.visitamoraleja.bdsqlite.datasource.EventosDataSource;
 import com.primos.visitamoraleja.bdsqlite.datasource.ImagenesEventoDatasource;
-import com.primos.visitamoraleja.contenidos.Evento;
 import com.primos.visitamoraleja.contenidos.ImagenEvento;
 
 import java.io.File;
@@ -27,16 +25,17 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 /**
- * Created by h on 3/04/16.
+ * Created by h on 5/07/16.
  */
-public class ControlSlider {
+public abstract class AbstractControlSlider {
 
-    private Activity actividad;
+    protected Activity actividad;
 
-    private long idEvento;
+    protected long id;
 
-    private List<Uri> imagenesGaleria = null;//{R.drawable.slide001, R.drawable.slide002, R.drawable.slide003, R.drawable.slide004, R.drawable.slide005, R.drawable.slide006, R.drawable.slide007};
+    protected List<Uri> imagenesGaleria = null;//{R.drawable.slide001, R.drawable.slide002, R.drawable.slide003, R.drawable.slide004, R.drawable.slide005, R.drawable.slide006, R.drawable.slide007};
 
+    private int idImageSwitcher;
     private ImageSwitcher imageSwitcher;
 
     private int position;
@@ -45,14 +44,17 @@ public class ControlSlider {
 
     private Timer timer = null;
 
-    public ControlSlider(Activity actividad, long idEvento) {
+    protected abstract void cargarGallery();
+
+    public AbstractControlSlider(Activity actividad, long id, int idImageSwitcher) {
         this.actividad = actividad;
-        this.idEvento = idEvento;
+        this.id = id;
+        this.idImageSwitcher = idImageSwitcher;
         cargarGallery();
     }
 
     public void initSlider() {
-        imageSwitcher = (ImageSwitcher) actividad.findViewById(R.id.imageSlider);
+        imageSwitcher = (ImageSwitcher) actividad.findViewById(idImageSwitcher);
         imageSwitcher.setFactory(new ViewSwitcher.ViewFactory() {
             @Override
             public View makeView() {
@@ -80,27 +82,6 @@ public class ControlSlider {
 
         startSlider();
     }
-
-    private void cargarGallery() {
-        ImagenesEventoDatasource dataSource = null;
-        try {
-            imagenesGaleria = new ArrayList<>();
-            ItfAlmacenamiento almacenamiento = AlmacenamientoFactory.getAlmacenamiento(actividad);
-            dataSource = new ImagenesEventoDatasource(actividad);
-            dataSource.open();
-            List<ImagenEvento> imagenes = dataSource.getByIdEvento(idEvento);
-            for(ImagenEvento imagen : imagenes) {
-                File fich = new File(almacenamiento.getDirImagenEvento(idEvento, imagen.getNombre()));
-                Uri uri = Uri.fromFile(fich);
-                imagenesGaleria.add(uri);
-            }
-        } finally {
-            if(dataSource != null) {
-                dataSource.close();
-            }
-        }
-    }
-
 
     private void startSlider() {
         final ItfAlmacenamiento almacenamiento = AlmacenamientoFactory.getAlmacenamiento(actividad);
@@ -130,6 +111,14 @@ public class ControlSlider {
         }, 0, DURATION);
     }
 
+    public void ocultar() {
+        imageSwitcher.setVisibility(View.GONE);
+    }
+
+    public void mostrar() {
+        imageSwitcher.setVisibility(View.VISIBLE);
+    }
+
     // Stops the slider when the Activity is going into the background
     public void pause() {
         if (timer != null) {
@@ -144,5 +133,4 @@ public class ControlSlider {
         }
 
     }
-
 }

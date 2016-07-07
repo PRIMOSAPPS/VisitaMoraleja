@@ -4,26 +4,28 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.webkit.WebView;
 import android.widget.ListView;
+import android.widget.Toast;
 
-import com.primos.visitamoraleja.ActionBarListActivity;
-import com.primos.visitamoraleja.MainActivity;
 import com.primos.visitamoraleja.R;
+import com.primos.visitamoraleja.bdsqlite.datasource.ActividadEventoDataSource;
 import com.primos.visitamoraleja.bdsqlite.datasource.EventosDataSource;
+import com.primos.visitamoraleja.bdsqlite.datasource.SitioEventoDataSource;
 import com.primos.visitamoraleja.constantes.Constantes;
+import com.primos.visitamoraleja.contenidos.ActividadEvento;
 import com.primos.visitamoraleja.contenidos.Evento;
-import com.primos.visitamoraleja.menulateral.ConfigMenuLateral;
-import com.primos.visitamoraleja.slider.ControlSlider;
+import com.primos.visitamoraleja.contenidos.SitioEvento;
+import com.primos.visitamoraleja.slider.EventoControlSlider;
+
+import java.util.List;
 
 public class EventoPrincipalActivity extends AbstractEventos {
 	public final static String ID_EVENTO = "idEvento";
 	public final static String EVENTO = "evento";
 	private final static String TAG = "[" + EventoPrincipalActivity.class.getName() + "]";
-	private ControlSlider controlSlider;
+	private EventoControlSlider controlSlider;
 	//private SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 	//private EventosDataSource dataSource = null;
 	//private Evento evento;
@@ -31,6 +33,9 @@ public class EventoPrincipalActivity extends AbstractEventos {
 
 	private DrawerLayout mDrawer;
 	private ListView mDrawerOptions;
+
+	private boolean existenSitios = false;
+	private boolean existenActividades = false;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +46,7 @@ public class EventoPrincipalActivity extends AbstractEventos {
 		Evento evento = null;
 		EventosDataSource dataSource = null;
 		try {
-			controlSlider = new ControlSlider(this, idEvento);
+			controlSlider = new EventoControlSlider(this, idEvento);
 			controlSlider.initSlider();
 
 			dataSource = new EventosDataSource(this);
@@ -58,19 +63,62 @@ public class EventoPrincipalActivity extends AbstractEventos {
 			}
 		}
 
+		compruebaExistenciaDatos();
+
 		initMenuLateral();
 	}
 
+	private void compruebaExistenciaDatos() {
+		compruebaExistenciaSitios();
+		compruebaExistenciaActividades();
+	}
+
+	private void compruebaExistenciaSitios() {
+		SitioEventoDataSource dataSource = null;
+		try {
+			existenSitios = false;
+			dataSource = new SitioEventoDataSource(this);
+			List<SitioEvento> sitiosEvento = dataSource.getByIdEvento(idEvento);
+			if(sitiosEvento == null || sitiosEvento.isEmpty()) {
+				existenSitios = true;
+			}
+		} finally {
+			dataSource.close();
+		}
+	}
+
+	private void compruebaExistenciaActividades() {
+		ActividadEventoDataSource dataSource = null;
+		try {
+			existenActividades = false;
+			dataSource = new ActividadEventoDataSource(this);
+			List<ActividadEvento> actividadesEvento = dataSource.getByIdEvento(idEvento);
+			if(actividadesEvento == null || actividadesEvento.isEmpty()) {
+				existenActividades = true;
+			}
+		} finally {
+			dataSource.close();
+		}
+	}
+
 	public void verSitios(View view) {
-		Intent i = new Intent(this, ListaSitiosEventoActivity.class);
-		i.putExtra(EventoPrincipalActivity.ID_EVENTO, idEvento);
-		startActivity(i);
+		if(existenSitios) {
+			Intent i = new Intent(this, ListaSitiosEventoActivity.class);
+			i.putExtra(EventoPrincipalActivity.ID_EVENTO, idEvento);
+			startActivity(i);
+		} else {
+			Toast.makeText(this, R.string.no_hay_sitios, Toast.LENGTH_LONG);
+		}
 	}
 
 	public void verActividades(View view) {
-		Intent i = new Intent(this, ListaActividadesEventoActivity.class);
-		i.putExtra(EventoPrincipalActivity.ID_EVENTO, idEvento);
-		startActivity(i);
+		if (existenSitios) {
+			Intent i = new Intent(this, ListaActividadesEventoActivity.class);
+			i.putExtra(EventoPrincipalActivity.ID_EVENTO, idEvento);
+			startActivity(i);
+		} else {
+			Toast.makeText(this, R.string.no_hay_actividades, Toast.LENGTH_LONG);
+		}
 	}
 
 	public void verMapa(View view) {

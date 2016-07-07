@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import com.primos.visitamoraleja.bdsqlite.ImagenesEventoSQLite;
 import com.primos.visitamoraleja.bdsqlite.SitioEventoSQLite;
 import com.primos.visitamoraleja.bdsqlite.SitiosSQLite;
 import com.primos.visitamoraleja.contenidos.SitioEvento;
@@ -86,6 +87,11 @@ public class SitioEventoDataSource extends AbstractDataSource {
         long id = sitioEvento.getId();
         database.delete(SitioEventoSQLite.TABLE_NAME, SitioEventoSQLite.COLUMNA_ID
                 + " = " + id, null);
+    }
+
+    public void deleteByIdEvento(long idEvento) {
+        database.delete(SitioEventoSQLite.TABLE_NAME, SitioEventoSQLite.COLUMNA_ID_EVENTO
+                + " = " + idEvento, null);
     }
 
     public SitioEvento getById(long id) {

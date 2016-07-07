@@ -53,6 +53,10 @@ public class UtilPropiedades {
 	 */
 	public final static String PROP_RUTA_IMAGENES_EVENTO_APP = "RutaImagenesEventoApp";
 	/**
+	 * Ruta en el servidor para pedir los datos de actualizacion de las imagenes de las actividades de eventos
+	 */
+	public final static String PROP_RUTA_IMAGENES_ACTIVIDAD_EVENTO_APP = "RutaImagenesActividadEventoApp";
+	/**
 	 * Ruta en el servidor para pedir los datos de actualizacion de los sitios registrados en eventos
 	 */
 	public final static String PROP_RUTA_SITIOS_EVENTO_APP = "RutaSitiosEventoApp";

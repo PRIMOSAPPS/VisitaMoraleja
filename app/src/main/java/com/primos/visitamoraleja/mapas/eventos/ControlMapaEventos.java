@@ -2,9 +2,14 @@ package com.primos.visitamoraleja.mapas.eventos;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.location.Location;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.CheckBox;
+import android.widget.ListView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -19,6 +24,8 @@ import com.google.android.gms.maps.model.Polygon;
 import com.google.android.gms.maps.model.PolygonOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.primos.visitamoraleja.R;
+import com.primos.visitamoraleja.adaptadores.OpcionCategoriaMapaAdaptador;
 import com.primos.visitamoraleja.adaptadores.eventos.InfoWindowsActividadEventoAdapter;
 import com.primos.visitamoraleja.adaptadores.eventos.InfoWindowsFormaEventoAdapter;
 import com.primos.visitamoraleja.adaptadores.eventos.InfoWindowsSitioEventoAdapter;
@@ -26,15 +33,18 @@ import com.primos.visitamoraleja.almacenamiento.AlmacenamientoFactory;
 import com.primos.visitamoraleja.almacenamiento.ItfAlmacenamiento;
 import com.primos.visitamoraleja.bdsqlite.datasource.ActividadEventoDataSource;
 import com.primos.visitamoraleja.bdsqlite.datasource.CategoriaEventoDataSource;
+import com.primos.visitamoraleja.bdsqlite.datasource.CategoriasDataSource;
 import com.primos.visitamoraleja.bdsqlite.datasource.EventosDataSource;
 import com.primos.visitamoraleja.bdsqlite.datasource.FormaEventoDataSource;
 import com.primos.visitamoraleja.bdsqlite.datasource.SitioEventoDataSource;
 import com.primos.visitamoraleja.contenidos.ActividadEvento;
+import com.primos.visitamoraleja.contenidos.Categoria;
 import com.primos.visitamoraleja.contenidos.CategoriaEvento;
 import com.primos.visitamoraleja.contenidos.Evento;
 import com.primos.visitamoraleja.contenidos.FormaEvento;
 import com.primos.visitamoraleja.contenidos.SitioEvento;
 import com.primos.visitamoraleja.mapas.ControlMapaItf;
+import com.primos.visitamoraleja.mapas.DatosOpcionCategoriaMapa;
 import com.primos.visitamoraleja.mapas.TipoForma;
 import com.primos.visitamoraleja.util.UtilCoordenadas;
 import com.primos.visitamoraleja.util.UtilImage;
@@ -62,6 +72,11 @@ public class ControlMapaEventos implements ControlMapaItf {
     private InfoWindowsFormaEventoAdapter infoWindowsFormaEventoAdapter;
     private InfoWindowsSitioEventoAdapter infoWindowsSitioEventoAdapter;
     private InfoWindowsActividadEventoAdapter infoWindowsActividadEventoAdapter;
+
+    private Map<Long, List<Marker>> categoriasMarkers = new HashMap<>();
+    private Map<Long, List<Polygon>> categoriasPolygonMapa = new HashMap<>();
+    private Map<Long, List<Polyline>> categoriasPolylineMapa = new HashMap<>();
+    private Map<Long, List<Circle>> categoriasCircleMapa = new HashMap<>();
 
     private Map<Polygon, ContenidoMapa> poligonos = null;
     private Map<Polyline, ContenidoMapa> lineas = null;
@@ -207,6 +222,8 @@ public class ControlMapaEventos implements ControlMapaItf {
                 return clicked;
             }
         });
+
+        cargarOpcionesMapa(contexto);
     }
 
     private void hideCurrentMarker() {
@@ -433,17 +450,44 @@ public class ControlMapaEventos implements ControlMapaItf {
         add(cm);
         puntos.put(circle, cm);
 
+        addToCategoria(forma.getIdCategoriaEvento(), circle);
 
-        /*
-        MarkerOptions mo = new MarkerOptions();
-        mo.position(punto);
-        Marker marker = googleMap.addMarker(mo);
+    }
 
-        ContenidoMapa cm = new ContenidoMapa(punto, marker, forma, TipoForma.PUNTO);
-        add(cm);
-        puntos.put(marker, cm);
-        */
+    private void addToCategoria(long idCategoria, Marker marker) {
+        List<Marker> lista = categoriasMarkers.get(idCategoria);
+        if(lista == null) {
+            lista = new ArrayList<>();
+            categoriasMarkers.put(idCategoria, lista);
+        }
+        lista.add(marker);
+    }
 
+    private void addToCategoria(long idCategoria, Polygon polygon) {
+        List<Polygon> lista = categoriasPolygonMapa.get(idCategoria);
+        if(lista == null) {
+            lista = new ArrayList<>();
+            categoriasPolygonMapa.put(idCategoria, lista);
+        }
+        lista.add(polygon);
+    }
+
+    private void addToCategoria(long idCategoria, Polyline polyline) {
+        List<Polyline> lista = categoriasPolylineMapa.get(idCategoria);
+        if(lista == null) {
+            lista = new ArrayList<>();
+            categoriasPolylineMapa.put(idCategoria, lista);
+        }
+        lista.add(polyline);
+    }
+
+    private void addToCategoria(long idCategoria, Circle circle) {
+        List<Circle> lista = categoriasCircleMapa.get(idCategoria);
+        if(lista == null) {
+            lista = new ArrayList<>();
+            categoriasCircleMapa.put(idCategoria, lista);
+        }
+        lista.add(circle);
     }
 
     private void addSitioMapa(GoogleMap googleMap, SitioEvento sitio, UtilCoordenadas coordenadasForma) {
@@ -462,6 +506,7 @@ public class ControlMapaEventos implements ControlMapaItf {
 
         sitios.put(marker, sitio);
 
+        addToCategoria(sitio.getIdCategoriaEvento(), marker);
     }
 
     private void addActividadMapa(GoogleMap googleMap, ActividadEvento actividad, UtilCoordenadas coordenadasForma) {
@@ -480,6 +525,7 @@ public class ControlMapaEventos implements ControlMapaItf {
 
         actividades.put(marker, actividad);
 
+        addToCategoria(actividad.getIdCategoriaEvento(), marker);
     }
     
     private void addLinea(GoogleMap googleMap, FormaEvento forma, UtilCoordenadas.CoordenadasForma coordenadasForma) {
@@ -498,6 +544,8 @@ public class ControlMapaEventos implements ControlMapaItf {
         ContenidoMapa cm = new ContenidoMapa(coordenadasForma.getPunto(), polyLine, forma, TipoForma.LINEA);
         add(cm);
         lineas.put(polyLine, cm);
+
+        addToCategoria(forma.getIdCategoriaEvento(), polyLine);
     }
 
     private int getColor(String color) {
@@ -524,5 +572,81 @@ public class ControlMapaEventos implements ControlMapaItf {
         ContenidoMapa cm = new ContenidoMapa(coordenadasForma.getPunto(), polygon, forma, TipoForma.LINEA);
         add(cm);
         poligonos.put(polygon, cm);
+
+        addToCategoria(forma.getIdCategoriaEvento(), polygon);
     }
+
+
+    // Carga las opciones del mapa
+    private void cargarOpcionesMapa(Context contexto) {
+        Activity actividad = (Activity)contexto;
+        List<DatosOpcionCategoriaMapaEventos> listaItemsMenu = new ArrayList<>();
+        List<CategoriaEvento> listaCategorias = getListaCategorias(contexto);
+        Resources resources = contexto.getResources();
+        int i=0;
+        for(CategoriaEvento categoria : listaCategorias) {
+            String textoMenu = categoria.getNombre();
+            String nombreIcono = categoria.getNombreIcono();
+            nombreIcono = nombreIcono.substring(0, nombreIcono.lastIndexOf("."));
+            int identificadorImagen = resources.getIdentifier(nombreIcono, "mipmap", contexto.getPackageName());
+            DatosOpcionCategoriaMapaEventos datosItem = new DatosOpcionCategoriaMapaEventos(categoria, textoMenu, identificadorImagen);
+            listaItemsMenu.add(datosItem);
+        }
+
+        ListView lstViewOpciones = (ListView)actividad.findViewById(R.id.listaOpcionesMapaEventos);
+        lstViewOpciones.setAdapter(new OpcionCategoriaMapaAdaptador(actividad, listaItemsMenu));
+
+        lstViewOpciones.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                DatosOpcionCategoriaMapaEventos datosItem = (DatosOpcionCategoriaMapaEventos) view.getTag();
+                CategoriaEvento categoria = datosItem.getCategoria();
+                CheckBox checkBox = (CheckBox) view.findViewById(R.id.checkBoxMostrarCategoria);
+                checkBox.setChecked(!checkBox.isChecked());
+                mostrarOcultarMarcas(categoria, checkBox.isChecked());
+            }
+        });
+    }
+
+    private void mostrarOcultarMarcas(CategoriaEvento categoria, boolean mostrar) {
+        List<Marker> lstMarkers = categoriasMarkers.get(categoria.getId());
+        if(lstMarkers != null) {
+            for (Marker markerSitio : lstMarkers) {
+                markerSitio.setVisible(mostrar);
+            }
+        }
+
+        List<Polygon> lstPolygon = categoriasPolygonMapa.get(categoria.getId());
+        if(lstPolygon != null) {
+            for (Polygon poligono : lstPolygon) {
+                poligono.setVisible(mostrar);
+            }
+        }
+
+
+        List<Polyline> lstPolyline = categoriasPolylineMapa.get(categoria.getId());
+        if(lstPolyline != null) {
+            for (Polyline polyline : lstPolyline) {
+                polyline.setVisible(mostrar);
+            }
+        }
+
+
+        List<Circle> lstCircle = categoriasCircleMapa.get(categoria.getId());
+        if(lstCircle != null) {
+            for (Circle circle : lstCircle) {
+                circle.setVisible(mostrar);
+            }
+        }
+    }
+
+    private List<CategoriaEvento> getListaCategorias(Context contexto) {
+        CategoriaEventoDataSource dataSource = new CategoriaEventoDataSource(contexto);
+        dataSource.open();
+        List<CategoriaEvento> categorias = dataSource.getByIdEvento(evento.getId());
+        dataSource.close();
+
+        return categorias;
+    }
+
 }

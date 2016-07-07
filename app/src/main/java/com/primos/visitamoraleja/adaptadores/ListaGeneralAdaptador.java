@@ -9,10 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.primos.visitamoraleja.R;
-import com.primos.visitamoraleja.almacenamiento.AlmacenamientoFactory;
-import com.primos.visitamoraleja.almacenamiento.ItfAlmacenamiento;
-import com.primos.visitamoraleja.contenidos.IGeneral;
-import com.primos.visitamoraleja.contenidos.Sitio;
+import com.primos.visitamoraleja.contenidos.IContenidoGeneral;
 
 import java.util.List;
 
@@ -22,9 +19,9 @@ import java.util.List;
  * @author h
  *
  */
-public abstract class ListaGeneralAdaptador<IGeneralDTO extends IGeneral> extends AbstractAdaptador  {
+public abstract class ListaGeneralAdaptador<IGeneralDTO extends IContenidoGeneral> extends AbstractAdaptador  {
 
-	protected abstract Bitmap getBitmap(IGeneral obj);
+	protected abstract Bitmap getBitmap(IContenidoGeneral obj);
 
 	public ListaGeneralAdaptador(Activity actividad, List<IGeneralDTO> listaGeneral) {
 		super(actividad, listaGeneral);
@@ -36,7 +33,7 @@ public abstract class ListaGeneralAdaptador<IGeneralDTO extends IGeneral> extend
 		View view = inflater.inflate(R.layout.item_lista_general, null, true);
 
 		List<IGeneralDTO> objetos = (List<IGeneralDTO>)listaObjetos;
-		IGeneral objeto = objetos.get(position);
+		IContenidoGeneral objeto = objetos.get(position);
 		
 		view.setTag(objeto);
         TextView textItem = (TextView)view.findViewById(R.id.textItem);

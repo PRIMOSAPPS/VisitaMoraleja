@@ -24,6 +24,7 @@ public class Constantes {
 		public final static String ULTIMA_ACTUALIZACION = "ultima_actualizacion";
 
 		public final static String ID_EVENTO = "id_evento";
+		public final static String ID_ACTIVIDAD = "id_actividad";
 		public final static String ID_CATEGORIA_EVENTO = "id_categoria_evento";
 		public final static String ES_SITIO_REGISTRADO = "es_sitio_registrado";
 		public final static String ID_SITIO_REGISTRADO = "id_sitio_registrado";

@@ -13,16 +13,17 @@ import android.widget.TextView;
 
 import com.primos.visitamoraleja.R;
 import com.primos.visitamoraleja.mapas.DatosOpcionCategoriaMapa;
+import com.primos.visitamoraleja.mapas.IDatosOpcionMapa;
 import com.primos.visitamoraleja.menulateral.DatosItemMenuLateral;
 
 import java.util.List;
 
-public class OpcionCategoriaMapaAdaptador extends BaseAdapter {
+public class OpcionCategoriaMapaAdaptador<IDatosOpcionMapaGen extends IDatosOpcionMapa> extends BaseAdapter {
 	private final Activity actividad;
-	private final List<DatosOpcionCategoriaMapa> listaItems;
+	private final List<IDatosOpcionMapaGen> listaItems;
 
 	public OpcionCategoriaMapaAdaptador(Activity actividad,
-										List<DatosOpcionCategoriaMapa> listaItems) {
+										List<IDatosOpcionMapaGen> listaItems) {
 		super();
 		this.actividad = actividad;
 		this.listaItems = listaItems;
@@ -51,7 +52,7 @@ public class OpcionCategoriaMapaAdaptador extends BaseAdapter {
 		ImageView imageView = (ImageView)view.findViewById(R.id.imagen_opcion_mapa);
 		TextView textView = (TextView)view.findViewById(R.id.titulo_opcion_mapa);
 
-		DatosOpcionCategoriaMapa datosItem = listaItems.get(position);
+		IDatosOpcionMapaGen datosItem = listaItems.get(position);
 		textView.setText(datosItem.getTextoMenu());
 		Resources resources = actividad.getResources();
 //		int identificadorImagen = resources.getIdentifier(datosItem.getNombreIcono(), "drawable", actividad.getPackageName());

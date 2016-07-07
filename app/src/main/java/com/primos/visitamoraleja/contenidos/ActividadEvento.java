@@ -4,11 +4,12 @@ import android.graphics.Bitmap;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by h on 24/06/16.
  */
-public class ActividadEvento implements Serializable, IContenidoUltimaActualizacion, IGeneral {
+public class ActividadEvento implements Serializable, IContenidoUltimaActualizacion, IContenidoGeneral {
     private long id;
     private long idEvento;
     private long idCategoriaEvento;
@@ -17,6 +18,7 @@ public class ActividadEvento implements Serializable, IContenidoUltimaActualizac
     private String descripcion;
     private String nombreIcono;
     private Bitmap icono;
+    private List<ImagenActividadEvento> imagenes;
     private Date inicio;
     private Date fin;
     private double longitud;
@@ -26,6 +28,14 @@ public class ActividadEvento implements Serializable, IContenidoUltimaActualizac
 
     public long getId() {
         return id;
+    }
+
+    public List<ImagenActividadEvento> getImagenes() {
+        return imagenes;
+    }
+
+    public void setImagenes(List<ImagenActividadEvento> imagenes) {
+        this.imagenes = imagenes;
     }
 
     @Override

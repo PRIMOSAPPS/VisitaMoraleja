@@ -11,11 +11,18 @@ import com.primos.visitamoraleja.R;
 import com.primos.visitamoraleja.almacenamiento.AlmacenamientoFactory;
 import com.primos.visitamoraleja.almacenamiento.ItfAlmacenamiento;
 import com.primos.visitamoraleja.bdsqlite.datasource.ActividadEventoDataSource;
+import com.primos.visitamoraleja.bdsqlite.datasource.ImagenesActividadEventoDatasource;
 import com.primos.visitamoraleja.constantes.Constantes;
 import com.primos.visitamoraleja.contenidos.ActividadEvento;
+import com.primos.visitamoraleja.contenidos.ImagenActividadEvento;
+import com.primos.visitamoraleja.slider.EventoControlSlider;
+
+import java.util.List;
 
 public class ActividadEventoDetalleActivity extends AbstractEventos {
     public final static String ID_ACTIVIDAD_EVENTO = "ID_ACTIVIDAD_EVENTO";
+
+    private EventoControlSlider controlSlider;
 
     private long idActividad;
 
@@ -27,6 +34,11 @@ public class ActividadEventoDetalleActivity extends AbstractEventos {
         initMenuLateral();
 
         idActividad = (long) getIntent().getExtras().get(ActividadEventoDetalleActivity.ID_ACTIVIDAD_EVENTO);
+
+        controlSlider = new EventoControlSlider(this, idActividad);
+        controlSlider.initSlider();
+
+        visibilidadImagenes();
 
         ActividadEvento actividadEvento = getSitioEvento();
 
@@ -42,6 +54,21 @@ public class ActividadEventoDetalleActivity extends AbstractEventos {
         texto.loadDataWithBaseURL(null, actividadEvento.getTexto(), Constantes.mimeType, Constantes.encoding, null);
     }
 
+    private void visibilidadImagenes() {
+        ImagenesActividadEventoDatasource dataSource = null;
+
+        try {
+            dataSource = new ImagenesActividadEventoDatasource(this);
+            dataSource.open();
+            List<ImagenActividadEvento> resul = dataSource.getByIdActividad(idActividad);
+            if(resul.isEmpty()) {
+                controlSlider.ocultar();
+            }
+        } finally {
+            dataSource.close();
+        }
+    }
+
     private ActividadEvento getSitioEvento() {
         ActividadEventoDataSource dataSource = null;
         ActividadEvento resul = null;
@@ -55,5 +82,17 @@ public class ActividadEventoDetalleActivity extends AbstractEventos {
         }
 
         return resul;
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        controlSlider.pause();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        controlSlider.resume();
     }
 }

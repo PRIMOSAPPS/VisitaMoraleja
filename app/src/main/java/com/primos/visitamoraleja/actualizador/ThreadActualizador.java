@@ -27,6 +27,7 @@ import com.primos.visitamoraleja.contenidos.Categoria;
 import com.primos.visitamoraleja.contenidos.CategoriaEvento;
 import com.primos.visitamoraleja.contenidos.Evento;
 import com.primos.visitamoraleja.contenidos.IContenidoUltimaActualizacion;
+import com.primos.visitamoraleja.contenidos.ImagenActividadEvento;
 import com.primos.visitamoraleja.contenidos.ImagenEvento;
 import com.primos.visitamoraleja.contenidos.Sitio;
 import com.primos.visitamoraleja.contenidos.SitioEvento;
@@ -319,6 +320,13 @@ public class ThreadActualizador extends Thread implements IPrimosActivityLifecyc
 				List<ActividadEvento> actividadesEvento = cs.getActividadesEvento(eventoActualizableDTO);
 				ordenarContenidoPorFechaActualizacion(actividadesEvento);
 				actualizador.actualizarActividadesEvento(actividadesEvento);
+
+				for(ActividadEvento actividadEvento : actividadesEvento) {
+					List<ImagenActividadEvento> imagenesActividadEvento = cs.getImagenesActividadEvento(actividadEvento);
+					actividadEvento.setImagenes(imagenesActividadEvento);
+					ordenarContenidoPorFechaActualizacion(imagenesActividadEvento);
+					actualizador.actualizarImagenesActividadEvento(imagenesActividadEvento);
+				}
 			}
 			ultimaActualizacionActualizada = Math.max(ultimaActualizacionActualizada, actualizador.getUltimaActualizacion());
 		} finally {

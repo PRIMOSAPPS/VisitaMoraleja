@@ -1,5 +1,6 @@
 package com.primos.visitamoraleja.actualizador;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -13,6 +14,7 @@ import com.primos.visitamoraleja.bdsqlite.datasource.CategoriaEventoDataSource;
 import com.primos.visitamoraleja.bdsqlite.datasource.CategoriasDataSource;
 import com.primos.visitamoraleja.bdsqlite.datasource.EventosDataSource;
 import com.primos.visitamoraleja.bdsqlite.datasource.FormaEventoDataSource;
+import com.primos.visitamoraleja.bdsqlite.datasource.ImagenesActividadEventoDatasource;
 import com.primos.visitamoraleja.bdsqlite.datasource.ImagenesEventoDatasource;
 import com.primos.visitamoraleja.bdsqlite.datasource.SitioEventoDataSource;
 import com.primos.visitamoraleja.bdsqlite.datasource.SitiosDataSource;
@@ -22,6 +24,7 @@ import com.primos.visitamoraleja.contenidos.CategoriaEvento;
 import com.primos.visitamoraleja.contenidos.Evento;
 import com.primos.visitamoraleja.contenidos.CategoriaEvento;
 import com.primos.visitamoraleja.contenidos.FormaEvento;
+import com.primos.visitamoraleja.contenidos.ImagenActividadEvento;
 import com.primos.visitamoraleja.contenidos.ImagenEvento;
 import com.primos.visitamoraleja.contenidos.Sitio;
 import com.primos.visitamoraleja.contenidos.SitioEvento;
@@ -162,7 +165,7 @@ public class Actualizador {
 			}
 		}
 	}
-	
+
 	/**
 	 * Borra las imagenes del sitio al almacenamiento
 	 * @param sitio
@@ -177,6 +180,181 @@ public class Actualizador {
 		almacenamiento.borrarImagenSitio(sitio.getNombreImagen4(), idSitio);
 	}
 
+	/////////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////////
+
+	// Para las imagenes del evento
+	private void borrarImagenesEvento(ImagenEvento existente) {
+		ItfAlmacenamiento almacenamiento = AlmacenamientoFactory.getAlmacenamiento(contexto);
+		long id = existente.getIdEvento();
+		almacenamiento.borrarImagenEvento(existente.getNombre(), id);
+	}
+
+	private void addImagenesEvento(Evento evento) {
+		ItfAlmacenamiento almacenamiento = AlmacenamientoFactory.getAlmacenamiento(contexto);
+		almacenamiento.addImagenEvento(evento.getIcono(), evento.getNombreIcono(), evento.getId());
+	}
+
+	private List<ImagenEvento> getImagenesEvento(long id) {
+		List<ImagenEvento> resul = null;
+		ImagenesEventoDatasource dataSource = null;
+		try {
+			dataSource = new ImagenesEventoDatasource(contexto);
+			dataSource.open();
+
+			resul = dataSource.getByIdEvento(id);
+		} finally {
+			dataSource.close();
+		}
+		if(resul == null) {
+			resul = new ArrayList<>();
+		}
+		return resul;
+	}
+
+	private void borrarImagenesBorradas(Evento actualizado, Evento existente) {
+		borrarImagenSiBorrada(existente, actualizado.getNombreIcono(), existente.getNombreIcono());
+	}
+
+	private void borrarImagenesEvento(Evento existente) {
+		ItfAlmacenamiento almacenamiento = AlmacenamientoFactory.getAlmacenamiento(contexto);
+		almacenamiento.borrarImagenEvento(existente.getNombre(), existente.getId());
+
+		ImagenesEventoDatasource dataSource = null;
+		try {
+
+			List<ImagenEvento> imagenesEvento = getImagenesEvento(existente.getId());
+			for (ImagenEvento imagenEvento : imagenesEvento) {
+				borrarImagenesEvento(imagenEvento);
+			}
+
+			dataSource = new ImagenesEventoDatasource(contexto);
+			dataSource.open();
+			dataSource.deleteByIdEvento(existente.getId());
+		} finally {
+			dataSource.close();
+		}
+	}
+
+	// Para las formas
+	private void borrarFormasEvento(Evento existente) {
+		FormaEventoDataSource dataSource = null;
+		try {
+			dataSource = new FormaEventoDataSource(contexto);
+			dataSource.open();
+			dataSource.deleteByIdEvento(existente.getId());
+		} finally {
+			dataSource.close();
+		}
+	}
+
+	// Para los sitios
+	private void borrarImagenesSitioEvento(SitioEvento existente) {
+		ItfAlmacenamiento almacenamiento = AlmacenamientoFactory.getAlmacenamiento(contexto);
+		long id = existente.getId();
+		almacenamiento.borrarImagenSitioEvento(existente.getNombreImagen(), id);
+	}
+
+	private void borrarSitiosEvento(Evento existente) {
+		SitioEventoDataSource dataSource = null;
+		try {
+			dataSource = new SitioEventoDataSource(contexto);
+			dataSource.open();
+
+			List<SitioEvento> sitiosEvento = dataSource.getByIdEvento(existente.getId());
+			for(SitioEvento sitioEvento : sitiosEvento) {
+				borrarImagenesSitioEvento(sitioEvento);
+			}
+
+			dataSource.deleteByIdEvento(existente.getId());
+		} finally {
+			dataSource.close();
+		}
+	}
+
+	// Para las categorias
+	private void borrarImagenesCategoriaEvento(CategoriaEvento existente) {
+		ItfAlmacenamiento almacenamiento = AlmacenamientoFactory.getAlmacenamiento(contexto);
+		long id = existente.getId();
+		almacenamiento.borrarImagenCategoriaEvento(existente.getNombreIcono(), id);
+	}
+
+	private void borrarCategoriasEvento(Evento existente) {
+		CategoriaEventoDataSource dataSource = null;
+		try {
+			dataSource = new CategoriaEventoDataSource(contexto);
+			dataSource.open();
+
+			List<CategoriaEvento> categoriasEvento = dataSource.getByIdEvento(existente.getId());
+			for(CategoriaEvento categoriaEvento : categoriasEvento) {
+				borrarImagenesCategoriaEvento(categoriaEvento);
+			}
+
+			dataSource.deleteByIdEvento(existente.getId());
+		} finally {
+			dataSource.close();
+		}
+	}
+
+	// Para las actividades
+	private void borrarImagenesActividadEvento(ImagenActividadEvento existente) {
+		ItfAlmacenamiento almacenamiento = AlmacenamientoFactory.getAlmacenamiento(contexto);
+		long id = existente.getIdActividad();
+		almacenamiento.borrarImagenActividadEvento(existente.getNombre(), id);
+	}
+
+	private void borrarImagenesActividadEvento(ActividadEvento existente) {
+		ItfAlmacenamiento almacenamiento = AlmacenamientoFactory.getAlmacenamiento(contexto);
+		long id = existente.getId();
+		almacenamiento.borrarImagenActividadEvento(existente.getNombreIcono(), id);
+
+		ImagenesActividadEventoDatasource dataSource = null;
+		try {
+			dataSource = new ImagenesActividadEventoDatasource(contexto);
+			dataSource.open();
+
+			List<ImagenActividadEvento> imagenesActividad = dataSource.getByIdActividad(existente.getId());
+			for(ImagenActividadEvento imagenActividad : imagenesActividad) {
+				borrarImagenesActividadEvento(imagenActividad);
+			}
+
+			dataSource.deleteByIdActividad(existente.getId());
+		} finally {
+			dataSource.close();
+		}
+	}
+
+	private void borrarActividadesEvento(Evento existente) {
+		ActividadEventoDataSource dataSource = null;
+		try {
+			dataSource = new ActividadEventoDataSource(contexto);
+			dataSource.open();
+
+			List<ActividadEvento> actividadesEvento = dataSource.getByIdEvento(existente.getId());
+			for(ActividadEvento actividadEvento : actividadesEvento) {
+				borrarImagenesActividadEvento(actividadEvento);
+			}
+
+			dataSource.deleteByIdEvento(existente.getId());
+		} finally {
+			dataSource.close();
+		}
+	}
+
+	private void borrarDependientesEvento(Evento existente) {
+		// Borrar formas
+		borrarFormasEvento(existente);
+		// Borrar sitios de evento
+		borrarSitiosEvento(existente);
+		// Borrar categorias de evento
+		borrarCategoriasEvento(existente);
+		// Borrar actividades de evento
+		borrarActividadesEvento(existente);
+		// Borrar imagenes de evento
+		borrarImagenesEvento(existente);
+	}
+
+
 	/**
 	 * Realiza la insercion/actualizacion de los eventos segun la lista de eventos recibidos.
 	 * Ademas almacena la imagen del icono asociado a este evento.
@@ -185,7 +363,7 @@ public class Actualizador {
 	 * @throws EventosException
 	 */
 	public void actualizarEventos(List<Evento> lstEventos) throws EventosException {
-		ItfAlmacenamiento almacenamiento = AlmacenamientoFactory.getAlmacenamiento(contexto);
+		//ItfAlmacenamiento almacenamiento = AlmacenamientoFactory.getAlmacenamiento(contexto);
 
 		EventosDataSource dataSource = new EventosDataSource(contexto);
 		try {
@@ -196,12 +374,32 @@ public class Actualizador {
 				long id = evento.getId();
 				comprobarUltimaActualizacion(evento.getUltimaActualizacion());
 				Evento existente = dataSource.getById(id);
+				/*
 				if(existente == null) {
 					dataSource.insertar(evento);
 				} else {
 					dataSource.actualizar(evento);
 				}
 				almacenamiento.addImagenEvento(evento.getIcono(), evento.getNombreIcono(), id);
+				*/
+				//////////////////////////////////////////////////
+				if(existente == null) {
+					if(evento.isActivo()) {
+						dataSource.insertar(evento);
+						addImagenesEvento(evento);
+					}
+				} else {
+					if(evento.isActivo()) {
+						// Se borran las imagenes que existiendo anteriormente, ya no forman parte del sitio
+						borrarImagenesBorradas(evento, existente);
+
+						dataSource.actualizar(evento);
+						addImagenesEvento(evento);
+					} else {
+						borrarDependientesEvento(existente);
+						dataSource.delete(existente);
+					}
+				}
 			}
 		} finally {
 			dataSource.close();
@@ -265,10 +463,114 @@ public class Actualizador {
 				ImagenEvento existente = dataSource.getById(id);
 				if(existente == null) {
 					dataSource.insertar(imagenEvento);
+					almacenamiento.addImagenEvento(imagenEvento.getImagen(), imagenEvento.getNombre(), imagenEvento.getIdEvento());
 				} else {
-					dataSource.actualizar(imagenEvento);
+					borrarImagenesEvento(existente);
+					if (imagenEvento.isActivo()) {
+						dataSource.actualizar(imagenEvento);
+						almacenamiento.addImagenEvento(imagenEvento.getImagen(), imagenEvento.getNombre(), imagenEvento.getIdEvento());
+					} else {
+						dataSource.delete(existente);
+					}
 				}
-				almacenamiento.addImagenEvento(imagenEvento.getImagen(), imagenEvento.getNombre(), imagenEvento.getIdEvento());
+			}
+		} finally {
+			dataSource.close();
+		}
+	}
+
+	/**
+	 * Borra una imagen si el nombre ya no coincide con la nueva o ha sido borrada
+	 * @param obj
+	 * @param nombreImagenActualizada
+	 * @param nombreImagenExistente
+	 */
+	private void borrarImagenSiBorrada(Evento obj, String nombreImagenActualizada, String nombreImagenExistente) {
+		if(nombreImagenExistente != null) {
+			ItfAlmacenamiento almacenamiento = AlmacenamientoFactory.getAlmacenamiento(contexto);
+			long id = obj.getId();
+			if(nombreImagenActualizada == null || !nombreImagenActualizada.equals(nombreImagenExistente)) {
+				almacenamiento.borrarImagenEvento(nombreImagenExistente, id);
+			}
+		}
+	}
+
+	/**
+	 * Borra una imagen si el nombre ya no coincide con la nueva o ha sido borrada
+	 * @param obj
+	 * @param nombreImagenActualizada
+	 * @param nombreImagenExistente
+	 */
+	private void borrarImagenSiBorrada(SitioEvento obj, String nombreImagenActualizada, String nombreImagenExistente) {
+		if(nombreImagenExistente != null) {
+			ItfAlmacenamiento almacenamiento = AlmacenamientoFactory.getAlmacenamiento(contexto);
+			long id = obj.getId();
+			if(nombreImagenActualizada == null || !nombreImagenActualizada.equals(nombreImagenExistente)) {
+				almacenamiento.borrarImagenSitioEvento(nombreImagenExistente, id);
+			}
+		}
+	}
+
+	/**
+	 * Borra una imagen si el nombre ya no coincide con la nueva o ha sido borrada
+	 * @param obj
+	 * @param nombreImagenActualizada
+	 * @param nombreImagenExistente
+	 */
+	private void borrarImagenSiBorrada(ActividadEvento obj, String nombreImagenActualizada, String nombreImagenExistente) {
+		if(nombreImagenExistente != null) {
+			ItfAlmacenamiento almacenamiento = AlmacenamientoFactory.getAlmacenamiento(contexto);
+			long id = obj.getId();
+			if(nombreImagenActualizada == null || !nombreImagenActualizada.equals(nombreImagenExistente)) {
+				almacenamiento.borrarImagenActividadEvento(nombreImagenExistente, id);
+			}
+		}
+	}
+
+	/**
+	 * Borra una imagen si el nombre ya no coincide con la nueva o ha sido borrada
+	 * @param obj
+	 * @param nombreImagenActualizada
+	 * @param nombreImagenExistente
+	 */
+	private void borrarImagenSiBorrada(CategoriaEvento obj, String nombreImagenActualizada, String nombreImagenExistente) {
+		if(nombreImagenExistente != null) {
+			ItfAlmacenamiento almacenamiento = AlmacenamientoFactory.getAlmacenamiento(contexto);
+			long id = obj.getId();
+			if(nombreImagenActualizada == null || !nombreImagenActualizada.equals(nombreImagenExistente)) {
+				almacenamiento.borrarImagenCategoriaEvento(nombreImagenExistente, id);
+			}
+		}
+	}
+
+	private void borrarImagenesEvento(ImagenActividadEvento existente) {
+		ItfAlmacenamiento almacenamiento = AlmacenamientoFactory.getAlmacenamiento(contexto);
+		almacenamiento.borrarImagenActividadEvento(existente.getNombre(), existente.getIdActividad());
+	}
+
+	public void actualizarImagenesActividadEvento(List<ImagenActividadEvento> imagenesActividadEvento) {
+		ItfAlmacenamiento almacenamiento = AlmacenamientoFactory.getAlmacenamiento(contexto);
+		ImagenesActividadEventoDatasource dataSource = new ImagenesActividadEventoDatasource(contexto);
+		try {
+			dataSource.open();
+
+			Log.d("ImagenActividadEvento", imagenesActividadEvento.toString());
+			for(ImagenActividadEvento imagenActividadEvento : imagenesActividadEvento) {
+				long id = imagenActividadEvento.getId();
+				comprobarUltimaActualizacion(imagenActividadEvento.getUltimaActualizacion());
+				ImagenActividadEvento existente = dataSource.getById(id);
+				if(existente == null) {
+					dataSource.insertar(imagenActividadEvento);
+					almacenamiento.addImagenActividadEvento(imagenActividadEvento.getImagen(), imagenActividadEvento.getNombre(), imagenActividadEvento.getIdActividad());
+				} else {
+					borrarImagenesEvento(existente);
+					if (imagenActividadEvento.isActivo()) {
+						dataSource.actualizar(imagenActividadEvento);
+						almacenamiento.addImagenActividadEvento(imagenActividadEvento.getImagen(), imagenActividadEvento.getNombre(), imagenActividadEvento.getIdActividad());
+					} else {
+						dataSource.delete(existente);
+					}
+				}
 			}
 		} finally {
 			dataSource.close();
