@@ -590,10 +590,16 @@ public class Actualizador {
 				CategoriaEvento existente = dataSource.getById(id);
 				if(existente == null) {
 					dataSource.insertar(categoriaEvento);
+					almacenamiento.addImagenCategoriaEvento(categoriaEvento.getIcono(), categoriaEvento.getNombreIcono(), categoriaEvento.getId());
 				} else {
-					dataSource.actualizar(categoriaEvento);
+					borrarImagenesCategoriaEvento(existente);
+					if (categoriaEvento.isActivo()) {
+						dataSource.actualizar(categoriaEvento);
+						almacenamiento.addImagenCategoriaEvento(categoriaEvento.getIcono(), categoriaEvento.getNombreIcono(), categoriaEvento.getId());
+					} else {
+						dataSource.delete(existente);
+					}
 				}
-				almacenamiento.addImagenCategoriaEvento(categoriaEvento.getIcono(), categoriaEvento.getNombreIcono(), categoriaEvento.getId());
 			}
 		} finally {
 			dataSource.close();
