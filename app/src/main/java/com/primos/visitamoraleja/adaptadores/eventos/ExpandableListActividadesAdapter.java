@@ -1,14 +1,18 @@
 package com.primos.visitamoraleja.adaptadores.eventos;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.primos.visitamoraleja.R;
+import com.primos.visitamoraleja.almacenamiento.AlmacenamientoFactory;
+import com.primos.visitamoraleja.almacenamiento.ItfAlmacenamiento;
 import com.primos.visitamoraleja.contenidos.ActividadEvento;
 
 import java.util.List;
@@ -54,6 +58,11 @@ public class ExpandableListActividadesAdapter extends BaseExpandableListAdapter 
 
             convertView.setTag(actividadEvento);
         }
+
+        ImageView imagen = (ImageView)convertView.findViewById(R.id.imagenItemActiv);
+        ItfAlmacenamiento almacenamiento = AlmacenamientoFactory.getAlmacenamiento(_context);
+        Bitmap bitmap = almacenamiento.getImagenActividadEvento(actividadEvento.getId(), actividadEvento.getNombreIcono());
+        imagen.setImageBitmap(bitmap);
 
         TextView txtListChild = (TextView) convertView
                 .findViewById(R.id.lblListItem);
