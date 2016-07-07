@@ -33,7 +33,7 @@ public class ActividadControlSlider extends AbstractControlSlider {
             dataSource.open();
             List<ImagenActividadEvento> imagenes = dataSource.getByIdActividad(id);
             for(ImagenActividadEvento imagen : imagenes) {
-                File fich = new File(almacenamiento.getDirImagenEvento(id, imagen.getNombre()));
+                File fich = new File(almacenamiento.getDirImagenActividadEvento(id, imagen.getNombre()));
                 Uri uri = Uri.fromFile(fich);
                 imagenesGaleria.add(uri);
             }

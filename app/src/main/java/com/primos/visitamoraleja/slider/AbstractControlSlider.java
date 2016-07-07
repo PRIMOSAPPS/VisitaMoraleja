@@ -55,16 +55,17 @@ public abstract class AbstractControlSlider {
 
     public void initSlider() {
         imageSwitcher = (ImageSwitcher) actividad.findViewById(idImageSwitcher);
-        imageSwitcher.setFactory(new ViewSwitcher.ViewFactory() {
-            @Override
-            public View makeView() {
-                ImageView myView = new ImageView(actividad);
-                myView.setScaleType(ImageView.ScaleType.FIT_XY);
-                myView.setLayoutParams(new ImageSwitcher.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,
-                        RelativeLayout.LayoutParams.MATCH_PARENT));
-                return myView;
-            }
-        });
+        if(conImagenes()) {
+            imageSwitcher.setFactory(new ViewSwitcher.ViewFactory() {
+                @Override
+                public View makeView() {
+                    ImageView myView = new ImageView(actividad);
+                    myView.setScaleType(ImageView.ScaleType.FIT_XY);
+                    myView.setLayoutParams(new ImageSwitcher.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,
+                            RelativeLayout.LayoutParams.MATCH_PARENT));
+                    return myView;
+                }
+            });
         /*
         imageSwitcher.setFactory(new ViewSwitcher.ViewFactory() {
             public View makeView() {
@@ -73,42 +74,48 @@ public abstract class AbstractControlSlider {
         });
         */
 
-        // Set animations
-        // https://danielme.com/2013/08/18/diseno-android-transiciones-entre-activities/
-        Animation fadeIn = AnimationUtils.loadAnimation(actividad, R.anim.fade_in);
-        Animation fadeOut = AnimationUtils.loadAnimation(actividad, R.anim.fade_out);
-        imageSwitcher.setInAnimation(fadeIn);
-        imageSwitcher.setOutAnimation(fadeOut);
+            // Set animations
+            // https://danielme.com/2013/08/18/diseno-android-transiciones-entre-activities/
+            Animation fadeIn = AnimationUtils.loadAnimation(actividad, R.anim.fade_in);
+            Animation fadeOut = AnimationUtils.loadAnimation(actividad, R.anim.fade_out);
+            imageSwitcher.setInAnimation(fadeIn);
+            imageSwitcher.setOutAnimation(fadeOut);
 
-        startSlider();
+            startSlider();
+        }
+    }
+
+    private boolean conImagenes() {
+        return (imagenesGaleria != null && !imagenesGaleria.isEmpty());
     }
 
     private void startSlider() {
-        final ItfAlmacenamiento almacenamiento = AlmacenamientoFactory.getAlmacenamiento(actividad);
-        timer = new Timer("ControlSlider_" + actividad.getClass().getName());
-        timer.scheduleAtFixedRate(new TimerTask() {
+        if(conImagenes()) {
+            timer = new Timer("ControlSlider_" + actividad.getClass().getName());
+            timer.scheduleAtFixedRate(new TimerTask() {
 
-            public void run() {
-                // avoid exception:
-                // "Only the original thread that created a view hierarchy can touch its views"
-                actividad.runOnUiThread(new Runnable() {
-                    public void run() {
-                        // El null se pasa por esto
-                        // http://stackoverflow.com/questions/2313148/imageview-setimageuri-does-not-work-when-trying-to-assign-a-r-drawable-x-uri
-                        // Pero parece que no funciona
-                        //imageSwitcher.setImageURI(null);
+                public void run() {
+                    // avoid exception:
+                    // "Only the original thread that created a view hierarchy can touch its views"
+                    actividad.runOnUiThread(new Runnable() {
+                        public void run() {
+                            // El null se pasa por esto
+                            // http://stackoverflow.com/questions/2313148/imageview-setimageuri-does-not-work-when-trying-to-assign-a-r-drawable-x-uri
+                            // Pero parece que no funciona
+                            //imageSwitcher.setImageURI(null);
 
-                        Drawable imagen = new BitmapDrawable(actividad.getResources(), imagenesGaleria.get(position).toString());
-                        imageSwitcher.setImageURI(imagenesGaleria.get(position));
-                        position++;
-                        if (position == imagenesGaleria.size()) {
-                            position = 0;
+                            Drawable imagen = new BitmapDrawable(actividad.getResources(), imagenesGaleria.get(position).toString());
+                            imageSwitcher.setImageURI(imagenesGaleria.get(position));
+                            position++;
+                            if (position == imagenesGaleria.size()) {
+                                position = 0;
+                            }
                         }
-                    }
-                });
-            }
+                    });
+                }
 
-        }, 0, DURATION);
+            }, 0, DURATION);
+        }
     }
 
     public void ocultar() {

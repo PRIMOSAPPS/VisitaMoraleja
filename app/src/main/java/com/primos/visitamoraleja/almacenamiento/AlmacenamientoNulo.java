@@ -55,6 +55,11 @@ public class AlmacenamientoNulo implements ItfAlmacenamiento {
     }
 
     @Override
+    public String getDirImagenActividadEvento(long id, String nombre) {
+        return null;
+    }
+
+    @Override
     public Bitmap getImagenEvento(long idEvento, String nombre) {
         mostrarMensajePermisos();return null;
     }

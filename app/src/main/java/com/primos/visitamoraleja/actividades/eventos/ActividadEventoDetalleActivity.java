@@ -3,6 +3,7 @@ package com.primos.visitamoraleja.actividades.eventos;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -15,6 +16,8 @@ import com.primos.visitamoraleja.bdsqlite.datasource.ImagenesActividadEventoData
 import com.primos.visitamoraleja.constantes.Constantes;
 import com.primos.visitamoraleja.contenidos.ActividadEvento;
 import com.primos.visitamoraleja.contenidos.ImagenActividadEvento;
+import com.primos.visitamoraleja.slider.AbstractControlSlider;
+import com.primos.visitamoraleja.slider.ActividadControlSlider;
 import com.primos.visitamoraleja.slider.EventoControlSlider;
 
 import java.util.List;
@@ -22,7 +25,7 @@ import java.util.List;
 public class ActividadEventoDetalleActivity extends AbstractEventos {
     public final static String ID_ACTIVIDAD_EVENTO = "ID_ACTIVIDAD_EVENTO";
 
-    private EventoControlSlider controlSlider;
+    private AbstractControlSlider controlSlider;
 
     private long idActividad;
 
@@ -35,7 +38,7 @@ public class ActividadEventoDetalleActivity extends AbstractEventos {
 
         idActividad = (long) getIntent().getExtras().get(ActividadEventoDetalleActivity.ID_ACTIVIDAD_EVENTO);
 
-        controlSlider = new EventoControlSlider(this, idActividad);
+        controlSlider = new ActividadControlSlider(this, idActividad);
         controlSlider.initSlider();
 
         visibilidadImagenes();
@@ -62,7 +65,8 @@ public class ActividadEventoDetalleActivity extends AbstractEventos {
             dataSource.open();
             List<ImagenActividadEvento> resul = dataSource.getByIdActividad(idActividad);
             if(resul.isEmpty()) {
-                controlSlider.ocultar();
+                View v = findViewById(R.id.layoutImageActividadSlider);
+                v.setVisibility(View.GONE);
             }
         } finally {
             dataSource.close();

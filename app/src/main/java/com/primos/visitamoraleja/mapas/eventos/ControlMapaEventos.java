@@ -1,7 +1,10 @@
 package com.primos.visitamoraleja.mapas.eventos;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -25,26 +28,27 @@ import com.google.android.gms.maps.model.PolygonOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.primos.visitamoraleja.R;
+import com.primos.visitamoraleja.actividades.eventos.ActividadEventoDetalleActivity;
+import com.primos.visitamoraleja.actividades.eventos.SitioEventoDetalleActivity;
+import com.primos.visitamoraleja.adaptadores.ActividadEventoAdaptador;
 import com.primos.visitamoraleja.adaptadores.OpcionCategoriaMapaAdaptador;
 import com.primos.visitamoraleja.adaptadores.eventos.InfoWindowsActividadEventoAdapter;
+import com.primos.visitamoraleja.adaptadores.eventos.InfoWindowsActividadesSeleccionAdapter;
 import com.primos.visitamoraleja.adaptadores.eventos.InfoWindowsFormaEventoAdapter;
 import com.primos.visitamoraleja.adaptadores.eventos.InfoWindowsSitioEventoAdapter;
 import com.primos.visitamoraleja.almacenamiento.AlmacenamientoFactory;
 import com.primos.visitamoraleja.almacenamiento.ItfAlmacenamiento;
 import com.primos.visitamoraleja.bdsqlite.datasource.ActividadEventoDataSource;
 import com.primos.visitamoraleja.bdsqlite.datasource.CategoriaEventoDataSource;
-import com.primos.visitamoraleja.bdsqlite.datasource.CategoriasDataSource;
 import com.primos.visitamoraleja.bdsqlite.datasource.EventosDataSource;
 import com.primos.visitamoraleja.bdsqlite.datasource.FormaEventoDataSource;
 import com.primos.visitamoraleja.bdsqlite.datasource.SitioEventoDataSource;
 import com.primos.visitamoraleja.contenidos.ActividadEvento;
-import com.primos.visitamoraleja.contenidos.Categoria;
 import com.primos.visitamoraleja.contenidos.CategoriaEvento;
 import com.primos.visitamoraleja.contenidos.Evento;
 import com.primos.visitamoraleja.contenidos.FormaEvento;
 import com.primos.visitamoraleja.contenidos.SitioEvento;
 import com.primos.visitamoraleja.mapas.ControlMapaItf;
-import com.primos.visitamoraleja.mapas.DatosOpcionCategoriaMapa;
 import com.primos.visitamoraleja.mapas.TipoForma;
 import com.primos.visitamoraleja.util.UtilCoordenadas;
 import com.primos.visitamoraleja.util.UtilImage;
@@ -65,13 +69,16 @@ public class ControlMapaEventos implements ControlMapaItf {
     private final static float ZINDEX_LINEA = 20;
     private final static float ZINDEX_PUNTO = 30;
 
+    private GoogleMap _googleMap;
+
     private Evento evento;
-    private Context contexto;
+    private Activity contexto;
     private Map<LatLng, List<ContenidoMapa>> contenidosMapa = null;
 
     private InfoWindowsFormaEventoAdapter infoWindowsFormaEventoAdapter;
     private InfoWindowsSitioEventoAdapter infoWindowsSitioEventoAdapter;
     private InfoWindowsActividadEventoAdapter infoWindowsActividadEventoAdapter;
+    private InfoWindowsActividadesSeleccionAdapter infoWindowsActividadesSeleccionAdapter;
 
     private Map<Long, List<Marker>> categoriasMarkers = new HashMap<>();
     private Map<Long, List<Polygon>> categoriasPolygonMapa = new HashMap<>();
@@ -82,8 +89,11 @@ public class ControlMapaEventos implements ControlMapaItf {
     private Map<Polyline, ContenidoMapa> lineas = null;
     private Map<Circle, ContenidoMapa> puntos = null;
     private Map<Marker, SitioEvento> sitios = null;
-    private Map<Marker, ActividadEvento> actividades = null;
+    private Map<LatLng, List<ActividadEvento>> actividades = null;
 
+    private SitioEvento sitioEventoSeleccionado = null;
+    private ActividadEvento actividadSeleccionada = null;
+    private AlertDialog dialogoSeleccion = null;
     private Marker markerVisible = null;
 
     public class ContenidoMapa {
@@ -124,6 +134,8 @@ public class ControlMapaEventos implements ControlMapaItf {
 
     @Override
     public void tratarMapa(final GoogleMap googleMap, Context contexto) {
+        _googleMap = googleMap;
+
         contenidosMapa = new HashMap<>();
         poligonos = new HashMap<>();
         lineas = new HashMap<>();
@@ -134,8 +146,9 @@ public class ControlMapaEventos implements ControlMapaItf {
         infoWindowsFormaEventoAdapter = new InfoWindowsFormaEventoAdapter((Activity) contexto);
         infoWindowsSitioEventoAdapter = new InfoWindowsSitioEventoAdapter((Activity) contexto);
         infoWindowsActividadEventoAdapter = new InfoWindowsActividadEventoAdapter((Activity) contexto);
+        infoWindowsActividadesSeleccionAdapter = new InfoWindowsActividadesSeleccionAdapter((Activity) contexto);
 
-        cargarCategorias();
+        //cargarCategorias();
         cargarSitios(googleMap);
         cargarFormas(googleMap);
         cargarActividades(googleMap);
@@ -143,6 +156,17 @@ public class ControlMapaEventos implements ControlMapaItf {
         googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(moraleja, evento.getZoomInicial()));
 
         googleMap.setInfoWindowAdapter(infoWindowsFormaEventoAdapter);
+
+        googleMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+            @Override
+            public void onInfoWindowClick(Marker marker) {
+                if(sitioEventoSeleccionado != null) {
+                    detalleSitio();
+                } else if(actividadSeleccionada != null) {
+                    detalleActividad();
+                }
+            }
+        });
 
         googleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
@@ -152,9 +176,15 @@ public class ControlMapaEventos implements ControlMapaItf {
                 if (sitioEvento != null) {
                     showInfoMarker(googleMap, sitioEvento);
                 } else {
-                    ActividadEvento actividadEvento = actividades.get(marker);
-                    if (actividadEvento != null) {
-                        showInfoMarker(googleMap, actividadEvento);
+                    LatLng punto = marker.getPosition();
+                    List<ActividadEvento> actividadesPosition = actividades.get(punto);
+                    if (actividadesPosition.size() > 1) {
+                            showSeleccionActividad(googleMap, actividadesPosition, punto);
+                    } else {
+                        ActividadEvento actividadEvento = actividadesPosition.get(0);
+                        if (actividadEvento != null) {
+                            showInfoMarker(googleMap, actividadEvento);
+                        }
                     }
                 }
                 return true;
@@ -190,27 +220,6 @@ public class ControlMapaEventos implements ControlMapaItf {
                         break;
                     }
                 }
-
-                /*
-                // Clears any existing markers from the GoogleMap
-                googleMap.clear();
-
-                // Creating an instance of MarkerOptions to set position
-                MarkerOptions markerOptions = new MarkerOptions();
-
-                // Setting position on the MarkerOptions
-                markerOptions.position(arg0);
-
-                // Animating to the currently touched position
-                googleMap.animateCamera(CameraUpdateFactory.newLatLng(arg0));
-
-                // Adding marker on the GoogleMap
-                Marker marker = googleMap.addMarker(markerOptions);
-
-                // Showing InfoWindow on the GoogleMap
-                marker.showInfoWindow();
-                */
-
             }
 
             private boolean clickInCircle(LatLng position, Circle circle) {
@@ -224,6 +233,18 @@ public class ControlMapaEventos implements ControlMapaItf {
         });
 
         cargarOpcionesMapa(contexto);
+    }
+
+    private void detalleSitio() {
+        Intent i = new Intent(contexto, SitioEventoDetalleActivity.class);
+        i.putExtra(SitioEventoDetalleActivity.ID_SITIO_EVENTO, sitioEventoSeleccionado.getId());
+        contexto.startActivity(i);
+    }
+
+    private void detalleActividad() {
+        Intent i = new Intent(contexto, ActividadEventoDetalleActivity.class);
+        i.putExtra(ActividadEventoDetalleActivity.ID_ACTIVIDAD_EVENTO, actividadSeleccionada.getId());
+        contexto.startActivity(i);
     }
 
     private void hideCurrentMarker() {
@@ -242,35 +263,35 @@ public class ControlMapaEventos implements ControlMapaItf {
         showInfoMarker(googleMap, marker, cm);
     }
 
-    /*
-    private void showInfoMarker(GoogleMap googleMap, SitioEvento sitioEvento) {
-        LatLng punto = new LatLng(sitioEvento.getLatitud(), sitioEvento.getLongitud());
-        // Creating an instance of MarkerOptions to set position
-        MarkerOptions markerOptions = new MarkerOptions();
-        markerOptions.position(punto);
-        Marker marker = googleMap.addMarker(markerOptions);
+    private void showSeleccionActividad(GoogleMap googleMap, List<ActividadEvento> actividadesPosition, LatLng punto) {
+        AlertDialog.Builder builderSingle = new AlertDialog.Builder(contexto);
+        builderSingle.setIcon(R.drawable.ic_launcher);
+        builderSingle.setTitle(R.string.seleccione_elemento_infowindows);
 
-        googleMap.setInfoWindowAdapter(infoWindowsSitioEventoAdapter);
-        infoWindowsSitioEventoAdapter.setSitioEvento(sitioEvento);
-        marker.showInfoWindow();
-        markerVisible = marker;
+        final ActividadEventoAdaptador adapter = new ActividadEventoAdaptador(contexto, actividadesPosition);
+        builderSingle.
+                setCancelable(true).
+                setAdapter(
+                        adapter,
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                            }
+                        });
+        dialogoSeleccion = builderSingle.create();
+        dialogoSeleccion.show();
+
+        /*
+        infoWindowsActividadesSeleccionAdapter.setElementos(actividadesPosition);
+
+        showInfoMarker(googleMap, punto, infoWindowsActividadesSeleccionAdapter);
+        */
     }
 
-    private void showInfoMarker(GoogleMap googleMap, ActividadEvento actividadEvento) {
-        LatLng punto = new LatLng(actividadEvento.getLatitud(), actividadEvento.getLongitud());
-        // Creating an instance of MarkerOptions to set position
-        MarkerOptions markerOptions = new MarkerOptions();
-        markerOptions.position(punto);
-        Marker marker = googleMap.addMarker(markerOptions);
-
-        googleMap.setInfoWindowAdapter(infoWindowsActividadEventoAdapter);
-        infoWindowsActividadEventoAdapter.setActividadEvento(actividadEvento);
-        marker.showInfoWindow();
-        markerVisible = marker;
-    }
-    */
-
     private void showInfoMarker(GoogleMap googleMap, SitioEvento sitioEvento) {
+        actividadSeleccionada = null;
+        sitioEventoSeleccionado = sitioEvento;
+
         LatLng punto = new LatLng(sitioEvento.getLatitud(), sitioEvento.getLongitud());
         infoWindowsSitioEventoAdapter.setSitioEvento(sitioEvento);
 
@@ -278,6 +299,8 @@ public class ControlMapaEventos implements ControlMapaItf {
     }
 
     private void showInfoMarker(GoogleMap googleMap, ActividadEvento actividadEvento) {
+        actividadSeleccionada = actividadEvento;
+        sitioEventoSeleccionado = null;
         LatLng punto = new LatLng(actividadEvento.getLatitud(), actividadEvento.getLongitud());
         infoWindowsActividadEventoAdapter.setActividadEvento(actividadEvento);
 
@@ -296,13 +319,15 @@ public class ControlMapaEventos implements ControlMapaItf {
     }
 
     private void showInfoMarker(GoogleMap googleMap, Marker marker, ContenidoMapa cm) {
+        actividadSeleccionada = null;
+        sitioEventoSeleccionado = null;
         googleMap.setInfoWindowAdapter(infoWindowsFormaEventoAdapter);
         infoWindowsFormaEventoAdapter.setContenidoMapa(cm);
         marker.showInfoWindow();
         markerVisible = marker;
     }
 
-    public void init(long idEvento, Context contexto) {
+    public void init(long idEvento, Activity contexto) {
         this.contexto = contexto;
         EventosDataSource dataSource = new EventosDataSource(contexto);
         dataSource.open();
@@ -314,6 +339,7 @@ public class ControlMapaEventos implements ControlMapaItf {
         }
     }
 
+    /*
     private void cargarCategorias() {
         CategoriaEventoDataSource dataSource = new CategoriaEventoDataSource(contexto);
         try {
@@ -323,6 +349,7 @@ public class ControlMapaEventos implements ControlMapaItf {
             dataSource.close();
         }
     }
+    */
 
     private void cargarFormas(GoogleMap googleMap) {
         UtilCoordenadas utilCoordenadas = new UtilCoordenadas();
@@ -384,17 +411,17 @@ public class ControlMapaEventos implements ControlMapaItf {
                 int resul = 0;
                 TipoForma tipoFormaL = TipoForma.get(lhs.getTipoForma());
                 TipoForma tipoFormaR = TipoForma.get(rhs.getTipoForma());
-                if(tipoFormaL == TipoForma.POLIGONO) {
-                    if(tipoFormaR != TipoForma.POLIGONO) {
+                if (tipoFormaL == TipoForma.POLIGONO) {
+                    if (tipoFormaR != TipoForma.POLIGONO) {
                         resul = -1;
                     }
-                } else if(tipoFormaL == TipoForma.LINEA) {
-                    if(tipoFormaR == TipoForma.POLIGONO) {
+                } else if (tipoFormaL == TipoForma.LINEA) {
+                    if (tipoFormaR == TipoForma.POLIGONO) {
                         resul = 1;
-                    } else if(tipoFormaR == TipoForma.PUNTO) {
+                    } else if (tipoFormaR == TipoForma.PUNTO) {
                         resul = -1;
                     }
-                } else if(tipoFormaL == TipoForma.PUNTO) {
+                } else if (tipoFormaL == TipoForma.PUNTO) {
                     if(tipoFormaR != TipoForma.PUNTO) {
                         resul = 1;
                     }
@@ -522,8 +549,14 @@ public class ControlMapaEventos implements ControlMapaItf {
         mo.icon(bitmapDescriptor);
 
         Marker marker = googleMap.addMarker(mo);
+        LatLng position = marker.getPosition();
 
-        actividades.put(marker, actividad);
+        List<ActividadEvento> actividadesPosition = actividades.get(position);
+        if(actividadesPosition == null) {
+            actividadesPosition = new ArrayList<>();
+            actividades.put(position, actividadesPosition);
+        }
+        actividadesPosition.add(actividad);
 
         addToCategoria(actividad.getIdCategoriaEvento(), marker);
     }
@@ -647,6 +680,13 @@ public class ControlMapaEventos implements ControlMapaItf {
         dataSource.close();
 
         return categorias;
+    }
+
+    public void mostrarDetalle(ActividadEvento actividadEvento) {
+        if(dialogoSeleccion != null) {
+            dialogoSeleccion.cancel();
+        }
+        showInfoMarker(_googleMap, actividadEvento);
     }
 
 }

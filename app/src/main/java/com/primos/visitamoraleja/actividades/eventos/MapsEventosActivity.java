@@ -14,6 +14,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.primos.visitamoraleja.R;
+import com.primos.visitamoraleja.contenidos.ActividadEvento;
 import com.primos.visitamoraleja.mapas.ControlMapaFactory;
 import com.primos.visitamoraleja.mapas.ControlMapaItf;
 import com.primos.visitamoraleja.mapas.eventos.ControlMapaEventos;
@@ -25,6 +26,7 @@ public class MapsEventosActivity extends FragmentActivity implements OnMapReadyC
     private DrawerLayout mDrawer;
     private ListView mDrawerOptions;
     private long idEvento;
+    private ControlMapaEventos controlMapa;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,7 +61,7 @@ public class MapsEventosActivity extends FragmentActivity implements OnMapReadyC
         mMap = googleMap;
 
         ControlMapaFactory factoria = new ControlMapaFactory();
-        ControlMapaEventos controlMapa = (ControlMapaEventos)factoria.createControlMapa(ControlMapaFactory.TIPOS_MAPAS.EVENTOS);
+        controlMapa = (ControlMapaEventos)factoria.createControlMapa(ControlMapaFactory.TIPOS_MAPAS.EVENTOS);
         controlMapa.init(idEvento, this);
         controlMapa.tratarMapa(mMap, this);
     }
@@ -72,6 +74,12 @@ public class MapsEventosActivity extends FragmentActivity implements OnMapReadyC
         int idResourceImgBoton = lstOpciones.getVisibility() == View.GONE ? R.mipmap.ic_launcher : R.mipmap.ic_cerrar_opciones;
         Button btnMenu = (Button)findViewById(R.id.btnMostrarOpcionesEventos);
         btnMenu.setBackgroundResource(idResourceImgBoton);
+    }
+
+    public void mostrarDetalle(View view) {
+        ActividadEvento actividadEvento = (ActividadEvento)view.getTag();
+
+        controlMapa.mostrarDetalle(actividadEvento);
     }
 
     public void mostrarMenuLateral(View view) {

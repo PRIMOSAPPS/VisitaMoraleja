@@ -67,6 +67,14 @@ public interface ItfAlmacenamiento {
 	String getDirImagenEvento(long idEvento, String nombre);
 
 	/**
+	 * Devuelve el path de una imagen
+	 * @param idEvento
+	 * @param nombre
+	 * @return
+	 */
+	String getDirImagenActividadEvento(long idEvento, String nombre);
+
+	/**
 	 * Devuelve la imagen que pertenece a un evento con identificador idEvento y nombre
 	 *
 	 * @param idEvento

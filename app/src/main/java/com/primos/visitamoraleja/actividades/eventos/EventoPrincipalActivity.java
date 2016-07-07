@@ -76,11 +76,12 @@ public class EventoPrincipalActivity extends AbstractEventos {
 	private void compruebaExistenciaSitios() {
 		SitioEventoDataSource dataSource = null;
 		try {
-			existenSitios = false;
+			existenSitios = true;
 			dataSource = new SitioEventoDataSource(this);
+			dataSource.open();
 			List<SitioEvento> sitiosEvento = dataSource.getByIdEvento(idEvento);
 			if(sitiosEvento == null || sitiosEvento.isEmpty()) {
-				existenSitios = true;
+				existenSitios = false;
 			}
 		} finally {
 			dataSource.close();
@@ -90,11 +91,12 @@ public class EventoPrincipalActivity extends AbstractEventos {
 	private void compruebaExistenciaActividades() {
 		ActividadEventoDataSource dataSource = null;
 		try {
-			existenActividades = false;
+			existenActividades = true;
 			dataSource = new ActividadEventoDataSource(this);
+			dataSource.open();
 			List<ActividadEvento> actividadesEvento = dataSource.getByIdEvento(idEvento);
 			if(actividadesEvento == null || actividadesEvento.isEmpty()) {
-				existenActividades = true;
+				existenActividades = false;
 			}
 		} finally {
 			dataSource.close();
@@ -107,7 +109,7 @@ public class EventoPrincipalActivity extends AbstractEventos {
 			i.putExtra(EventoPrincipalActivity.ID_EVENTO, idEvento);
 			startActivity(i);
 		} else {
-			Toast.makeText(this, R.string.no_hay_sitios, Toast.LENGTH_LONG);
+			Toast.makeText(this, R.string.no_hay_sitios, Toast.LENGTH_LONG).show();
 		}
 	}
 
@@ -117,7 +119,7 @@ public class EventoPrincipalActivity extends AbstractEventos {
 			i.putExtra(EventoPrincipalActivity.ID_EVENTO, idEvento);
 			startActivity(i);
 		} else {
-			Toast.makeText(this, R.string.no_hay_actividades, Toast.LENGTH_LONG);
+			Toast.makeText(this, R.string.no_hay_actividades, Toast.LENGTH_LONG).show();
 		}
 	}
 

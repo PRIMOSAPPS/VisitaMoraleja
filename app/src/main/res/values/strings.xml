@@ -108,4 +108,6 @@
 
     <string name="no_hay_sitios">No existen sitios que mostrar</string>
     <string name="no_hay_actividades">No existen actividades que mostrar</string>
+
+    <string name="seleccione_elemento_infowindows">Seleccione para mas detalle</string>
 </resources>

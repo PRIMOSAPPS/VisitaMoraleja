@@ -129,6 +129,11 @@ public class AlmacenamientoInterno implements ItfAlmacenamiento {
 	}
 
 	@Override
+	public String getDirImagenActividadEvento(long id, String nombre) {
+		return getNombreImagen(PREFIJO_ACTIVIDADES_EVENTOS, id, nombre);
+	}
+
+	@Override
 	public Bitmap getImagenEvento(long idEvento, String nombre) {
 		String nombreImagen = getDirImagenEvento(idEvento, nombre);
 		Bitmap resul = null;
