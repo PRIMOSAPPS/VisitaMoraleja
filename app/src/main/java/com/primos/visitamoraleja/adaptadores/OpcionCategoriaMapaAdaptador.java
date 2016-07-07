@@ -2,6 +2,7 @@ package com.primos.visitamoraleja.adaptadores;
 
 import android.app.Activity;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,8 +13,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.primos.visitamoraleja.R;
+import com.primos.visitamoraleja.almacenamiento.AlmacenamientoFactory;
+import com.primos.visitamoraleja.almacenamiento.ItfAlmacenamiento;
+import com.primos.visitamoraleja.contenidos.CategoriaEvento;
 import com.primos.visitamoraleja.mapas.DatosOpcionCategoriaMapa;
 import com.primos.visitamoraleja.mapas.IDatosOpcionMapa;
+import com.primos.visitamoraleja.mapas.eventos.DatosOpcionCategoriaMapaEventos;
 import com.primos.visitamoraleja.menulateral.DatosItemMenuLateral;
 
 import java.util.List;
@@ -56,9 +61,13 @@ public class OpcionCategoriaMapaAdaptador<IDatosOpcionMapaGen extends IDatosOpci
 		textView.setText(datosItem.getTextoMenu());
 		Resources resources = actividad.getResources();
 //		int identificadorImagen = resources.getIdentifier(datosItem.getNombreIcono(), "drawable", actividad.getPackageName());
-		int identificadorImagen = datosItem.getIdentificadorIcono();
-		Drawable drawable = resources.getDrawable(identificadorImagen);
-		imageView.setImageDrawable(drawable);
+		ItfAlmacenamiento almacenamiento = AlmacenamientoFactory.getAlmacenamiento(actividad);
+		DatosOpcionCategoriaMapaEventos datCategoria = (DatosOpcionCategoriaMapaEventos)datosItem;
+		CategoriaEvento categoria = datCategoria.getCategoria();
+		Bitmap bitmap = almacenamiento.getImagenCategoriaEvento(categoria.getId(), categoria.getNombre());
+		if(bitmap != null) {
+			imageView.setImageBitmap(bitmap);
+		}
 
 		view.setTag(datosItem);
 		return view;
