@@ -13,8 +13,12 @@ import android.widget.TextView;
 import com.primos.visitamoraleja.R;
 import com.primos.visitamoraleja.almacenamiento.AlmacenamientoFactory;
 import com.primos.visitamoraleja.almacenamiento.ItfAlmacenamiento;
+import com.primos.visitamoraleja.bdsqlite.datasource.EventosDataSource;
 import com.primos.visitamoraleja.contenidos.ActividadEvento;
+import com.primos.visitamoraleja.contenidos.Evento;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -26,12 +30,28 @@ public class ExpandableListActividadesAdapter extends BaseExpandableListAdapter 
     private List<String> _listDataHeader; // header titles
     // child data in format of header title, child title
     private Map<String, List<ActividadEvento>> _listDataChild;
+    private SimpleDateFormat sdf;
+    private Evento evento;
 
     public ExpandableListActividadesAdapter(Context context, List<String> listDataHeader,
-                                 Map<String, List<ActividadEvento>> listChildData) {
+                                 Map<String, List<ActividadEvento>> listChildData, long idEvento) {
         this._context = context;
         this._listDataHeader = listDataHeader;
         this._listDataChild = listChildData;
+        this.sdf = new SimpleDateFormat("HH:mm");
+
+        cargaEvento(idEvento);
+    }
+
+    private void cargaEvento(long idEvento) {
+        EventosDataSource dataSource = null;
+        try {
+            dataSource = new EventosDataSource(_context);
+            dataSource.open();
+            evento = dataSource.getById(idEvento);
+        } finally {
+            dataSource.close();
+        }
     }
 
     @Override
@@ -67,7 +87,20 @@ public class ExpandableListActividadesAdapter extends BaseExpandableListAdapter 
         TextView txtListChild = (TextView) convertView
                 .findViewById(R.id.lblListItem);
 
-        txtListChild.setText(actividadEvento.getNombre());
+        StringBuilder sbTexto = new StringBuilder(actividadEvento.getNombre());
+        Date inicio = actividadEvento.getInicio();
+        if(inicio != null) {
+            sbTexto.append(" ");
+            sbTexto.append(sdf.format(inicio));
+            Date fin = actividadEvento.getFin();
+            if(fin != null) {
+                sbTexto.append("-");
+                sbTexto.append(sdf.format(fin));
+
+            }
+        }
+
+        txtListChild.setText(sbTexto.toString());
         return convertView;
     }
 
@@ -101,6 +134,11 @@ public class ExpandableListActividadesAdapter extends BaseExpandableListAdapter 
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = infalInflater.inflate(R.layout.actividades_group, null);
         }
+
+        ImageView imagen = (ImageView)convertView.findViewById(R.id.imagenGroupActiv);
+        ItfAlmacenamiento almacenamiento = AlmacenamientoFactory.getAlmacenamiento(_context);
+        Bitmap bitmap = almacenamiento.getImagenEvento(evento.getId(), evento.getNombreIcono());
+        imagen.setImageBitmap(bitmap);
 
         TextView lblListHeader = (TextView) convertView
                 .findViewById(R.id.lblListHeader);

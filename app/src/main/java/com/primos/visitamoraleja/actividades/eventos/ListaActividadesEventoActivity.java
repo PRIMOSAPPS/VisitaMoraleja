@@ -51,7 +51,7 @@ public class ListaActividadesEventoActivity extends AbstractEventos {
 
         expListView = (ExpandableListView) findViewById(R.id.expandableActividades);
 
-        listAdapter = new ExpandableListActividadesAdapter(this, listDataHeader, listDataChild);
+        listAdapter = new ExpandableListActividadesAdapter(this, listDataHeader, listDataChild, idEvento);
 
         // setting list adapter
         expListView.setAdapter(listAdapter);

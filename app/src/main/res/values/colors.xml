@@ -14,7 +14,7 @@
    <color name="btnVerNotificaciones">#318C34</color>
     <color name="menu_lateral_color_texto">#318C34</color>
     <color name="fondo_acerca_de_inicio">#318C34</color>
-    <color name="botones_evento_principal_activo">#33b5e5</color>
+    <color name="botones_evento_principal_activo">#65cff5</color>
     <color name="botones_evento_principal_inactivo">#c9e9f5</color>
    
 </resources>
