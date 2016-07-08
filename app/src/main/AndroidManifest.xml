@@ -70,10 +70,12 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".actividades.eventos.ListaActividadesEventoActivity"
-            android:label="@string/title_activity_detalle_evento_temporal" />
+            android:label="@string/title_activity_detalle_evento_temporal"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".actividades.eventos.ListaSitiosEventoActivity"
-            android:label="@string/title_activity_detalle_evento_temporal" />
+            android:label="@string/title_activity_detalle_evento_temporal"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".PreferenciasActivity"
             android:label="@string/title_activity_preferencias"
@@ -96,19 +98,32 @@
         </activity>
         <activity
             android:name=".NotificacionesActivity"
-            android:label="@string/title_activity_notificaciones" />
+            android:label="@string/title_activity_notificaciones"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".ListaEventosActivity"
-            android:label="@string/title_activity_lista_eventos" />
+            android:label="@string/title_activity_lista_eventos"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".DetalleEventoTemporalActivity"
             android:label="@string/title_activity_detalle_evento_temporal" />
         <activity
             android:name=".AcercaDeActivity"
-            android:label="Acerca de" />
+            android:label="Acerca de"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".MapsActivity"
-            android:label="@string/title_activity_maps" />
+            android:label="@string/title_activity_maps"/>
+
+        <activity android:name=".DetalleNotificacionActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".actividades.eventos.MapsEventosActivity"
+            android:label="@string/title_activity_maps_eventos" />
+        <activity android:name=".actividades.eventos.SitioEventoDetalleActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".actividades.eventos.ActividadEventoDetalleActivity"
+            android:screenOrientation="portrait"/>
 
         <service
             android:name=".service.ServicioComprobadorActualizaciones"
@@ -157,12 +172,6 @@
             </intent-filter>
         </receiver>
 
-        <activity android:name=".DetalleNotificacionActivity" />
-        <activity
-            android:name=".actividades.eventos.MapsEventosActivity"
-            android:label="@string/title_activity_maps_eventos" />
-        <activity android:name=".actividades.eventos.SitioEventoDetalleActivity" />
-        <activity android:name=".actividades.eventos.ActividadEventoDetalleActivity"></activity>
     </application>
 
 </manifest>
