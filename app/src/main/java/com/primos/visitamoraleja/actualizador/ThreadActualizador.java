@@ -305,27 +305,29 @@ public class ThreadActualizador extends Thread implements IPrimosActivityLifecyc
 				List<Evento> lstEventos = cs.getEvento(eventoActualizableDTO);
 				actualizador.actualizarEventos(lstEventos);
 
-				List<SitioEvento> sitiosEvento = cs.getSitiosEvento(eventoActualizableDTO);
-				ordenarContenidoPorFechaActualizacion(sitiosEvento);
-				actualizador.actualizarSitiosEvento(sitiosEvento);
+				if(eventoActualizableDTO.isActivo()) {
+					List<SitioEvento> sitiosEvento = cs.getSitiosEvento(eventoActualizableDTO);
+					ordenarContenidoPorFechaActualizacion(sitiosEvento);
+					actualizador.actualizarSitiosEvento(sitiosEvento);
 
-				List<ImagenEvento> imagenesEvento = cs.getImagenesEvento(eventoActualizableDTO);
-				ordenarContenidoPorFechaActualizacion(imagenesEvento);
-				actualizador.actualizarImagenesEvento(imagenesEvento);
+					List<ImagenEvento> imagenesEvento = cs.getImagenesEvento(eventoActualizableDTO);
+					ordenarContenidoPorFechaActualizacion(imagenesEvento);
+					actualizador.actualizarImagenesEvento(imagenesEvento);
 
-				List<CategoriaEvento> categoriasEvento = cs.getCategoriasEvento(eventoActualizableDTO);
-				ordenarContenidoPorFechaActualizacion(categoriasEvento);
-				actualizador.actualizarCategoriasEvento(categoriasEvento);
+					List<CategoriaEvento> categoriasEvento = cs.getCategoriasEvento(eventoActualizableDTO);
+					ordenarContenidoPorFechaActualizacion(categoriasEvento);
+					actualizador.actualizarCategoriasEvento(categoriasEvento);
 
-				List<ActividadEvento> actividadesEvento = cs.getActividadesEvento(eventoActualizableDTO);
-				ordenarContenidoPorFechaActualizacion(actividadesEvento);
-				actualizador.actualizarActividadesEvento(actividadesEvento);
+					List<ActividadEvento> actividadesEvento = cs.getActividadesEvento(eventoActualizableDTO);
+					ordenarContenidoPorFechaActualizacion(actividadesEvento);
+					actualizador.actualizarActividadesEvento(actividadesEvento);
 
-				for(ActividadEvento actividadEvento : actividadesEvento) {
-					List<ImagenActividadEvento> imagenesActividadEvento = cs.getImagenesActividadEvento(actividadEvento);
-					actividadEvento.setImagenes(imagenesActividadEvento);
-					ordenarContenidoPorFechaActualizacion(imagenesActividadEvento);
-					actualizador.actualizarImagenesActividadEvento(imagenesActividadEvento);
+					for (ActividadEvento actividadEvento : actividadesEvento) {
+						List<ImagenActividadEvento> imagenesActividadEvento = cs.getImagenesActividadEvento(actividadEvento);
+						actividadEvento.setImagenes(imagenesActividadEvento);
+						ordenarContenidoPorFechaActualizacion(imagenesActividadEvento);
+						actualizador.actualizarImagenesActividadEvento(imagenesActividadEvento);
+					}
 				}
 			}
 			ultimaActualizacionActualizada = Math.max(ultimaActualizacionActualizada, actualizador.getUltimaActualizacion());

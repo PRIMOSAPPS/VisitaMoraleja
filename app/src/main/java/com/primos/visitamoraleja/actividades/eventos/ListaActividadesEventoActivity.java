@@ -2,6 +2,7 @@ package com.primos.visitamoraleja.actividades.eventos;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
@@ -12,8 +13,10 @@ import com.primos.visitamoraleja.adaptadores.eventos.ExpandableListActividadesAd
 import com.primos.visitamoraleja.bdsqlite.datasource.ActividadEventoDataSource;
 import com.primos.visitamoraleja.contenidos.ActividadEvento;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -26,6 +29,7 @@ import java.util.Set;
  * Created by h on 25/06/16.
  */
 public class ListaActividadesEventoActivity extends AbstractEventos {
+    private final static String TAG = "ListaActividadEventActi";
     private ExpandableListAdapter listAdapter;
     private ExpandableListView expListView;
     private List<String> listDataHeader;
@@ -34,6 +38,22 @@ public class ListaActividadesEventoActivity extends AbstractEventos {
     private SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
     private long idEvento;
+
+    class ComparadorActividadesFecha implements Comparator<ActividadEvento> {
+        @Override
+        public int compare(ActividadEvento lhs, ActividadEvento rhs) {
+            int resul = 0;
+            if(lhs != null && rhs != null) {
+                Date lhsDate = lhs.getInicio();
+                Date rhsDate = rhs.getInicio();
+                if(lhsDate != null && rhsDate != null) {
+                    resul = lhsDate.compareTo(rhsDate);
+                }
+            }
+            return resul;
+        }
+
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,34 +109,30 @@ public class ListaActividadesEventoActivity extends AbstractEventos {
         startActivity(i);
     }
 
-
-
-
-
     private void prepareListData(List<ActividadEvento> lista) {
         listDataHeader = new ArrayList<String>();
         listDataChild = new HashMap<String, List<ActividadEvento>>();
 
         Map<String, List<ActividadEvento>> actividadesAgrupadas = agruparPorFecha(lista);
         Set<String> keys = actividadesAgrupadas.keySet();
+        List<String> listaKeys = new ArrayList(keys);
+        Collections.sort(listaKeys, new Comparator<String>() {
+            public int compare(String lhs, String rhs) {
+                try {
+                    Date dlhs = sdf.parse(lhs);
+                    Date drhs = sdf.parse(rhs);
+                    return dlhs.compareTo(drhs);
+                } catch (ParseException e) {
+                    Log.e(TAG, "Error al parsear la fecha");
+                }
+                return 0;
+            }
+        });
         int indice = 0;
-        for(String fecha : keys) {
+        for(String fecha : listaKeys) {
             List<ActividadEvento> actividadesFecha = actividadesAgrupadas.get(fecha);
             // Se ordenan las actividades por inicio
-            Collections.sort(actividadesFecha, new Comparator<ActividadEvento>() {
-                @Override
-                public int compare(ActividadEvento lhs, ActividadEvento rhs) {
-                    int resul = 0;
-                    if(lhs != null && rhs != null) {
-                        Date lhsDate = lhs.getInicio();
-                        Date rhsDate = rhs.getInicio();
-                        if(lhsDate != null && rhsDate != null) {
-                            resul = lhsDate.compareTo(rhsDate);
-                        }
-                    }
-                    return 0;
-                }
-            });
+            Collections.sort(actividadesFecha, new ComparadorActividadesFecha());
             if(!actividadesAgrupadas.isEmpty()) {
                 listDataHeader.add(fecha);
 

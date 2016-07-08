@@ -14,7 +14,9 @@ import org.json.JSONObject;
 import java.io.UnsupportedEncodingException;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.util.TimeZone;
 
 /**
  * Created by h on 5/06/16.
@@ -47,8 +49,9 @@ public class ActividadesEventoJsonParser extends AbstractJsonParser<ActividadEve
         }
         resul.setImagenes(imagenesActividad);
 
-        resul.setInicio(utilJson.getDate(json, Constantes.Json.INICIO));
-        resul.setFin(utilJson.getDate(json, Constantes.Json.FIN));
+        TimeZone timeZone = Calendar.getInstance().getTimeZone();
+        resul.setInicio(utilJson.getDate(json, Constantes.Json.INICIO, timeZone));
+        resul.setFin(utilJson.getDate(json, Constantes.Json.FIN, timeZone));
         resul.setLatitud(Double.parseDouble(json.getString(Constantes.Json.LATITUD)));
         resul.setLongitud(Double.parseDouble(json.getString(Constantes.Json.LONGITUD)));
         resul.setActivo(utilJson.getBoolean(json, Constantes.Json.ACTIVO));

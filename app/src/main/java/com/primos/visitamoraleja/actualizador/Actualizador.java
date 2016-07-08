@@ -392,6 +392,7 @@ public class Actualizador {
 					if(evento.isActivo()) {
 						// Se borran las imagenes que existiendo anteriormente, ya no forman parte del sitio
 						borrarImagenesBorradas(evento, existente);
+						borrarImagenesEvento(existente);
 
 						dataSource.actualizar(evento);
 						addImagenesEvento(evento);
@@ -440,10 +441,17 @@ public class Actualizador {
 				SitioEvento existente = dataSource.getById(id);
 				if(existente == null) {
 					dataSource.insertar(sitioEvento);
+					almacenamiento.addImagenSitioEvento(sitioEvento.getIcono(), sitioEvento.getNombreIcono(), id);
 				} else {
-					dataSource.actualizar(sitioEvento);
+					borrarImagenesSitioEvento(existente);
+					if(sitioEvento.isActivo()) {
+						dataSource.actualizar(sitioEvento);
+						almacenamiento.addImagenSitioEvento(sitioEvento.getIcono(), sitioEvento.getNombreIcono(), id);
+					} else {
+						dataSource.delete(existente);
+					}
 				}
-				almacenamiento.addImagenSitioEvento(sitioEvento.getIcono(), sitioEvento.getNombreIcono(), id);
+
 			}
 		} finally {
 			dataSource.close();
@@ -563,7 +571,7 @@ public class Actualizador {
 					dataSource.insertar(imagenActividadEvento);
 					almacenamiento.addImagenActividadEvento(imagenActividadEvento.getImagen(), imagenActividadEvento.getNombre(), imagenActividadEvento.getIdActividad());
 				} else {
-					borrarImagenesEvento(existente);
+					borrarImagenesActividadEvento(existente);
 					if (imagenActividadEvento.isActivo()) {
 						dataSource.actualizar(imagenActividadEvento);
 						almacenamiento.addImagenActividadEvento(imagenActividadEvento.getImagen(), imagenActividadEvento.getNombre(), imagenActividadEvento.getIdActividad());
@@ -619,10 +627,16 @@ public class Actualizador {
 				ActividadEvento existente = dataSource.getById(id);
 				if(existente == null) {
 					dataSource.insertar(actividadEvento);
+					almacenamiento.addImagenActividadEvento(actividadEvento.getIcono(), actividadEvento.getNombreIcono(), actividadEvento.getId());
 				} else {
-					dataSource.actualizar(actividadEvento);
+					borrarImagenesActividadEvento(existente);
+					if (actividadEvento.isActivo()) {
+						dataSource.actualizar(actividadEvento);
+						almacenamiento.addImagenActividadEvento(actividadEvento.getIcono(), actividadEvento.getNombreIcono(), actividadEvento.getId());
+					} else {
+						dataSource.delete(existente);
+					}
 				}
-				almacenamiento.addImagenActividadEvento(actividadEvento.getIcono(), actividadEvento.getNombreIcono(), actividadEvento.getId());
 			}
 		} finally {
 			dataSource.close();

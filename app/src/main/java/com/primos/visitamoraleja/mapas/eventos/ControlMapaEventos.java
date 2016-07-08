@@ -256,6 +256,9 @@ public class ControlMapaEventos implements ControlMapaItf {
 
     private void showInfoNewMarker(GoogleMap googleMap, ContenidoMapa cm) {
         MarkerOptions mo = new MarkerOptions();
+
+        BitmapDescriptor icon = BitmapDescriptorFactory.fromResource(R.drawable.marker_transparente);
+        mo.icon(icon);
         mo.position(cm.getCoordenada());
         mo.title("Esto es una linea");
 
@@ -310,6 +313,8 @@ public class ControlMapaEventos implements ControlMapaItf {
     private void showInfoMarker(GoogleMap googleMap, LatLng punto, GoogleMap.InfoWindowAdapter adapter) {
         // Creating an instance of MarkerOptions to set position
         MarkerOptions markerOptions = new MarkerOptions();
+        BitmapDescriptor icon = BitmapDescriptorFactory.fromResource(R.drawable.marker_transparente);
+        markerOptions.icon(icon);
         markerOptions.position(punto);
         Marker marker = googleMap.addMarker(markerOptions);
 
@@ -544,9 +549,11 @@ public class ControlMapaEventos implements ControlMapaItf {
         mo.position(punto);
         //mo.title(forma.get);
         Bitmap bitmap = almacenamiento.getImagenActividadEvento(actividad.getId(), actividad.getNombreIcono());
-        bitmap = UtilImage.createScaledBitmap(bitmap, 72);
-        BitmapDescriptor bitmapDescriptor = BitmapDescriptorFactory.fromBitmap(bitmap);
-        mo.icon(bitmapDescriptor);
+        if(bitmap != null) {
+            bitmap = UtilImage.createScaledBitmap(bitmap, 72);
+            BitmapDescriptor bitmapDescriptor = BitmapDescriptorFactory.fromBitmap(bitmap);
+            mo.icon(bitmapDescriptor);
+        }
 
         Marker marker = googleMap.addMarker(mo);
         LatLng position = marker.getPosition();

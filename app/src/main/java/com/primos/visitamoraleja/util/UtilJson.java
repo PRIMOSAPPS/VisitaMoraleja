@@ -12,6 +12,7 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 /**
  * Created by h on 6/06/16.
@@ -30,6 +31,11 @@ public class UtilJson {
 
     public Date getDate(JSONObject json, String campoJson) throws JSONException, ParseException {
         return UtilFechas.fechaFromUTC(json.getString(campoJson));
+    }
+
+
+    public Date getDate(JSONObject json, String campoJson, TimeZone timeZone) throws JSONException, ParseException {
+        return UtilFechas.fechaFromString(json.getString(campoJson), timeZone);
     }
 
     public List<Integer> getListaInteger(JSONObject json, String campoJson) throws JSONException {

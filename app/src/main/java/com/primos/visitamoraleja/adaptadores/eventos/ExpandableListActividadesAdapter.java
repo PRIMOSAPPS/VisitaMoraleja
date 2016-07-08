@@ -75,9 +75,8 @@ public class ExpandableListActividadesAdapter extends BaseExpandableListAdapter 
             LayoutInflater infalInflater = (LayoutInflater) this._context
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = infalInflater.inflate(R.layout.actividad_item, null);
-
-            convertView.setTag(actividadEvento);
         }
+        convertView.setTag(actividadEvento);
 
         ImageView imagen = (ImageView)convertView.findViewById(R.id.imagenItemActiv);
         ItfAlmacenamiento almacenamiento = AlmacenamientoFactory.getAlmacenamiento(_context);

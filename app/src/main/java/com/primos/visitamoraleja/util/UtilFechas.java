@@ -56,6 +56,20 @@ public class UtilFechas {
 		return sdf.parse(strDate);
 	}
 
+
+	/**
+	 * Metodo que convierte una fecha indicada en un String, asumiendo TimeZone UTC
+	 * a un objeto Date con TimeZone local
+	 *
+	 * @param strDate
+	 * @return
+	 * @throws ParseException
+	 */
+	public static Date fechaFromString(String strDate, TimeZone timeZone) throws ParseException {
+		sdf.setTimeZone(timeZone);
+		return sdf.parse(strDate);
+	}
+
 	/**
 	 * Metodo que convierte una fecha indicada en un String, asumiendo TimeZone local
 	 * a un objeto Date con TimeZone UTC, pero este Date no es correcto, hay que aplicarle

@@ -20,7 +20,9 @@ import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.util.TimeZone;
 
 /**
  * Created by h on 5/06/16.
@@ -42,8 +44,10 @@ public class EventosJsonParser extends AbstractJsonParser<Evento> {
         resul.setLatitud(Double.parseDouble(json.getString(Constantes.Json.LATITUD)));
         resul.setLongitud(Double.parseDouble(json.getString(Constantes.Json.LONGITUD)));
         resul.setZoomInicial(Integer.parseInt(json.getString(Constantes.Json.ZOOM_INICIAL)));
-        resul.setInicio(utilJson.getDate(json, Constantes.Json.INICIO));
-        resul.setFin(utilJson.getDate(json, Constantes.Json.FIN));
+
+        TimeZone timeZone = Calendar.getInstance().getTimeZone();
+        resul.setInicio(utilJson.getDate(json, Constantes.Json.INICIO, timeZone));
+        resul.setFin(utilJson.getDate(json, Constantes.Json.FIN, timeZone));
         resul.setActivo(utilJson.getBoolean(json, Constantes.Json.ACTIVO));
         resul.setUltimaActualizacion(utilJson.getDate(json, Constantes.Json.ULTIMA_ACTUALIZACION));
 

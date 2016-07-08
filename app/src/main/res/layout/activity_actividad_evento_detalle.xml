@@ -27,11 +27,11 @@
                 android:id="@+id/tvActividadEventoNombre"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignBottom="@+id/ivSitioEventoIcono"
-                android:layout_alignParentRight="true"
-                android:layout_toRightOf="@+id/ivSitioEventoIcono"
                 android:text="Medium Text"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:layout_alignParentTop="true"
+                android:layout_toRightOf="@+id/ivActividadEventoIcono"
+                android:layout_alignParentRight="true" />
         </RelativeLayout>
 
 

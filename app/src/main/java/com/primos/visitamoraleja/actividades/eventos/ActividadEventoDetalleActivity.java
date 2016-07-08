@@ -19,6 +19,7 @@ import com.primos.visitamoraleja.contenidos.ImagenActividadEvento;
 import com.primos.visitamoraleja.slider.AbstractControlSlider;
 import com.primos.visitamoraleja.slider.ActividadControlSlider;
 import com.primos.visitamoraleja.slider.EventoControlSlider;
+import com.primos.visitamoraleja.util.UtilImage;
 
 import java.util.List;
 
@@ -48,6 +49,7 @@ public class ActividadEventoDetalleActivity extends AbstractEventos {
         ImageView imagen = (ImageView)findViewById(R.id.ivActividadEventoIcono);
         ItfAlmacenamiento almacenamiento = AlmacenamientoFactory.getAlmacenamiento(this);
         Bitmap bitmap = almacenamiento.getImagenActividadEvento(actividadEvento.getId(), actividadEvento.getNombreIcono());
+        bitmap = UtilImage.createScaledBitmap(bitmap, 72);
         imagen.setImageBitmap(bitmap);
 
         TextView nombre = (TextView)findViewById(R.id.tvActividadEventoNombre);

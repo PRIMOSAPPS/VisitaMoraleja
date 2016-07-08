@@ -189,7 +189,7 @@
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
-                        android:text="@string/eventos"
+                        android:text="@string/festejos"
                         android:textColor="#000000"
                         android:textStyle="bold" />
                 </LinearLayout>
