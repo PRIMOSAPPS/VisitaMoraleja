@@ -60,13 +60,15 @@ public abstract class AbstractControlSlider {
                 @Override
                 public View makeView() {
                     ImageView myView = new ImageView(actividad);
+                    /*
                     int width = myView.getWidth();
                     int height = myView.getHeight();
                     ImageView.ScaleType scaleType = ImageView.ScaleType.CENTER_INSIDE;
                     if(height > width) {
                         scaleType = ImageView.ScaleType.FIT_CENTER;
                     }
-                    myView.setScaleType(scaleType);
+                    */
+                    myView.setScaleType(ImageView.ScaleType.FIT_XY);
                     myView.setLayoutParams(new ImageSwitcher.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,
                             RelativeLayout.LayoutParams.MATCH_PARENT));
                     return myView;
