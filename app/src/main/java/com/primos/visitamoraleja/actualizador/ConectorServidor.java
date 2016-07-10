@@ -503,8 +503,12 @@ public class ConectorServidor {
 
 		List<Long> idsImagenes = eventoActualizable.getIdsImagenes();
 		for(Long idImagen : idsImagenes) {
-			List<ImagenEvento> im = getImagenesEvento(idImagen);
-			resul.addAll(im);
+			try {
+				List<ImagenEvento> im = getImagenesEvento(idImagen);
+				resul.addAll(im);
+			} catch(Exception e) {
+				Log.e(TAG, "Error actualizando la imagen " + idImagen + " de evento.", e);
+			}
 		}
 
 		return resul;
@@ -545,8 +549,12 @@ public class ConectorServidor {
 
 		List<ImagenActividadEvento> imagenesActividad = actividadEvento.getImagenes();
 		for(ImagenActividadEvento imagen : imagenesActividad) {
-			List<ImagenActividadEvento> im = getImagenesActividadEvento(imagen.getId());
-			resul.addAll(im);
+			try {
+				List<ImagenActividadEvento> im = getImagenesActividadEvento(imagen.getId());
+				resul.addAll(im);
+			} catch(Exception e) {
+				Log.e(TAG, "Error actualizando la categoria " + imagen.getId() + " de evento.", e);
+			}
 		}
 
 		return resul;
@@ -587,8 +595,12 @@ public class ConectorServidor {
 
 		List<Long> ids = eventoActualizable.getIdsCategoriasEvento();
 		for(Long id : ids) {
-			List<CategoriaEvento> im = getCategoriasEvento(id);
-			resul.addAll(im);
+			try {
+				List<CategoriaEvento> im = getCategoriasEvento(id);
+				resul.addAll(im);
+			} catch(Exception e) {
+				Log.e(TAG, "Error actualizando la categoria " + id + " de evento.", e);
+			}
 		}
 
 		return resul;
@@ -629,8 +641,12 @@ public class ConectorServidor {
 
 		List<Long> ids = eventoActualizable.getIdsActividades();
 		for(Long id : ids) {
-			List<ActividadEvento> im = getActividadesEvento(id);
-			resul.addAll(im);
+			try {
+				List<ActividadEvento> im = getActividadesEvento(id);
+				resul.addAll(im);
+			} catch(Exception e) {
+				Log.e(TAG, "Error actualizando la actividad " + id + " de evento.", e);
+			}
 		}
 
 		return resul;

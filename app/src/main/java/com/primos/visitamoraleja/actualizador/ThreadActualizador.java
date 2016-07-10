@@ -50,7 +50,8 @@ import com.primos.visitamoraleja.util.UtilPreferencias;
  * 
  */
 public class ThreadActualizador extends Thread implements IPrimosActivityLifecycleCallbacks{
-	private enum ESTADO_ACTUALIZACION {
+	private final static String TAG = "ThreadActualizador";
+	enum ESTADO_ACTUALIZACION {
 		PARADO(0), PREGUNTANDO_SI_ACTUALIZAR(1), ACTUALIZANDO(2), SIN_DATOS(3), EXCEPCION(4), FINALIZADO(5);
 		
 		private int idEstado;
@@ -226,10 +227,17 @@ public class ThreadActualizador extends Thread implements IPrimosActivityLifecyc
 								msj.obj = sitio;
 								handlerBarraProgresoActualizacion
 										.sendMessage(msj);
-								List<Sitio> lstSitios = cs.getSitio(sitio);
-								actualizador.actualizarSitios(lstSitios);
+								try {
+									List<Sitio> lstSitios = cs.getSitio(sitio);
+									actualizador.actualizarSitios(lstSitios);
+									if(estadoActualizacion != ESTADO_ACTUALIZACION.EXCEPCION) {
+										ultimaActualizacionActualizada = Math.max(ultimaActualizacionActualizada, actualizador.getUltimaActualizacion());
+									}
+								} catch (Exception e) {
+									Log.e(TAG, "Error al actualizar el sitio: " + sitio.getNombre() + "(" + sitio.getId() + ")", e);
+									estadoActualizacion = ESTADO_ACTUALIZACION.EXCEPCION;
+								}
 							}
-							ultimaActualizacionActualizada = Math.max(ultimaActualizacionActualizada, actualizador.getUltimaActualizacion());
 
 							Message msjFin = new Message();
 							msjFin.arg1 = FIN_ACTUALIZAR;
@@ -306,9 +314,13 @@ public class ThreadActualizador extends Thread implements IPrimosActivityLifecyc
 				actualizador.actualizarEventos(lstEventos);
 
 				if(eventoActualizableDTO.isActivo()) {
-					List<SitioEvento> sitiosEvento = cs.getSitiosEvento(eventoActualizableDTO);
-					ordenarContenidoPorFechaActualizacion(sitiosEvento);
-					actualizador.actualizarSitiosEvento(sitiosEvento);
+					try {
+						List<SitioEvento> sitiosEvento = cs.getSitiosEvento(eventoActualizableDTO);
+						ordenarContenidoPorFechaActualizacion(sitiosEvento);
+						actualizador.actualizarSitiosEvento(sitiosEvento);
+					} catch(Exception e) {
+						Log.e(TAG, "Error actualzando el evento: " + eventoActualizableDTO.getNombre() + "(" + eventoActualizableDTO.getId() + ")", e);
+					}
 
 					List<ImagenEvento> imagenesEvento = cs.getImagenesEvento(eventoActualizableDTO);
 					ordenarContenidoPorFechaActualizacion(imagenesEvento);
@@ -348,8 +360,12 @@ public class ThreadActualizador extends Thread implements IPrimosActivityLifecyc
 				ultimaActualizacionActualizada = ultimaActualizacion;
 				actualizarCategorias(ultimaActualizacion);
 				actualizarSitios(idsCategoriasActualizacion, ultimaActualizacion);
-				actualizarEventos(idsCategoriasActualizacion, ultimaActualizacion);
 				PreferenciasActivity.setFechaUltimaComprobacionActualizacion(contexto, ultimaActualizacionActualizada);
+
+				long ultimaActualizacionEventos = ultimaActUtil.getUltimaActualizacionEventos(contexto);
+				actualizarEventos(idsCategoriasActualizacion, ultimaActualizacionEventos);
+				PreferenciasActivity.setFechaUltimaComprobacionActualizacionEventos(contexto, ultimaActualizacionActualizada);
+
 			}
 		} catch (EventosException e) {
 			Log.e("AsyncTaskActualizador",

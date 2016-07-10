@@ -20,7 +20,7 @@ public class AlmacenamientoNulo implements ItfAlmacenamiento {
 
     private void mostrarMensajePermisos() {
         if(!mostrado) {
-            Toast.makeText(contexto, R.string.permisos_necesarios, Toast.LENGTH_SHORT)
+            Toast.makeText(contexto, R.string.permisos_necesarios_1, Toast.LENGTH_SHORT)
                     .show();
             mostrado = true;
         }

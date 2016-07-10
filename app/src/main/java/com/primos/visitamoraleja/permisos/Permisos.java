@@ -43,12 +43,14 @@ public class Permisos {
 
     public boolean permisosConcedido(Activity actividad, String[] permisos) {
         boolean resul = true;
-        for(String permiso : permisos) {
-            int permissionCheck = ContextCompat.checkSelfPermission(actividad,
-                    permiso);
-            resul = permissionCheck == PackageManager.PERMISSION_GRANTED;
-            if(!resul) {
-                break;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            for (String permiso : permisos) {
+                int permissionCheck = ContextCompat.checkSelfPermission(actividad,
+                        permiso);
+                resul = permissionCheck == PackageManager.PERMISSION_GRANTED;
+                if (!resul) {
+                    break;
+                }
             }
         }
         return resul;
