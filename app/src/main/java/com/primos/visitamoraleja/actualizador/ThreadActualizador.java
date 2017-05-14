@@ -81,6 +81,7 @@ public class ThreadActualizador extends Thread implements IPrimosActivityLifecyc
 	private ESTADO_ACTUALIZACION estadoActualizacion = ESTADO_ACTUALIZACION.PARADO;
 
 	private long ultimaActualizacionActualizada;
+	private long ultimaActualizacionEventosActualizada;
 
 	/**
 	 * 
@@ -342,7 +343,7 @@ public class ThreadActualizador extends Thread implements IPrimosActivityLifecyc
 					}
 				}
 			}
-			ultimaActualizacionActualizada = Math.max(ultimaActualizacionActualizada, actualizador.getUltimaActualizacion());
+			ultimaActualizacionEventosActualizada = Math.max(ultimaActualizacionEventosActualizada, actualizador.getUltimaActualizacion());
 		} finally {
 			dataSource.close();
 		}
@@ -363,8 +364,9 @@ public class ThreadActualizador extends Thread implements IPrimosActivityLifecyc
 				PreferenciasActivity.setFechaUltimaComprobacionActualizacion(contexto, ultimaActualizacionActualizada);
 
 				long ultimaActualizacionEventos = ultimaActUtil.getUltimaActualizacionEventos(contexto);
+				ultimaActualizacionEventosActualizada = ultimaActualizacionEventos;
 				actualizarEventos(idsCategoriasActualizacion, ultimaActualizacionEventos);
-				PreferenciasActivity.setFechaUltimaComprobacionActualizacionEventos(contexto, ultimaActualizacionActualizada);
+				PreferenciasActivity.setFechaUltimaComprobacionActualizacionEventos(contexto, ultimaActualizacionEventosActualizada);
 
 			}
 		} catch (EventosException e) {

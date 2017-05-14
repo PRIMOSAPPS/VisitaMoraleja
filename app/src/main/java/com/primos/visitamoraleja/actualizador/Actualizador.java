@@ -418,7 +418,9 @@ public class Actualizador {
 				comprobarUltimaActualizacion(formaEvento.getUltimaActualizacion());
 				FormaEvento existente = dataSource.getById(id);
 				if(existente == null) {
-					dataSource.insertar(formaEvento);
+					if(formaEvento.isActivo()) {
+						dataSource.insertar(formaEvento);
+					}
 				} else {
 					dataSource.actualizar(formaEvento);
 				}
@@ -440,8 +442,10 @@ public class Actualizador {
 				comprobarUltimaActualizacion(sitioEvento.getUltimaActualizacion());
 				SitioEvento existente = dataSource.getById(id);
 				if(existente == null) {
-					dataSource.insertar(sitioEvento);
-					almacenamiento.addImagenSitioEvento(sitioEvento.getIcono(), sitioEvento.getNombreIcono(), id);
+					if(sitioEvento.isActivo()) {
+						dataSource.insertar(sitioEvento);
+						almacenamiento.addImagenSitioEvento(sitioEvento.getIcono(), sitioEvento.getNombreIcono(), id);
+					}
 				} else {
 					borrarImagenesSitioEvento(existente);
 					if(sitioEvento.isActivo()) {
@@ -470,8 +474,10 @@ public class Actualizador {
 				comprobarUltimaActualizacion(imagenEvento.getUltimaActualizacion());
 				ImagenEvento existente = dataSource.getById(id);
 				if(existente == null) {
-					dataSource.insertar(imagenEvento);
-					almacenamiento.addImagenEvento(imagenEvento.getImagen(), imagenEvento.getNombre(), imagenEvento.getIdEvento());
+					if(imagenEvento.isActivo()) {
+						dataSource.insertar(imagenEvento);
+						almacenamiento.addImagenEvento(imagenEvento.getImagen(), imagenEvento.getNombre(), imagenEvento.getIdEvento());
+					}
 				} else {
 					borrarImagenesEvento(existente);
 					if (imagenEvento.isActivo()) {
@@ -568,8 +574,10 @@ public class Actualizador {
 				comprobarUltimaActualizacion(imagenActividadEvento.getUltimaActualizacion());
 				ImagenActividadEvento existente = dataSource.getById(id);
 				if(existente == null) {
-					dataSource.insertar(imagenActividadEvento);
-					almacenamiento.addImagenActividadEvento(imagenActividadEvento.getImagen(), imagenActividadEvento.getNombre(), imagenActividadEvento.getIdActividad());
+					if(imagenActividadEvento.isActivo()) {
+						dataSource.insertar(imagenActividadEvento);
+						almacenamiento.addImagenActividadEvento(imagenActividadEvento.getImagen(), imagenActividadEvento.getNombre(), imagenActividadEvento.getIdActividad());
+					}
 				} else {
 					borrarImagenesActividadEvento(existente);
 					if (imagenActividadEvento.isActivo()) {
@@ -597,8 +605,10 @@ public class Actualizador {
 				comprobarUltimaActualizacion(categoriaEvento.getUltimaActualizacion());
 				CategoriaEvento existente = dataSource.getById(id);
 				if(existente == null) {
-					dataSource.insertar(categoriaEvento);
-					almacenamiento.addImagenCategoriaEvento(categoriaEvento.getIcono(), categoriaEvento.getNombreIcono(), categoriaEvento.getId());
+					if(categoriaEvento.isActivo()) {
+						dataSource.insertar(categoriaEvento);
+						almacenamiento.addImagenCategoriaEvento(categoriaEvento.getIcono(), categoriaEvento.getNombreIcono(), categoriaEvento.getId());
+					}
 				} else {
 					borrarImagenesCategoriaEvento(existente);
 					if (categoriaEvento.isActivo()) {
@@ -626,8 +636,10 @@ public class Actualizador {
 				comprobarUltimaActualizacion(actividadEvento.getUltimaActualizacion());
 				ActividadEvento existente = dataSource.getById(id);
 				if(existente == null) {
-					dataSource.insertar(actividadEvento);
-					almacenamiento.addImagenActividadEvento(actividadEvento.getIcono(), actividadEvento.getNombreIcono(), actividadEvento.getId());
+					if(actividadEvento.isActivo()) {
+						dataSource.insertar(actividadEvento);
+						almacenamiento.addImagenActividadEvento(actividadEvento.getIcono(), actividadEvento.getNombreIcono(), actividadEvento.getId());
+					}
 				} else {
 					borrarImagenesActividadEvento(existente);
 					if (actividadEvento.isActivo()) {
